@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'DiaryOfAWimpyKidFont';
+  src: url('/fonts/DiaryOfAWimpyKidFont-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: 'DiaryOfAWimpyKidFont', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: url("../public//backgrounds/background.png") center center;
+  background-size: cover;
+}
