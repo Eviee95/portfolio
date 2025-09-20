@@ -1,6 +1,6 @@
-// GreenPulse.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './GreenPulse.css';
 
 const scrollToSection = (id) => {
   const section = document.getElementById(id);
@@ -30,9 +30,29 @@ const GreenPulse = () => {
   const [secondAnimationStarted, setSecondAnimationStarted] = useState(false);
   const [secondAnimationCompleted, setSecondAnimationCompleted] = useState(false);
   const secondDividerLineRef = useRef(null);
+  // Third line animation state
+  const [thirdLineSvgIndex, setThirdLineSvgIndex] = useState(1);
+  const [thirdAnimationStarted, setThirdAnimationStarted] = useState(false);
+  const [thirdAnimationCompleted, setThirdAnimationCompleted] = useState(false);
+  const thirdDividerLineRef = useRef(null);
+  // Animation states for comparison SVGs
+  const [niceSvgState, setNiceSvgState] = useState('open');
+  const [uglySvgState, setUglySvgState] = useState('open');
+  // State for alternating kido images
+  const [kidoImage, setKidoImage] = useState('kido1');
+
+  // Use refs to track animation completion persistently
+  const animationCompletedRef = useRef(false);
+  const secondAnimationCompletedRef = useRef(false);
+  const thirdAnimationCompletedRef = useRef(false);
+
+  // Mindig az oldal tetejére görbünk, amikor betöltődik az oldal
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleGoBack = () => {
-    navigate("/"); // Vissza navigálás a főoldalra (Hero)
+    navigate("/");
   };
 
   const handleBackBtnDown = () => setBackBtnDown(true);
@@ -71,7 +91,7 @@ const GreenPulse = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !animationStarted && !animationCompleted) {
+        if (entry.isIntersecting && !animationStarted && !animationCompletedRef.current) {
           setAnimationStarted(true);
           
           // Animate through the line SVGs
@@ -83,6 +103,7 @@ const GreenPulse = () => {
             } else {
               clearInterval(interval);
               setAnimationCompleted(true);
+              animationCompletedRef.current = true;
             }
           }, 100);
         }
@@ -99,13 +120,13 @@ const GreenPulse = () => {
         observer.unobserve(dividerLineRef.current);
       }
     };
-  }, [animationStarted, animationCompleted]);
+  }, [animationStarted]);
 
   // Check if second divider line is visible and start animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !secondAnimationStarted && !secondAnimationCompleted) {
+        if (entry.isIntersecting && !secondAnimationStarted && !secondAnimationCompletedRef.current) {
           setSecondAnimationStarted(true);
           
           // Animate through the line SVGs
@@ -117,6 +138,7 @@ const GreenPulse = () => {
             } else {
               clearInterval(interval);
               setSecondAnimationCompleted(true);
+              secondAnimationCompletedRef.current = true;
             }
           }, 100);
         }
@@ -133,7 +155,90 @@ const GreenPulse = () => {
         observer.unobserve(secondDividerLineRef.current);
       }
     };
-  }, [secondAnimationStarted, secondAnimationCompleted]);
+  }, [secondAnimationStarted]);
+
+  // Check if third divider line is visible and start animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !thirdAnimationStarted && !thirdAnimationCompletedRef.current) {
+          setThirdAnimationStarted(true);
+          
+          // Animate through the line SVGs
+          let currentIndex = 1;
+          const interval = setInterval(() => {
+            if (currentIndex < 15) {
+              currentIndex++;
+              setThirdLineSvgIndex(currentIndex);
+            } else {
+              clearInterval(interval);
+              setThirdAnimationCompleted(true);
+              thirdAnimationCompletedRef.current = true;
+            }
+          }, 100);
+        }
+      },
+      { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    if (thirdDividerLineRef.current) {
+      observer.observe(thirdDividerLineRef.current);
+    }
+
+    return () => {
+      if (thirdDividerLineRef.current) {
+        observer.unobserve(thirdDividerLineRef.current);
+      }
+    };
+  }, [thirdAnimationStarted]);
+
+  // Animation for nice/ugly SVGs - open 4s, closed very briefly (50ms)
+  useEffect(() => {
+    let niceInterval;
+    let uglyInterval;
+
+    const startNiceAnimation = () => {
+      niceInterval = setInterval(() => {
+        // Show closed state very briefly
+        setNiceSvgState('closed');
+        
+        // Immediately return to open state (almost instant)
+        setTimeout(() => {
+          setNiceSvgState('open');
+        }, 200); // Extremely short closed state (50ms)
+      }, 2000); // Repeat every 4 seconds
+    };
+
+    const startUglyAnimation = () => {
+      uglyInterval = setInterval(() => {
+        // Show closed state very briefly
+        setUglySvgState('closed');
+        
+        // Immediately return to open state (almost instant)
+        setTimeout(() => {
+          setUglySvgState('open');
+        }, 200); // Extremely short closed state (50ms)
+      }, 2000); // Repeat every 4 seconds
+    };
+
+    // Start animations
+    startNiceAnimation();
+    startUglyAnimation();
+
+    return () => {
+      clearInterval(niceInterval);
+      clearInterval(uglyInterval);
+    };
+  }, []);
+
+  // Animation for alternating kido images
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setKidoImage(prev => prev === 'kido1' ? 'kido2' : 'kido1');
+    }, 500); // Change every second
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Calculate eye position based on mouse position
   const calculateEyePosition = () => {
@@ -301,7 +406,7 @@ const GreenPulse = () => {
           <div className="divider-line-container" ref={dividerLineRef}>
             <div className="divider-line">
               <img 
-                src={`/images/line${lineSvgIndex}.svg`} 
+                src={`/images/line${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`} 
                 alt="Decorative divider line" 
                 className="line-svg"
               />
@@ -311,20 +416,43 @@ const GreenPulse = () => {
           {/* Second section */}
           <div className="second-section">
             <h2>What was wrong with the old version? (Which obviously doesn't exist 😊)</h2>
-            <p>Well, there were some issues...</p>
-            <ul>
-              <li>You couldn't understand in 5 seconds who they are and what they want. That's a problem. If a CFO doesn't get it quickly, they bounce.</li>
-              <li>Zero trust. No numbers, no stories, no reviews, nothing. It felt like they were just making promises.</li>
-              <li>The design looked like it was made in 2005. But they're a cool AT & IoT startup, not a corner shop.</li>
-            </ul>
-            <p>They didn't tell me what to do. There was no clear button for "request a demo".</p>
+            
+            <div className="comparison-container">
+              <div className="comparison-image">
+                <img 
+                  src={`/images/nice${niceSvgState}.svg`} 
+                  alt="Good design example" 
+                  className="comparison-svg" 
+                />
+                <p>Good design</p>
+              </div>
+              
+              <div className="comparison-text">
+                <p>Well, there were some issues...</p>
+                <ul>
+                  <li>You couldn't understand in 5 seconds who they are and what they want. That's a problem. If a CFO doesn't get it quickly, they bounce.</li>
+                  <li>Zero trust. No numbers, no stories, no reviews, nothing. It felt like they were just making promises.</li>
+                  <li>The design looked like it was made in 2005. But they're a cool AT & IoT startup, not a corner shop.</li>
+                </ul>
+                <p>They didn't tell me what to do. There was no clear button for "request a demo".</p>
+              </div>
+              
+              <div className="comparison-image">
+                <img 
+                  src={`/images/ugly${uglySvgState}.svg`} 
+                  alt="Bad design example" 
+                  className="comparison-svg" 
+                />
+                <p>Bad design</p>
+              </div>
+            </div>
           </div>
 
-          {/* Second divider line - flipped */}
+          {/* Second divider line - flipped horizontally */}
           <div className="divider-line-container flipped" ref={secondDividerLineRef}>
             <div className="divider-line">
               <img 
-                src={`/images/line${secondLineSvgIndex}.svg`} 
+                src={`/images/line${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`} 
                 alt="Decorative divider line" 
                 className="line-svg flipped"
               />
@@ -333,441 +461,159 @@ const GreenPulse = () => {
 
           {/* Third section - Design Process */}
           <div className="third-section">
-            <div className="design-process-container">
-              {/* Image on the left */}
-              <div className="design-image-content">
-                <img src="/images/design-process.svg" alt="Design process illustration" className="design-process-image" />
+            {/* Three columns side by side */}
+            <div className="design-process-row">
+              
+              <div className="design-column logos-column">
+                <h2>Logos</h2>
+                <div className="logo-item">
+                  <div className="logo-with-background light-bg">
+                    <img src="/images/logoblackwhite.svg" alt="Black and White Logo" className="process-logo" />
+                  </div>
+                </div>
+                <div className="logo-item">
+                  <div className="logo-with-background dark-bg">
+                    <img src="/images/logocolored.svg" alt="Colored Logo" className="process-logo" />
+                  </div>
+                </div>
+                <img src={`/images/${kidoImage}.svg`} alt="Alternating kido image"/>
               </div>
 
-              {/* Text on the right */}
-              <div className="design-text-content">
+              {/* Text column */}
+              <div className="design-column text-column">
                 <h2>How Did I Make It? (The Design Process)</h2>
-                <p>First, I sketched a wireframe on paper to plan where everything goes. Very basic. Then I moved to Figma.</p>
+                <p>Started with paper (iPad) wireframes, then moved to Figma.</p>
                 
                 <h3>Structure:</h3>
                 <ul>
-                  <li><strong>Top (Hero):</strong> The main point in one sentence + a big red "Request a Demo" button.</li>
-                  <li><strong>Middle (Features):</strong> Three sections: MEASURE → ANALYZE → SAVE. A simple icon for each.</li>
-                  <li><strong>Testimonials:</strong> I put (fake) customer quotes here with concrete numbers. "30% savings in one month!" – stuff like that.</li>
-                  <li><strong>About:</strong> That they're from Budapest, and what their mission is. So they aren't just a faceless company.</li>
-                  <li><strong>Contact:</strong> Another CTA button, and contact info.</li>
+                  <li><strong>Hero:</strong> Clear value proposition + prominent "Request Demo" button</li>
+                  <li><strong>Features:</strong> MEASURE → ANALYZE → SAVE flow with simple icons</li>
+                  <li><strong>Testimonials:</strong> Concrete results with numbers ("30% savings!")</li>
+                  <li><strong>About:</strong> Budapest roots and mission to add personality</li>
+                  <li><strong>Contact:</strong> Repeated CTA with contact information</li>
                 </ul>
                 
                 <h3>Look & Feel:</h3>
                 <ul>
-                  <li><strong>Colors:</strong> Green. But not a boring green, different shades. The chameleon is green too, so it ties everything together.</li>
-                  <li><strong>Icons:</strong> Super simple. A chart, a coin, a gauge. Everyone gets it.</li>
-                  <li><strong>Typography:</strong> Headlines are bold and eye-catching, and the buttons have contrast so you have to click them.</li>
+                  <li><strong>Colors:</strong> Various green shades matching the chameleon mascot</li>
+                  <li><strong>Icons:</strong> Simple, universally understood symbols</li>
+                  <li><strong>Typography:</strong> Bold headlines with high-contrast buttons</li>
                 </ul>
+              </div>
+              
+              {/* Balls column */}
+              <div className="design-column balls-column">
+                <h2>Colors</h2>
+                <div className="ball-animation-container">
+                  <img 
+                    src={`/images/paca.svg`} 
+                    alt="Animated ball" 
+                    className="ball-animation"
+                  />
+                  <div className="ball-hex-code">#6bd8b0</div>
+                </div>
+                
+                <div className="ball-animation-container">
+                  <img 
+                    src={`/images/paca.svg`} 
+                    alt="Animated ball" 
+                    className="ball-animation"
+                  />
+                  <div className="ball-hex-code">#4caf50</div>
+                </div>
+                
+                {/* Centered Helvetica text */}
+                <div style={{ 
+                  textAlign: 'center', 
+                  marginTop: '30px',
+                  width: '100%'
+                }}>
+                  <h2>Font</h2>
+                  <h2>Helvetica Neue</h2>
+                  <h3 style={{
+                    fontFamily: "Helvetica Neue",
+                    textAlign: 'center',
+                    margin: '0 auto',
+                    padding: '20px',
+                    letterSpacing: '5px'
+                  }}>
+                    aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ
+                  </h3>
+                </div>
+              </div>
+            </div>
+
+            {/* Images below - full width */}
+            <div className="design-images-content full-width">
+              <div className="images-row">
+                <div className="image-with-caption">
+                  <img src="/images/GreenPulseSketch.png" alt="GreenPulse Sketch" className="design-process-img" />
+                  <p>Initial Sketch</p>
+                </div>
+                <img 
+                  src={`/images/nyil.svg`} 
+                  alt="Arrow"
+                />
+                <div className="image-with-caption">
+                  <img src="/images/GreenPulseWireframe.png" alt="GreenPulse Wireframe" className="design-process-img" />
+                  <p>Wireframe</p>
+                </div>
+                <img 
+                  src={`/images/nyil.svg`} 
+                  alt="Arrow"
+                />
+                <div className="image-with-caption">
+                  <img src="/images/GreenPulseFinal.jpg" alt="GreenPulse Final Design" className="design-process-img" />
+                  <p>Final Design</p>
+                </div>
               </div>
             </div>
           </div>
+          
+          <div className="footer-links">
+            <a
+              href="#home"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateToHome();
+                setTimeout(() => scrollToSection("home"), 100);
+              }}
+            >
+              Home
+            </a>
+            <a
+              href="#about"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateToHome();
+                setTimeout(() => scrollToSection("about"), 100);
+              }}
+            >
+              About Me
+            </a>
+            <a
+              href="#projects"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateToHome();
+                setTimeout(() => scrollToSection("projects"), 100);
+              }}
+            >
+              My Projects
+            </a>
+            <a
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateToHome();
+                setTimeout(() => scrollToSection("contact"), 100);
+              }}
+            >
+              Contact
+            </a>
+          </div>
         </main>
       </div>
-
-      <style>{`
-        .greenpulse-page {
-          min-height: 100vh;
-          background: url('/images/background.jpg') center center / cover no-repeat;
-          font-family: DiaryOfAWimpyKidFont, sans-serif;
-        }
-        
-        .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 20px 7vw;
-          font-size: clamp(1.3rem, 2vw, 2.2rem);
-          font-weight: bold;
-          text-transform: uppercase;
-        }
-        
-        .header-logo {
-          width: clamp(80px, 8vw, 120px);
-          height: auto;
-        }
-        
-        .header-nav {
-          display: flex;
-          gap: clamp(18px, 4vw, 40px);
-          align-items: center;
-        }
-        
-        .header-nav a {
-          color: black;
-          text-decoration: none;
-        }
-        
-        .dropdown {
-          position: relative;
-          display: inline-block;
-        }
-        
-        .dropdown-toggle {
-          background: none;
-          border: none;
-          font-family: DiaryOfAWimpyKidFont, sans-serif;
-          font-size: clamp(1.3rem, 2vw, 2.2rem);
-          font-weight: bold;
-          text-transform: uppercase;
-          color: black;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-        
-        .dropdown-arrow {
-          width: 14px;
-          height: 14px;
-          transition: transform 0.3s ease;
-        }
-        
-        .dropdown-arrow.open {
-          transform: rotate(180deg);
-        }
-        
-        .dropdown-menu {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          background: white;
-          border: 2px solid black;
-          border-radius: 8px;
-          padding: 10px 0;
-          min-width: 180px;
-          z-index: 1000;
-          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .dropdown-menu a {
-          display: block;
-          padding: 8px 16px;
-          color: black;
-          text-decoration: none;
-          font-size: 1.2rem;
-        }
-        
-        .dropdown-menu a:hover {
-          background-color: #f0f0f0;
-        }
-        
-        .greenpulse-content-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 20px 5vw;
-          max-width: 1600px;
-          margin: 0 auto;
-          box-sizing: border-box;
-          width: 100%;
-        }
-        
-        .back-button-container {
-          width: 100%;
-          display: flex;
-          justify-content: flex-start;
-          margin-bottom: 20px;
-          max-width: 1600px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-        
-        .back-button-img {
-          width: 240px;
-          max-width: 60vw;
-          height: auto;
-          cursor: pointer;
-          transition: filter 0.13s cubic-bezier(.65,.05,.36,1), transform 0.13s cubic-bezier(.65,.05,.36,1);
-          outline: none;
-        }
-        
-        .back-button-img.pressed, .back-button-img:active {
-          transform: translateY(8px);
-          filter: brightness(0.85);
-        }
-        
-        .back-button-img:focus {
-          filter: brightness(1.04);
-        }
-        
-        .greenpulse-content {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        
-        .greenpulse-content h1 {
-          font-size: 2.5rem;
-          margin: 0 0 40px 0;
-          text-align: center;
-        }
-        
-        .main-content-container {
-          display: flex;
-          justify-content: center;
-          align-items: flex-start;
-          gap: 60px;
-          width: 100%;
-          max-width: 1400px;
-          margin: 0 auto;
-        }
-        
-        .text-content {
-          flex: 1;
-          max-width: 700px;
-        }
-        
-        .text-content h2 {
-          font-size: clamp(24px, 3vw, 36px);
-          margin-top: 0;
-          color: #2e7d32;
-        }
-        
-        .text-content p {
-          font-size: clamp(18px, 2vw, 26px);
-          line-height: 1.6;
-        }
-        
-        .text-content ul {
-          font-size: clamp(18px, 2vw, 26px);
-          line-height: 1.6;
-          margin: 15px 0;
-          padding-left: 20px;
-        }
-        
-        .image-content {
-          flex: 1;
-          display: flex;
-          justify-content: right;
-          align-items: center;
-          max-width: 600px;
-        }
-        
-        .chameleon-container {
-          position: relative;
-          width: 100%;
-          max-width: 500px;
-        }
-        
-        .chameleon-body {
-          width: 100%;
-          height: auto;
-          object-fit: contain;
-          border-radius: 12px;
-        }
-        
-        .eye-container {
-          position: absolute;
-          width: 12%;
-          height: 12%;
-          top: 20%;
-          left: 68%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          pointer-events: none;
-        }
-        
-        .pupil {
-          width: 60%;
-          height: 60%;
-          transition: transform 0.1s ease-out;
-        }
-        
-        .divider-line-container {
-          width: 100%;
-          max-width: 1000px;
-          margin: 60px auto;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 200px;
-        }
-        
-        .divider-line {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        
-        .line-svg {
-          width: 100%;
-          height: 180px;
-          object-fit: fill;
-        }
-        
-        .line-svg.flipped {
-          transform: scaleY(-1);
-        }
-        
-        .second-section {
-          max-width: 800px;
-          width: 100%;
-          text-align: center;
-          margin-top: 40px;
-        }
-        
-        .second-section h2 {
-          font-size: clamp(24px, 3vw, 36px);
-          margin-top: 0;
-          color: #2e7d32;
-        }
-        
-        .second-section p {
-          font-size: clamp(18px, 2vw, 26px);
-          line-height: 1.6;
-        }
-        
-        .second-section ul {
-          font-size: clamp(18px, 2vw, 26px);
-          line-height: 1.6;
-          margin: 15px 0;
-          padding-left: 20px;
-          text-align: left;
-        }
-        
-        /* Third section - Design Process */
-        .third-section {
-          width: 100%;
-          max-width: 1400px;
-          margin: 40px auto 40px;
-        }
-        
-        .design-process-container {
-          display: flex;
-          justify-content: center;
-          align-items: flex-start;
-          gap: 60px;
-          width: 100%;
-        }
-        
-        .design-image-content {
-          flex: 1;
-          display: flex;
-          justify-content: left;
-          align-items: center;
-          max-width: 600px;
-        }
-        
-        .design-process-image {
-          width: 100%;
-          height: auto;
-          object-fit: contain;
-          border-radius: 12px;
-          max-width: 500px;
-        }
-        
-        .design-text-content {
-          flex: 1;
-          max-width: 700px;
-        }
-        
-        .design-text-content h2 {
-          font-size: clamp(24px, 3vw, 36px);
-          margin-top: 0;
-          color: #2e7d32;
-        }
-        
-        .design-text-content h3 {
-          font-size: clamp(20px, 2.5vw, 30px);
-          color: #2e7d32;
-          margin-top: 25px;
-        }
-        
-        .design-text-content p {
-          font-size: clamp(18px, 2vw, 26px);
-          line-height: 1.6;
-        }
-        
-        .design-text-content ul {
-          font-size: clamp(18px, 2vw, 26px);
-          line-height: 1.6;
-          margin: 15px 0;
-          padding-left: 20px;
-        }
-        
-        .design-text-content li {
-          margin-bottom: 10px;
-        }
-        
-        @media (max-width: 1200px) {
-          .main-content-container {
-            flex-direction: column;
-            align-items: center;
-            gap: 50px;
-          }
-          
-          .design-process-container {
-            flex-direction: column;
-            align-items: center;
-            gap: 50px;
-          }
-          
-          .text-content, .image-content, .design-text-content, .design-image-content {
-            max-width: 90%;
-          }
-        }
-        
-        @media (max-width: 768px) {
-          .header {
-            flex-direction: column;
-            text-align: center;
-            gap: 10px;
-          }
-          
-          .greenpulse-content h1 {
-            font-size: 2rem;
-            margin: 0 0 30px 0;
-          }
-          
-          .greenpulse-content-container {
-            padding: 20px 4vw;
-          }
-          
-          .text-content, .image-content, .design-text-content, .design-image-content {
-            max-width: 100%;
-          }
-          
-          .eye-container {
-            top: 22%;
-            left: 63%;
-            width: 14%;
-            height: 14%;
-          }
-          
-          .divider-line-container {
-            margin: 40px 0;
-            min-height: 150px;
-          }
-          
-          .line-svg {
-            height: 140px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .text-content, .image-content, .design-text-content, .design-image-content {
-            max-width: 100%;
-          }
-          
-          .eye-container {
-            top: 20%;
-            left: 61%;
-          }
-          
-          .divider-line-container {
-            min-height: 120px;
-            margin: 30px 0;
-          }
-          
-          .line-svg {
-            height: 110px;
-          }
-        }
-      `}</style>
     </div>
   );
 };
