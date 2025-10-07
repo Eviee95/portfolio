@@ -1,784 +1,953 @@
-/* GreenPulse.css */
 .greenpulse-page {
-  min-height: 100vh;
-  background: url('/images/background.jpg') center center / cover no-repeat;
-  font-family: DiaryOfAWimpyKidFont, sans-serif;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 7vw;
-  font-size: clamp(1.3rem, 2vw, 2.2rem);
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.header-logo {
-  width: clamp(80px, 8vw, 120px);
-  height: auto;
-}
-
-.header-nav {
-  display: flex;
-  gap: clamp(18px, 4vw, 40px);
-  align-items: center;
-}
-
-.header-nav a {
-  color: black;
-  text-decoration: none;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-toggle {
-  background: none;
-  border: none;
-  font-family: DiaryOfAWimpyKidFont, sans-serif;
-  font-size: clamp(1.3rem, 2vw, 2.2rem);
-  font-weight: bold;
-  text-transform: uppercase;
-  color: black;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.dropdown-arrow {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.3s ease;
-}
-
-.dropdown-arrow.open {
-  transform: rotate(180deg);
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  border: 2px solid black;
-  border-radius: 8px;
-  padding: 10px 0;
-  min-width: 180px;
-  z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.dropdown-menu a {
-  display: block;
-  padding: 8px 16px;
-  color: black;
-  text-decoration: none;
-  font-size: 1.2rem;
-}
-
-.dropdown-menu a:hover {
-  background-color: #f0f0f0;
-}
-
-.greenpulse-content-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 5vw;
-  max-width: 1600px;
-  margin: 0 auto;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.back-button-container {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 20px;
-  max-width: 1600px;
-  margin-left: auto;
-  margin-right: auto;
-}
+    min-height: 100vh;
+    width: 100%;
+    font-family: DiaryOfAWimpyKidFont, sans-serif;
+    background: transparent;
+}
+
+.greenpulse-page .main-container {
+    margin: 0 auto;
+    width: 100%;
+    padding-left: 7vw;
+    padding-right: 7vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
 
-.back-button-img {
-  width: 240px;
-  max-width: 60vw;
-  height: auto;
-  cursor: pointer;
-  transition: filter 0.13s cubic-bezier(.65,.05,.36,1), transform 0.13s cubic-bezier(.65,.05,.36,1);
-  outline: none;
+.greenpulse-page .greenpulse-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    width: 100%;
 }
 
-.back-button-img.pressed, .back-button-img:active {
-  transform: translateY(8px);
-  filter: brightness(0.85);
-}
-
-.back-button-img:focus {
-  filter: brightness(1.04);
-}
-
-.greenpulse-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+.greenpulse-page .back-button-container {
+    width: 100%;
+    max-width: 1800px;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    padding: 0 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-.greenpulse-content h1 {
-  font-size: 2.5rem;
-  margin: 0 0 40px 0;
-  text-align: center;
+.greenpulse-page .back-button-img {
+    width: 240px;
+    max-width: 60vw;
+    height: auto;
+    cursor: pointer;
+    transition: filter 0.13s cubic-bezier(.65,.05,.36,1), transform 0.13s cubic-bezier(.65,.05,.36,1);
+    outline: none;
+}
+
+.greenpulse-page .back-button-img.pressed,
+.greenpulse-page .back-button-img:active {
+    transform: translateY(8px);
+    filter: brightness(0.85);
 }
+
+.greenpulse-page .back-button-img:focus {
+    filter: brightness(1.04);
+}
+
+.greenpulse-page .greenpulse-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.greenpulse-page .greenpulse-content h1 {
+    font-size: 2.5rem;
+    margin: 0 0 40px 0;
+    text-align: center;
+    width: 100%;
+    max-width: 1800px;
+    padding: 0 20px;
+}
+
+.greenpulse-page .main-content-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 80px;
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.greenpulse-page .text-content {
+    flex: 1;
+    max-width: 1100px;
+}
+
+.greenpulse-page .text-content h2 {
+    font-size: clamp(24px, 3vw, 36px);
+    margin-top: 0;
+    color: #2e7d32;
+    margin-bottom: 20px;
+}
+
+.greenpulse-page .text-content p {
+    font-size: clamp(18px, 2vw, 26px);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.greenpulse-page .text-content ul {
+    font-size: clamp(18px, 2vw, 26px);
+    line-height: 1.6;
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.greenpulse-page .text-content li {
+    margin-bottom: 8px;
+}
+
+.greenpulse-page .image-content {
+    flex: 1;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    max-width: 800px;
+}
 
-.main-content-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 60px;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-}
+.greenpulse-page .computer-with-video {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+}
+
+.greenpulse-page .computer-frame {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.greenpulse-page .video-screen {
+    position: absolute;
+    top: 9.9%;
+    left: 0.26%;
+    width: 100%;
+    height: 69%;
+    border-radius: 26px;
+    overflow: hidden;
+    z-index: 0;
+    border: none;
+}
 
-.text-content {
-  flex: 1;
-  max-width: 700px;
+.greenpulse-page .greenpulse-screen-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center center;
+}
+
+.greenpulse-page .video-play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
 }
 
-.text-content h2 {
-  font-size: clamp(24px, 3vw, 36px);
-  margin-top: 0;
-  color: #2e7d32;
+.greenpulse-page .video-play-overlay:hover {
+    background: rgba(0, 0, 0, 0.4);
 }
 
-.text-content p {
-  font-size: clamp(18px, 2vw, 26px);
-  line-height: 1.6;
+.greenpulse-page .play-button {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.text-content ul {
-  font-size: clamp(18px, 2vw, 26px);
-  line-height: 1.6;
-  margin: 15px 0;
-  padding-left: 20px;
+.greenpulse-page .play-button:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
 }
 
-.image-content {
-  flex: 1;
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  max-width: 600px;
+.greenpulse-page .divider-line-container {
+    width: 100%;
+    max-width: 1800px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
-.chameleon-container {
-  position: relative;
-  width: 100%;
-  max-width: 500px;
+.greenpulse-page .divider-line {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.chameleon-body {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 12px;
+.greenpulse-page .line-svg {
+    width: 100%;
+    height: 180px;
+    object-fit: fill;
 }
 
-.eye-container {
-  position: absolute;
-  width: 12%;
-  height: 12%;
-  top: 20%;
-  left: 68%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
+.greenpulse-page .line-svg.flipped {
+    transform: scaleX(-1);
 }
 
-.pupil {
-  width: 60%;
-  height: 60%;
-  transition: transform 0.1s ease-out;
+.greenpulse-page .second-section {
+    width: 100%;
+    max-width: 1800px;
+    margin: 40px auto 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
-.divider-line-container {
-  width: 100%;
-  max-width: 1000px;
-  margin: 60px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
+.greenpulse-page .second-section h2 {
+    font-size: clamp(24px, 3vw, 36px);
+    margin-top: 0;
+    color: #2e7d32;
+    width: 100%;
 }
 
-.divider-line {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.greenpulse-page .comparison-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 60px;
+    margin-top: 30px;
+    width: 100%;
 }
 
-.line-svg {
-  width: 100%;
-  height: 180px;
-  object-fit: fill;
+.greenpulse-page .comparison-image {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 300px;
 }
 
-.line-svg.flipped {
-  transform: scaleX(-1);
+.greenpulse-page .comparison-svg {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    transition: opacity 0.5s ease-in-out;
 }
 
-.second-section {
-  max-width: 1400px;
-  width: 100%;
-  text-align: center;
-  margin-top: 40px;
+.greenpulse-page .comparison-image p {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: clamp(16px, 1.5vw, 20px);
 }
 
-.second-section h2 {
-  font-size: clamp(24px, 3vw, 36px);
-  margin-top: 0;
-  color: #2e7d32;
+.greenpulse-page .comparison-text {
+    flex: 3;
+    text-align: left;
+    padding: 0 40px;
+    min-width: 0;
 }
 
-.comparison-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 40px;
-  margin-top: 30px;
+.greenpulse-page .comparison-text p {
+    font-size: clamp(18px, 2vw, 26px);
+    line-height: 1.6;
+    margin-bottom: 15px;
 }
 
-.comparison-image {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 200px;
+.greenpulse-page .comparison-text ul {
+    font-size: clamp(18px, 2vw, 26px);
+    line-height: 1.6;
+    margin: 15px 0;
+    padding-left: 20px;
 }
 
-.comparison-svg {
-  width: 100%;
-  max-width: 300px;
-  height: auto;
+.greenpulse-page .comparison-text {
+    text-align: center;
 }
 
-.comparison-image p {
-  margin-top: 10px;
-  font-weight: bold;
-  font-size: clamp(16px, 1.5vw, 20px);
+.greenpulse-page .comparison-text h2 {
+    margin-top: 70px;
 }
 
-.comparison-text {
-  flex: 3;
-  text-align: left;
-  padding: 0 30px;
-  min-width: 0;
+.greenpulse-page .third-section {
+    width: 100%;
+    max-width: 1800px;
+    margin: 40px auto 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
-.comparison-text p {
-  font-size: clamp(18px, 2vw, 26px);
-  line-height: 1.6;
+.greenpulse-page .design-process-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 60px;
+    width: 100%;
+    margin-bottom: 40px;
 }
 
-.comparison-text ul {
-  font-size: clamp(18px, 2vw, 26px);
-  line-height: 1.6;
-  margin: 15px 0;
-  padding-left: 20px;
+.greenpulse-page .design-column {
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    min-width: 0;
 }
 
-/* Third section - Design Process - MÓDOSÍTVA: A SZÖVEG OSZLOP SZÉLESEBB */
-.third-section {
-  width: 100%;
-  max-width: 1400px;
-  margin: 60px auto;
+.greenpulse-page .logos-column {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Három oszlop módosított arányokkal */
-.design-process-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 40px;
-  width: 100%;
-  margin-bottom: 40px;
+.greenpulse-page .logo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
 }
 
-/* Közös stílus az oszlopokhoz - MÓDOSÍTOTT ARÁNYOK */
-.design-column {
-  display: flex;
-  flex-direction: column;
-  background-color: transparent;
-  min-width: 0;
+.greenpulse-page .logo-item:last-child {
+    margin-bottom: 0;
 }
 
-/* Logók oszlop - keskenyebb */
-.logos-column {
-  flex: 1; /* 1 részt foglal el */
-  justify-content: center;
-  align-items: center;
-
+.greenpulse-page .logo-item p {
+    font-weight: bold;
+    font-size: clamp(18px, 1.8vw, 24px);
+    text-align: center;
+    margin: 20px 0 0 0;
+    color: #000;
 }
 
-.logo-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-
+.greenpulse-page .text-column {
+    flex: 2;
+    justify-content: center;
+    padding: 0 0 0 120px;
 }
 
-.logo-item:last-child {
-  margin-bottom: 0;
+.greenpulse-page .text-column h2 {
+    font-size: clamp(26px, 3.2vw, 38px);
+    margin-top: 0;
+    color: #2e7d32;
+    margin-bottom: 25px;
 }
 
-.logo-item p {
-  font-weight: bold;
-  font-size: clamp(18px, 1.8vw, 24px);
-  text-align: center;
-  margin: 20px 0 0 0;
-  color: #000;
+.greenpulse-page .text-column p,
+.greenpulse-page .text-column ul {
+    font-size: clamp(18px, 2.1vw, 27px);
+    line-height: 1.7;
+    color: #000;
 }
-
-/* Szöveg oszlop - szélesebb */
-.text-column {
-  flex: 2; /* 2 részt foglal el - dupla széles */
-  justify-content: center;
-padding: 0 0 0 100px;}
 
-.text-column h2 {
-  font-size: clamp(26px, 3.2vw, 38px);
-  margin-top: 0;
-  color: #2e7d32;
-  margin-bottom: 25px;
+.greenpulse-page .text-column ul {
+    margin: 20px 0;
+    padding-left: 25px;
 }
 
-.text-column p, .text-column ul {
-  font-size: clamp(18px, 2.1vw, 27px);
-  line-height: 1.7;
-  color: #000;
+.greenpulse-page .text-column li {
+    margin-bottom: 12px;
 }
 
-.text-column ul {
-  margin: 20px 0;
-  padding-left: 25px;
+.greenpulse-page .balls-column {
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    margin-left: 60px;
 }
 
-.text-column li {
-  margin-bottom: 12px;
+.greenpulse-page .ball-animation {
+    width: 150px;
+    height: 150px;
+    transition: transform 0.3s ease;
+    border-radius: 50%;
 }
 
-/* Labdák oszlop - keskenyebb */
-.balls-column {
-  flex: 1; /* 1 részt foglal el */
-  justify-content: center;
-  align-items: center;
-  margin-left: 50px;
+.greenpulse-page .ball-animation:hover {
+    transform: scale(1.1);
 }
 
-.ball-animation {
-  width: 280px;
-  height: 160px;
-  transition: transform 0.3s ease;
-  border-radius: 50%;
+.greenpulse-page .ball-hex-code {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-top: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: #000;
+    text-align: center;
 }
 
-.ball-animation:hover {
-  transform: scale(1.1);
+.greenpulse-page .design-images-content.full-width {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    padding: 0 20px;
 }
 
-.ball-hex-code {
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-top: 12px;
-  padding: 6px 14px;
-  background-color: rgba(240, 240, 240, 0.7);
-  border-radius: 20px;
-  color: #000;
-  text-align: center;
+.greenpulse-page .images-row {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
-/* Design Images Section */
-.design-images-content.full-width {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
+.greenpulse-page .image-with-caption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 350px;
+    max-width: 450px;
 }
 
-.images-row {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  width: 100%;
-  max-width: 1200px;
+.greenpulse-page .design-process-img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
 }
 
-.image-with-caption {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  min-width: 280px;
-  max-width: 350px;
+.greenpulse-page .image-with-caption p {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: clamp(16px, 1.5vw, 20px);
+    text-align: center;
+    color: #000;
 }
 
-.design-process-img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
+.greenpulse-page .logo-with-background {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    height: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
 }
 
-.image-with-caption p {
-  margin-top: 10px;
-  font-weight: bold;
-  font-size: clamp(16px, 1.5vw, 20px);
-  text-align: center;
-  color: #000;
+.greenpulse-page .light-bg {
+    background: url('/images/lightbackground.png') center center / contain no-repeat;
 }
 
-.logo-with-background {
-  position: relative;
-  width: 100%;
-  max-width: 320px;
-  height: 220px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 12px;
+.greenpulse-page .dark-bg {
+    background: url('/images/darkbackground.png') center center / contain no-repeat;
 }
 
-.light-bg {
-  background: url('/images/lightbackground.png') center center / contain no-repeat;
+.greenpulse-page .logo-with-background .process-logo {
+    position: relative;
+    z-index: 2;
+    width: 80%;
+    max-width: 260px;
+    height: auto;
 }
 
-.dark-bg {
-  background: url('/images/darkbackground.png') center center / contain no-repeat;
+/* Animation for comparison SVGs */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
 }
 
-.logo-with-background .process-logo {
-  position: relative;
-  z-index: 2;
-  width: 80%;
-  max-width: 220px;
-  height: auto;
+.greenpulse-page .comparison-svg {
+    animation: pulse 4s ease-in-out infinite;
 }
 
 /* Reszponzív beállítások */
+@media (max-width: 1600px) {
+    .greenpulse-page .main-content-container,
+    .greenpulse-page .second-section,
+    .greenpulse-page .third-section,
+    .greenpulse-page .back-button-container,
+    .greenpulse-page .divider-line-container,
+    .greenpulse-page .greenpulse-content h1 {
+        max-width: 1600px;
+        padding: 0 30px;
+    }
+}
+
+@media (max-width: 1400px) {
+    .greenpulse-page .main-content-container,
+    .greenpulse-page .second-section,
+    .greenpulse-page .third-section,
+    .greenpulse-page .back-button-container,
+    .greenpulse-page .divider-line-container,
+    .greenpulse-page .greenpulse-content h1 {
+        max-width: 1400px;
+        padding: 0 25px;
+    }
+}
+
 @media (max-width: 1200px) {
-  .main-content-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 50px;
-  }
-  
-  .text-content, .image-content {
-    max-width: 90%;
-  }
-  
-  .design-process-row {
-    gap: 30px;
-  }
-  
-  .design-column {
-    padding: 0 10px;
-  }
-  
-  .ball-animation {
-    width: 140px;
-    height: 140px;
-  }
-  
-  .ball-hex-code {
-    font-size: 1.2rem;
-  }
+    .greenpulse-page .main-content-container,
+    .greenpulse-page .second-section,
+    .greenpulse-page .third-section,
+    .greenpulse-page .back-button-container,
+    .greenpulse-page .divider-line-container,
+    .greenpulse-page .greenpulse-content h1 {
+        max-width: 1200px;
+        padding: 0 20px;
+    }
+
+    .greenpulse-page .main-content-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+    }
+
+    .greenpulse-page .text-content,
+    .greenpulse-page .image-content {
+        max-width: 100%;
+    }
+
+    .greenpulse-page .design-process-row {
+        gap: 40px;
+    }
+
+    .greenpulse-page .text-column {
+        padding: 0 0 0 80px;
+    }
+
+    .greenpulse-page .balls-column {
+        margin-left: 40px;
+    }
+
+    .greenpulse-page .ball-animation {
+        width: 130px;
+        height: 130px;
+    }
+
+    .greenpulse-page .computer-with-video {
+        max-width: 700px;
+    }
+
+    .greenpulse-page .comparison-container {
+        gap: 40px;
+    }
+
+    .greenpulse-page .image-with-caption {
+        min-width: 300px;
+        max-width: 380px;
+    }
+
+    .greenpulse-page .logo-with-background {
+        max-width: 320px;
+        height: 220px;
+    }
 }
 
 @media (max-width: 1000px) {
-  .design-process-row {
-    flex-direction: column;
-    gap: 30px;
-    align-items: center;
-  }
-  
-  .design-column {
-    margin-bottom: 0;
-    padding: 0 15px;
-    width: 100%;
-  }
-  
-  /* Mobilnézetben minden oszlop teljes szélességű */
-  .logos-column, .text-column, .balls-column {
-    flex: 1 0 100%;
-  }
-  
-  .logos-column {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
-  }
-  
-  .logo-item {
-    flex: 0 0 calc(50% - 15px);
-    margin-bottom: 0;
-  }
-  
-  .balls-column {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
-  }
-  
-  .ball-animation-container {
-    flex: 0 0 calc(33.333% - 20px);
-    margin-bottom: 0;
-  }
-  
-  .ball-animation {
-    width: 120px;
-    height: 120px;
-  }
-  
-  .comparison-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-  }
-  
-  .comparison-image {
-    margin-bottom: 20px;
-  }
-  
-  .comparison-text {
-    order: 3;
-    width: 100%;
-    padding: 0 15px;
-  }
-  
-  .images-row {
-    gap: 30px;
-  }
-  
-  .image-with-caption {
-    min-width: 250px;
-    max-width: 100%;
-  }
-  
-  .logo-with-background {
-    max-width: 280px;
-    height: 200px;
-  }
+    .greenpulse-page .main-content-container,
+    .greenpulse-page .second-section,
+    .greenpulse-page .third-section,
+    .greenpulse-page .back-button-container,
+    .greenpulse-page .divider-line-container,
+    .greenpulse-page .greenpulse-content h1 {
+        max-width: 1000px;
+        padding: 0 15px;
+    }
+
+    .greenpulse-page .design-process-row {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+    }
+
+    .greenpulse-page .design-column {
+        margin-bottom: 0;
+        padding: 0 15px;
+        width: 100%;
+    }
+
+    .greenpulse-page .logos-column,
+    .greenpulse-page .text-column,
+    .greenpulse-page .balls-column {
+        flex: 1 0 100%;
+    }
+
+    .greenpulse-page .text-column {
+        padding: 0;
+    }
+
+    .greenpulse-page .balls-column {
+        margin-left: 0;
+    }
+
+    .greenpulse-page .logos-column {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .greenpulse-page .logo-item {
+        flex: 0 0 calc(50% - 15px);
+        margin-bottom: 0;
+    }
+
+    .greenpulse-page .balls-column {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .greenpulse-page .ball-animation-container {
+        flex: 0 0 calc(33.333% - 20px);
+        margin-bottom: 0;
+    }
+
+    .greenpulse-page .ball-animation {
+        width: 110px;
+        height: 110px;
+    }
+
+    .greenpulse-page .comparison-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .greenpulse-page .comparison-image {
+        margin-bottom: 20px;
+    }
+
+    .greenpulse-page .comparison-text {
+        order: 3;
+        width: 100%;
+        padding: 0 15px;
+    }
+
+    .greenpulse-page .images-row {
+        gap: 40px;
+    }
+
+    .greenpulse-page .image-with-caption {
+        min-width: 280px;
+        max-width: 100%;
+    }
+
+    .greenpulse-page .logo-with-background {
+        max-width: 280px;
+        height: 200px;
+    }
+
+    .greenpulse-page .computer-with-video {
+        max-width: 550px;
+    }
+
+    .greenpulse-page .video-screen {
+        top: 7.5%;
+        left: 12%;
+        width: 76%;
+        height: 66%;
+    }
 }
 
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
-  }
-  
-  .greenpulse-content h1 {
-    font-size: 2rem;
-    margin: 0 0 30px 0;
-    padding: 0 10px;
-  }
-  
-  .greenpulse-content-container {
-    padding: 20px 4vw;
-  }
-  
-  .text-content, .image-content {
-    max-width: 100%;
-  }
-  
-  .eye-container {
-    top: 22%;
-    left: 63%;
-    width: 14%;
-    height: 14%;
-  }
-  
-  .divider-line-container {
-    margin: 40px 0;
-    min-height: 150px;
-    width: 90%;
-  }
-  
-  .line-svg {
-    height: 140px;
-    width: 100%;
-  }
-  
-  .logos-column {
-    flex-direction: column;
-    gap: 30px;
-  }
-  
-  .logo-item {
-    flex: 0 0 100%;
-    margin-bottom: 30px;
-  }
-  
-  .logo-item:last-child {
-    margin-bottom: 0;
-  }
-  
-  .comparison-container {
-    gap: 25px;
-  }
-  
-  .images-row {
-    gap: 25px;
-    justify-content: center;
-  }
-  
-  .image-with-caption {
-    min-width: 220px;
-  }
-  
-  .balls-column {
-    flex-direction: row;
-    padding: 0;
-    justify-content: center;
-    gap: 20px;
-  }
-  
-  .ball-animation-container {
-    flex: 0 0 calc(50% - 10px);
-    margin-bottom: 0;
-  }
-  
-  .ball-animation {
-    width: 110px;
-    height: 110px;
-  }
-  
-  .ball-hex-code {
-    font-size: 1.1rem;
-    padding: 5px 12px;
-  }
-  
-  .logo-with-background {
-    max-width: 240px;
-    height: 180px;
-  }
+    .greenpulse-page .main-content-container,
+    .greenpulse-page .second-section,
+    .greenpulse-page .third-section,
+    .greenpulse-page .back-button-container,
+    .greenpulse-page .divider-line-container,
+    .greenpulse-page .greenpulse-content h1 {
+        max-width: 768px;
+        padding: 0 15px;
+    }
+
+    .greenpulse-page .greenpulse-content h1 {
+        font-size: 2rem;
+        margin: 0 0 30px 0;
+        padding: 0 10px;
+    }
+
+    .greenpulse-page .text-content,
+    .greenpulse-page .image-content {
+        max-width: 100%;
+    }
+
+    .greenpulse-page .divider-line-container {
+        margin: 40px 0;
+        min-height: 150px;
+        width: 90%;
+    }
+
+    .greenpulse-page .line-svg {
+        height: 140px;
+        width: 100%;
+    }
+
+    .greenpulse-page .logos-column {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .greenpulse-page .logo-item {
+        flex: 0 0 100%;
+        margin-bottom: 30px;
+    }
+
+    .greenpulse-page .logo-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .greenpulse-page .comparison-container {
+        gap: 25px;
+    }
+
+    .greenpulse-page .images-row {
+        gap: 25px;
+        justify-content: center;
+    }
+
+    .greenpulse-page .image-with-caption {
+        min-width: 220px;
+    }
+
+    .greenpulse-page .balls-column {
+        flex-direction: row;
+        padding: 0;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .greenpulse-page .ball-animation-container {
+        flex: 0 0 calc(50% - 10px);
+        margin-bottom: 0;
+    }
+
+    .greenpulse-page .ball-animation {
+        width: 90px;
+        height: 90px;
+    }
+
+    .greenpulse-page .ball-hex-code {
+        font-size: 1.1rem;
+        padding: 5px 12px;
+    }
+
+    .greenpulse-page .logo-with-background {
+        max-width: 240px;
+        height: 180px;
+    }
+
+    .greenpulse-page .computer-with-video {
+        max-width: 500px;
+    }
+
+    .greenpulse-page .video-screen {
+        top: 8%;
+        left: 12.5%;
+        width: 75%;
+        height: 65%;
+        border-radius: 10px;
+    }
+
+    .greenpulse-page .play-button {
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+    }
 }
 
 @media (max-width: 600px) {
-  .images-row {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .image-with-caption {
-    max-width: 100%;
-  }
-  
-  .balls-column {
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .ball-animation-container {
-    flex: 0 0 100%;
-  }
+    .greenpulse-page .main-content-container,
+    .greenpulse-page .second-section,
+    .greenpulse-page .third-section,
+    .greenpulse-page .back-button-container,
+    .greenpulse-page .divider-line-container,
+    .greenpulse-page .greenpulse-content h1 {
+        max-width: 600px;
+        padding: 0 10px;
+    }
+
+    .greenpulse-page .images-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .greenpulse-page .image-with-caption {
+        max-width: 100%;
+    }
+
+    .greenpulse-page .balls-column {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .greenpulse-page .ball-animation-container {
+        flex: 0 0 100%;
+    }
+
+    .greenpulse-page .computer-with-video {
+        max-width: 450px;
+    }
+
+    .greenpulse-page .video-screen {
+        top: 8.5%;
+        left: 13%;
+        width: 74%;
+        height: 64%;
+        border-radius: 8px;
+    }
 }
 
 @media (max-width: 480px) {
-  .text-content, .image-content {
-    max-width: 100%;
-  }
-  
-  .eye-container {
-    top: 20%;
-    left: 61%;
-  }
-  
-  .divider-line-container {
-    min-height: 120px;
-    margin: 30px 0;
-  }
-  
-  .line-svg {
-    height: 110px;
-  }
-  
-  .comparison-container {
-    gap: 20px;
-  }
-  
-  .process-logo {
-    max-width: 200px;
-  }
-  
-  .ball-animation {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .ball-hex-code {
-    font-size: 1rem;
-    padding: 4px 10px;
-  }
-  
-  .logo-with-background {
-    max-width: 200px;
-    height: 160px;
-  }
-  
-  .design-column {
-    padding: 0 5px;
-  }
-  
-  .third-section {
-    padding: 0 15px;
-    margin: 30px auto;
-  }
-    
+    .greenpulse-page .main-content-container,
+    .greenpulse-page .second-section,
+    .greenpulse-page .third-section,
+    .greenpulse-page .back-button-container,
+    .greenpulse-page .divider-line-container,
+    .greenpulse-page .greenpulse-content h1 {
+        max-width: 480px;
+        padding: 0 8px;
+    }
+
+    .greenpulse-page .text-content,
+    .greenpulse-page .image-content {
+        max-width: 100%;
+    }
+
+    .greenpulse-page .divider-line-container {
+        min-height: 120px;
+        margin: 30px 0;
+    }
+
+    .greenpulse-page .line-svg {
+        height: 110px;
+    }
+
+    .greenpulse-page .comparison-container {
+        gap: 20px;
+    }
+
+    .greenpulse-page .process-logo {
+        max-width: 200px;
+    }
+
+    .greenpulse-page .ball-animation {
+        width: 80px;
+        height: 80px;
+    }
+
+    .greenpulse-page .ball-hex-code {
+        font-size: 1rem;
+        padding: 4px 10px;
+    }
+
+    .greenpulse-page .logo-with-background {
+        max-width: 200px;
+        height: 160px;
+    }
+
+    .greenpulse-page .design-column {
+        padding: 0 5px;
+    }
+
+    .greenpulse-page .third-section {
+        margin: 30px auto;
+    }
+
+    .greenpulse-page .computer-with-video {
+        max-width: 400px;
+    }
+
+    .greenpulse-page .video-screen {
+        top: 9%;
+        left: 13.5%;
+        width: 73%;
+        height: 63%;
+        border-radius: 6px;
+    }
+
+    .greenpulse-page .play-button {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
 }
 
-  .footer-links {
-          display: flex;
-          gap: clamp(16px, 2vw, 40px);
-          flex-wrap: wrap;
-          justify-content: center;
-          position: relative;
-          z-index: 101;
-        }
-        
-        .footer-links a {
-          color: black;
-          font-size: clamp(14px, 2vw, 20px);
-          text-decoration: none;
-          transition: color 0.2s ease;
-        }
-        
-        .footer-links a:hover {
-          color: 444;
-        }
+@media (max-width: 360px) {
+    .greenpulse-page .main-content-container,
+    .greenpulse-page .second-section,
+    .greenpulse-page .third-section,
+    .greenpulse-page .back-button-container,
+    .greenpulse-page .divider-line-container,
+    .greenpulse-page .greenpulse-content h1 {
+        max-width: 360px;
+        padding: 0 5px;
+    }
 
-        /* Add these styles to your GreenPulse.css file */
+    .greenpulse-page .greenpulse-content h1 {
+        font-size: 1.6rem;
+    }
 
-.comparison-svg {
-  transition: opacity 0.5s ease-in-out;
+    .greenpulse-page .text-content h2,
+    .greenpulse-page .second-section h2,
+    .greenpulse-page .text-column h2 {
+        font-size: 1.4rem;
+    }
+
+    .greenpulse-page .text-content p,
+    .greenpulse-page .text-content ul,
+    .greenpulse-page .comparison-text p,
+    .greenpulse-page .comparison-text ul,
+    .greenpulse-page .text-column p,
+    .greenpulse-page .text-column ul {
+        font-size: 0.9rem;
+    }
+
+    .greenpulse-page .comparison-image p,
+    .greenpulse-page .image-with-caption p,
+    .greenpulse-page .logo-item p,
+    .greenpulse-page .ball-hex-code {
+        font-size: 0.8rem;
+    }
+
+    .greenpulse-page .computer-with-video {
+        max-width: 320px;
+    }
+
+    .greenpulse-page .video-screen {
+        top: 9.5%;
+        left: 14%;
+        width: 72%;
+        height: 62%;
+        border-radius: 4px;
+    }
+
+    .greenpulse-page .play-button {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+    }
 }
-
-/* Optional: Add a subtle animation effect */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
-}
-

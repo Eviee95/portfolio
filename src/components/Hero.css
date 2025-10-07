@@ -1,109 +1,19 @@
-/* Hero.css */
-html, body {
-  width: 100vw;
-  overflow-x: hidden;
-}
-
 .hero-root {
   min-height: 100vh;
-  width: 100vw;
-  background: url('/images/background.jpg') center center / cover no-repeat;
+  width: 100%;
   font-family: DiaryOfAWimpyKidFont, sans-serif;
-  box-sizing: border-box;
-  overflow-x: hidden;
+  background: transparent;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 7vw;
-  font-size: clamp(1.3rem, 2vw, 2.2rem);
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.header-logo {
-  width: clamp(80px, 8vw, 120px);
-  height: auto;
-}
-
-.header-nav {
-  display: flex;
-  gap: clamp(18px, 4vw, 40px);
-  align-items: center;
-}
-
-.header-nav a {
-  color: black;
-  text-decoration: none;
-}
-
-/* Dropdown styles */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-toggle {
-  background: none;
-  border: none;
-  font-family: DiaryOfAWimpyKidFont, sans-serif;
-  font-size: clamp(1.3rem, 2vw, 2.2rem);
-  font-weight: bold;
-  text-transform: uppercase;
-  color: black;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.dropdown-arrow {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.3s ease;
-}
-
-.dropdown-arrow.open {
-  transform: rotate(180deg);
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  border: 2px solid black;
-  border-radius: 8px;
-  padding: 10px 0;
-  min-width: 180px;
-  z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.dropdown-menu a {
-  display: block;
-  padding: 8px 16px;
-  color: black;
-  text-decoration: none;
-  font-size: 1.2rem;
-}
-
-.dropdown-menu a:hover {
-  background-color: #f0f0f0;
-}
-
-.main-container {
+.hero-root .main-container {
   margin: 0 auto;
-  max-width: 1800px;
   width: 100%;
   padding-left: 7vw;
   padding-right: 7vw;
   box-sizing: border-box;
   overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
 }
 
 .main-frame {
@@ -152,7 +62,6 @@ html, body {
   height: 100%;
   object-fit: contain;
   pointer-events: none;
-  /* Nincs árnyék a szöveges résznek */
 }
 
 .postit-img {
@@ -163,7 +72,6 @@ html, body {
   z-index: 2;
 }
 
-/* About Me Button styling - only press effect, no border, no shadow */
 .aboutme-button-wrap {
   width: 100%;
   display: flex;
@@ -189,7 +97,6 @@ html, body {
   filter: brightness(1.04);
 }
 
-/* Send Button styling - centered */
 .send-button-container {
   width: 100%;
   display: flex;
@@ -215,7 +122,6 @@ html, body {
   filter: brightness(1.04);
 }
 
-/* Coffee stain on contact section - BIGGER! */
 .stain-relative {
   position: relative;
 }
@@ -232,23 +138,11 @@ html, body {
   mix-blend-mode: multiply;
 }
 
-/* Card container for green pulse effect - ENHANCED SIZE */
 .card-container {
   position: relative;
   display: inline-block;
 }
 
-.greenpulse-img {
-  position: absolute;
-  top: 49%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: auto;
-  z-index: -1;
-}
-
-/* NEW: Container for both magic effect and card - ENHANCED SIZE */
 .card-magic-container {
   position: relative;
   display: flex;
@@ -257,42 +151,33 @@ html, body {
   cursor: pointer;
 }
 
-/* Magic effect container - positioned above the card - ENHANCED SIZE */
 .magic-container {
   position: relative;
-  margin-bottom: -40px; /* Increased overlap with the card */
+  margin-bottom: -40px;
   z-index: 10;
 }
 
 .magic-img {
-  width: 280px; /* Reduced from 350px */
+  width: 280px;
   height: auto;
 }
 
-/* Project card - ENHANCED SIZE */
 .project-card {
   width: 100%;
-  max-width: 320px; /* Reduced from 400px */
+  max-width: 320px;
   position: relative;
   z-index: 2;
 }
 
 .center-card {
-  max-width: 400px; /* Reduced from 500px */
+  max-width: 400px;
 }
 
-@keyframes pulse {
-  0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.95); }
-  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
-  100% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.95); }
-}
-
-/* Projects section - UPDATED TO KEEP CARDS IN ONE ROW WITH LARGER GAPS */
 .projects-section {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: clamp(40px, 8vw, 100px); /* Increased gap between cards */
+  gap: clamp(40px, 8vw, 100px);
   margin: clamp(24px, 8vw, 60px) 0 clamp(80px, 15vw, 140px) 0;
   padding: 0 clamp(10px, 3vw, 20px);
   flex-wrap: nowrap;
@@ -308,13 +193,13 @@ html, body {
 .project-item {
   display: flex;
   align-items: center;
-  gap: clamp(40px, 5vw, 80px); /* Increased gap between arrows and cards */
+  gap: clamp(40px, 5vw, 80px);
   position: relative;
   flex: 0 0 auto;
 }
 
 .arrow-img {
-  width: clamp(40px, 4vw, 60px); /* Increased arrow size */
+  width: clamp(40px, 4vw, 60px);
   flex-shrink: 0;
 }
 
@@ -419,7 +304,7 @@ html, body {
   image-rendering: pixelated;
 }
 
-.footer {
+.footer-animation-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -491,7 +376,6 @@ html, body {
   margin-left: -60px;
 }
 
-/* Pencil and eraser styles - VERY BIG SIZE */
 .footer-pencil {
   position: absolute;
   right: 4%;
@@ -512,27 +396,38 @@ html, body {
   filter: drop-shadow(8px 10px 5px rgba(0, 0, 0, 0.4));
 }
 
-.footer-links {
+.projects-title-container {
+  width: 100%;
+  text-align: center;
+  margin-top: -20px;
+}
+
+.projects-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: -50px;
+  padding: 0;
+}
+
+.projects-cards-container {
   display: flex;
-  gap: clamp(16px, 2vw, 40px);
-  flex-wrap: wrap;
   justify-content: center;
-  position: relative;
-  z-index: 101;
+  align-items: center;
+  gap: 8rem;
+  width: 100%;
 }
 
-.footer-links a {
-  color: black;
-  font-size: clamp(14px, 2vw, 20px);
-  text-decoration: none;
-  transition: color 0.2s ease;
+.projects-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2rem 0;
 }
 
-.footer-links a:hover {
-  color: #444;
-}
-
-/* Media Queries */
 @media (max-width: 1100px) {
   .postit-stack {
     width: 36vw;
@@ -552,27 +447,27 @@ html, body {
   }
   
   .magic-img {
-    width: 220px; /* Reduced from 280px */
+    width: 220px;
   }
   
   .project-card {
-    max-width: 280px; /* Reduced from 350px */
+    max-width: 280px;
   }
   
   .center-card {
-    max-width: 350px; /* Reduced from 450px */
+    max-width: 350px;
   }
   
   .projects-section {
-    gap: clamp(30px, 6vw, 80px); /* Adjusted for medium screens */
+    gap: clamp(30px, 6vw, 80px);
   }
   
   .project-item {
-    gap: clamp(30px, 4vw, 60px); /* Adjusted for medium screens */
+    gap: clamp(30px, 4vw, 60px);
   }
   
   .arrow-img {
-    width: clamp(35px, 3.5vw, 50px); /* Adjusted for medium screens */
+    width: clamp(35px, 3.5vw, 50px);
   }
   
   .main-container {
@@ -580,10 +475,6 @@ html, body {
     padding-right: 3vw;
     max-width: 98vw;
     width: 98vw;
-  }
-  
-  .header {
-    padding: 20px 4vw;
   }
   
   .footer-content-wrapper {
@@ -617,7 +508,6 @@ html, body {
     filter: drop-shadow(6px 8px 4px rgba(0, 0, 0, 0.35));
   }
   
-  /* Shadow adjustments for medium screens */
   .postit-img {
     filter: drop-shadow(5px 6px 3px rgba(0, 0, 0, 0.25));
   }
@@ -642,27 +532,27 @@ html, body {
   }
   
   .magic-img {
-    width: 180px; /* Reduced from 220px */
+    width: 180px;
   }
   
   .project-card {
-    max-width: 240px; /* Reduced from 300px */
+    max-width: 240px;
   }
   
   .center-card {
-    max-width: 300px; /* Reduced from 380px */
+    max-width: 300px;
   }
   
   .projects-section {
-    gap: clamp(25px, 5vw, 60px); /* Adjusted for smaller screens */
+    gap: clamp(25px, 5vw, 60px);
   }
   
   .project-item {
-    gap: clamp(25px, 3.5vw, 50px); /* Adjusted for smaller screens */
+    gap: clamp(25px, 3.5vw, 50px);
   }
   
   .arrow-img {
-    width: clamp(30px, 3vw, 45px); /* Adjusted for smaller screens */
+    width: clamp(30px, 3vw, 45px);
   }
   
   .about-section, .contact-section {
@@ -711,7 +601,6 @@ html, body {
     filter: drop-shadow(4px 5px 3px rgba(0, 0, 0, 0.3));
   }
   
-  /* Shadow adjustments for smaller screens */
   .postit-img {
     filter: drop-shadow(4px 5px 2px rgba(0, 0, 0, 0.2));
   }
@@ -740,27 +629,27 @@ html, body {
   }
   
   .magic-img {
-    width: 150px; /* Reduced from 180px */
+    width: 150px;
   }
   
   .project-card {
-    max-width: 200px; /* Reduced from 250px */
+    max-width: 200px;
   }
   
   .center-card {
-    max-width: 250px; /* Reduced from 300px */
+    max-width: 250px;
   }
   
   .projects-section {
-    gap: clamp(20px, 4vw, 40px); /* Adjusted for mobile */
+    gap: clamp(20px, 4vw, 40px);
   }
   
   .project-item {
-    gap: clamp(20px, 3vw, 40px); /* Adjusted for mobile */
+    gap: clamp(20px, 3vw, 40px);
   }
   
   .arrow-img {
-    width: clamp(25px, 2.5vw, 35px); /* Adjusted for mobile */
+    width: clamp(25px, 2.5vw, 35px);
   }
   
   .main-container {
@@ -769,17 +658,6 @@ html, body {
     margin: 0;
     max-width: 100vw;
     width: 100vw;
-  }
-  
-  .header {
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px 2vw;
-    font-size: 1.2rem;
-  }
-  
-  .header-logo {
-    width: 80px;
   }
   
   .main-animation-img, .about-img, .contact-animation-img, .footer-animation-img, .guy-animation-img {
@@ -819,17 +697,15 @@ html, body {
     filter: drop-shadow(3px 4px 2px rgba(0, 0, 0, 0.25));
   }
   
-  .footer {
+  .footer-animation-container {
     min-height: 400px;
   }
   
-  /* Shadow adjustments for mobile */
   .postit-img {
     filter: drop-shadow(3px 4px 2px rgba(0, 0, 0, 0.2));
   }
 }
 
-/* Additional breakpoint for larger screens */
 @media (min-width: 1400px) {
   .guy-animation-img {
     max-width: 600px;
@@ -844,7 +720,7 @@ html, body {
   .footer-pencil {
     height: 780px;
     right: 2%;
-    bottom:12%;
+    bottom: 12%;
     filter: drop-shadow(10px 12px 6px rgba(0, 0, 0, 0.45));
   }
   
@@ -855,7 +731,6 @@ html, body {
     filter: drop-shadow(10px 12px 6px rgba(0, 0, 0, 0.45));
   }
   
-  /* Larger shadow for big screens */
   .postit-img {
     filter: drop-shadow(8px 10px 5px rgba(0, 0, 0, 0.35));
   }
