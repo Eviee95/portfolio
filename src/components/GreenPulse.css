@@ -333,7 +333,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-bottom: 30px;
+    
 }
 
 .greenpulse-page .logo-item:last-child {
@@ -385,10 +385,10 @@
 }
 
 .greenpulse-page .ball-animation {
-    width: 150px;
-    height: 150px;
+    width: 160px;
+    height: auto;
     transition: transform 0.3s ease;
-    border-radius: 50%;
+  
 }
 
 .greenpulse-page .ball-animation:hover {
@@ -398,7 +398,7 @@
 .greenpulse-page .ball-hex-code {
     font-size: 1.3rem;
     font-weight: bold;
-    margin-top: 12px;
+    margin-top: 16px;
     padding: 6px 14px;
     border-radius: 20px;
     color: #000;
@@ -457,10 +457,12 @@
 
 .greenpulse-page .light-bg {
     background: url('/images/lightbackground.png') center center / contain no-repeat;
+    margin-bottom: -60px;
 }
 
 .greenpulse-page .dark-bg {
     background: url('/images/darkbackground.png') center center / contain no-repeat;
+     margin-top: -60px;
 }
 
 .greenpulse-page .logo-with-background .process-logo {
@@ -480,6 +482,19 @@
 
 .greenpulse-page .comparison-svg {
     animation: pulse 4s ease-in-out infinite;
+}
+
+/* Ensure the fourth divider line has proper spacing */
+.greenpulse-page .third-section .divider-line-container {
+  margin: 40px auto 20px auto;
+  width: 100%;
+  max-width: 1800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* Reszponzív beállítások */
@@ -563,6 +578,11 @@
         max-width: 320px;
         height: 220px;
     }
+
+    .greenpulse-page .third-section .divider-line-container {
+        max-width: 1200px;
+        padding: 0 20px;
+    }
 }
 
 @media (max-width: 1000px) {
@@ -611,7 +631,7 @@
 
     .greenpulse-page .logo-item {
         flex: 0 0 calc(50% - 15px);
-        margin-bottom: 0;
+      
     }
 
     .greenpulse-page .balls-column {
@@ -624,6 +644,7 @@
     .greenpulse-page .ball-animation-container {
         flex: 0 0 calc(33.333% - 20px);
         margin-bottom: 0;
+       
     }
 
     .greenpulse-page .ball-animation {
@@ -666,10 +687,15 @@
     }
 
     .greenpulse-page .video-screen {
-        top: 7.5%;
+        top: 7.8%;
         left: 12%;
-        width: 76%;
-        height: 66%;
+        width: 78%;
+        height: 68%;
+    }
+
+    .greenpulse-page .third-section .divider-line-container {
+        max-width: 1000px;
+        padding: 0 15px;
     }
 }
 
@@ -766,8 +792,8 @@
 
     .greenpulse-page .video-screen {
         top: 8%;
-        left: 12.5%;
-        width: 75%;
+        left: 12.8%;
+        width: 77%;
         height: 65%;
         border-radius: 10px;
     }
@@ -776,6 +802,17 @@
         width: 45px;
         height: 45px;
         font-size: 16px;
+    }
+
+    .greenpulse-page .third-section .divider-line-container {
+        max-width: 768px;
+        padding: 0 15px;
+        min-height: 150px;
+        margin: 30px auto 15px auto;
+    }
+    
+    .greenpulse-page .third-section .line-svg {
+        height: 140px;
     }
 }
 
@@ -893,6 +930,17 @@
         width: 40px;
         height: 40px;
         font-size: 14px;
+    }
+
+    .greenpulse-page .third-section .divider-line-container {
+        max-width: 480px;
+        padding: 0 8px;
+        min-height: 120px;
+        margin: 20px auto 10px auto;
+    }
+    
+    .greenpulse-page .third-section .line-svg {
+        height: 110px;
     }
 }
 

@@ -24,6 +24,11 @@ const GreenPulse = () => {
   const [thirdAnimationStarted, setThirdAnimationStarted] = useState(false);
   const [thirdAnimationCompleted, setThirdAnimationCompleted] = useState(false);
   const thirdDividerLineRef = useRef(null);
+  // Fourth line animation state (new one before images)
+  const [fourthLineSvgIndex, setFourthLineSvgIndex] = useState(1);
+  const [fourthAnimationStarted, setFourthAnimationStarted] = useState(false);
+  const [fourthAnimationCompleted, setFourthAnimationCompleted] = useState(false);
+  const fourthDividerLineRef = useRef(null);
   // Animation states for comparison SVGs
   const [niceSvgState, setNiceSvgState] = useState('open');
   const [uglySvgState, setUglySvgState] = useState('open');
@@ -36,6 +41,7 @@ const GreenPulse = () => {
   const animationCompletedRef = useRef(false);
   const secondAnimationCompletedRef = useRef(false);
   const thirdAnimationCompletedRef = useRef(false);
+  const fourthAnimationCompletedRef = useRef(false);
 
   // Mindig az oldal tetejére görbünk, amikor betöltődik az oldal
   useEffect(() => {
@@ -196,6 +202,41 @@ const GreenPulse = () => {
       }
     };
   }, [thirdAnimationStarted]);
+
+  // Check if fourth divider line is visible and start animation (new one)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !fourthAnimationStarted && !fourthAnimationCompletedRef.current) {
+          setFourthAnimationStarted(true);
+          
+          // Animate through the line SVGs
+          let currentIndex = 1;
+          const interval = setInterval(() => {
+            if (currentIndex < 15) {
+              currentIndex++;
+              setFourthLineSvgIndex(currentIndex);
+            } else {
+              clearInterval(interval);
+              setFourthAnimationCompleted(true);
+              fourthAnimationCompletedRef.current = true;
+            }
+          }, 100);
+        }
+      },
+      { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    if (fourthDividerLineRef.current) {
+      observer.observe(fourthDividerLineRef.current);
+    }
+
+    return () => {
+      if (fourthDividerLineRef.current) {
+        observer.unobserve(fourthDividerLineRef.current);
+      }
+    };
+  }, [fourthAnimationStarted]);
 
   // Animation for nice/ugly SVGs - open 4s, closed very briefly (50ms)
   useEffect(() => {
@@ -387,7 +428,7 @@ const GreenPulse = () => {
                 <div className="design-process-row">
                   
                   <div className="design-column logos-column">
-                    <h2>Logos</h2>
+                    <h2 style={{ fontSize: "2rem",  }}>Logos</h2>
                     <div className="logo-item">
                       <div className="logo-with-background light-bg">
                         <img src="/images/logoblackwhite.svg" alt="Black and White Logo" className="process-logo" />
@@ -425,23 +466,23 @@ const GreenPulse = () => {
                   
                   {/* Balls column */}
                   <div className="design-column balls-column">
-                    <h2>Colors</h2>
+                    <h2 style={{ fontSize: "2rem",  }}>Colors</h2>
                     <div className="ball-animation-container">
                       <img 
-                        src="/images/paca.svg" 
+                        src="/images/00696F.svg" 
                         alt="Animated ball" 
                         className="ball-animation"
                       />
-                      <div className="ball-hex-code">#6bd8b0</div>
+                      <div className="ball-hex-code">#00696F</div>
                     </div>
                     
                     <div className="ball-animation-container">
                       <img 
-                        src="/images/paca.svg" 
+                        src="/images/6BD8B0.svg" 
                         alt="Animated ball" 
                         className="ball-animation"
                       />
-                      <div className="ball-hex-code">#4caf50</div>
+                      <div className="ball-hex-code">#6BD8B0</div>
                     </div>
                     
                     {/* Centered Helvetica text */}
@@ -450,8 +491,9 @@ const GreenPulse = () => {
                       marginTop: '30px',
                       width: '100%'
                     }}>
-                      <h2>Font</h2>
-                      <h2>Helvetica Neue</h2>
+                      <h2 style={{ fontSize: "2rem",  }}>Font</h2>
+                      <h2 style={{ fontSize: "2rem", color: "#00696F" }}>Helvetica Neue</h2>
+                      
                       <h3 style={{
                         fontFamily: "Helvetica Neue",
                         textAlign: 'center',
@@ -462,6 +504,17 @@ const GreenPulse = () => {
                         aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ
                       </h3>
                     </div>
+                  </div> 
+                </div>
+
+                {/* Fourth divider line - before the final images */}
+                <div className="divider-line-container" ref={fourthDividerLineRef}>
+                  <div className="divider-line">
+                    <img 
+                      src={`/images/line${fourthAnimationCompletedRef.current ? 15 : fourthLineSvgIndex}.svg`} 
+                      alt="Decorative divider line" 
+                      className="line-svg"
+                    />
                   </div>
                 </div>
 

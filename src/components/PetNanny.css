@@ -79,7 +79,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    gap: 80px;
+    gap: 120px;
     width: 100%;
     max-width: 1800px;
     margin: 0 auto;
@@ -88,8 +88,7 @@
 }
 
 .petnanny-page .text-content {
-    flex: 1;
-    max-width: 1100px;
+    max-width: 1000px;
 }
 
 .petnanny-page .text-content h2 {
@@ -119,7 +118,7 @@
 .petnanny-page .image-content {
     flex: 1;
     display: flex;
-    justify-content: right;
+    justify-content: center;
     align-items: center;
     max-width: 800px;
 }
@@ -127,14 +126,44 @@
 .petnanny-page .project-image-container {
     position: relative;
     width: 100%;
-    max-width: 500px;
+    max-width: 280px;
     height: auto;
 }
 
-.petnanny-page .project-image {
+/* Phone frame styles */
+.petnanny-page .phone-frame {
+    position: relative;
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.petnanny-page .phone-frame-image {
     width: 100%;
     height: auto;
-    border-radius: 12px;
+    position: relative;
+    z-index: 2;
+}
+
+.petnanny-page .phone-screen {
+    position: absolute;
+    top: 7.5%;
+    left: 6.5%;
+    width: 87%;
+    height: 85%;
+    background: transparent;
+    border-radius: 22px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.petnanny-page .pet-animation {
+    width: 95%;
+    height: 97%;
+    object-fit: cover;
+    margin-top: 4px;
+    margin-left: 6px;
 }
 
 .petnanny-page .divider-line-container {
@@ -166,26 +195,19 @@
     transform: scaleX(-1);
 }
 
+/* Second section styles */
 .petnanny-page .second-section {
     width: 100%;
     max-width: 1800px;
     margin: 40px auto 0 auto;
     padding: 0 20px;
     box-sizing: border-box;
-    text-align: center;
-}
-
-.petnanny-page .second-section h2 {
-    font-size: clamp(24px, 3vw, 36px);
-    margin-top: 0;
-    color: #1976d2;
-    width: 100%;
 }
 
 .petnanny-page .comparison-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center; /* Középre igazítás függőlegesen */
     gap: 60px;
     margin-top: 30px;
     width: 100%;
@@ -194,29 +216,29 @@
 .petnanny-page .comparison-image {
     flex: 1;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 300px;
+    justify-content: center;
+    align-items: center; /* Középre igazítás */
+    min-width: 200px;
 }
 
 .petnanny-page .comparison-svg {
     width: 100%;
-    max-width: 400px;
+    max-width: 250px; /* Csökkentve 400px-ről */
     height: auto;
-    transition: opacity 0.5s ease-in-out;
-}
-
-.petnanny-page .comparison-image p {
-    margin-top: 10px;
-    font-weight: bold;
-    font-size: clamp(16px, 1.5vw, 20px);
 }
 
 .petnanny-page .comparison-text {
-    flex: 3;
+    flex: 2;
     text-align: left;
     padding: 0 40px;
     min-width: 0;
+}
+
+.petnanny-page .comparison-text h2 {
+    font-size: clamp(24px, 3vw, 36px);
+    margin-top: 0;
+    color: #1976d2;
+    margin-bottom: 20px;
 }
 
 .petnanny-page .comparison-text p {
@@ -225,19 +247,18 @@
     margin-bottom: 15px;
 }
 
-.petnanny-page .comparison-text ul {
-    font-size: clamp(18px, 2vw, 26px);
-    line-height: 1.6;
-    margin: 15px 0;
-    padding-left: 20px;
+/* Additional SVGs styling */
+.petnanny-page .additional-svgs {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 30px;
+    flex-wrap: wrap;
 }
 
-.petnanny-page .comparison-text {
-    text-align: center;
-}
-
-.petnanny-page .comparison-text h2 {
-    margin-top: 70px;
+.petnanny-page .additional-svg {
+    max-width: 200px;
+    height: auto;
 }
 
 .petnanny-page .third-section {
@@ -413,24 +434,6 @@
     height: auto;
 }
 
-.petnanny-page .comparison-container img[alt="PetNanny Illustration"] {
-    width: 100%;
-    height: auto;
-    margin: 0 auto;
-    display: block;
-}
-
-/* Animation for comparison SVGs */
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-    100% { transform: scale(1); }
-}
-
-.petnanny-page .comparison-svg {
-    animation: pulse 4s ease-in-out infinite;
-}
-
 /* Reszponzív beállítások */
 @media (max-width: 1600px) {
     .petnanny-page .main-content-container,
@@ -453,6 +456,22 @@
     .petnanny-page .petnanny-content h1 {
         max-width: 1400px;
         padding: 0 25px;
+    }
+    
+    .petnanny-page .phone-frame {
+        max-width: 230px;
+    }
+    
+    .petnanny-page .comparison-container {
+        gap: 40px;
+    }
+    
+    .petnanny-page .comparison-text {
+        padding: 0 20px;
+    }
+    
+    .petnanny-page .comparison-svg {
+        max-width: 220px; /* Csökkentve */
     }
 }
 
@@ -496,11 +515,19 @@
     }
 
     .petnanny-page .project-image-container {
-        max-width: 400px;
+        max-width: 260px;
+    }
+
+    .petnanny-page .phone-frame {
+        max-width: 220px;
     }
 
     .petnanny-page .comparison-container {
         gap: 40px;
+    }
+
+    .petnanny-page .comparison-svg {
+        max-width: 200px; /* Csökkentve */
     }
 
     .petnanny-page .image-with-caption {
@@ -511,6 +538,14 @@
     .petnanny-page .logo-with-background {
         max-width: 320px;
         height: 220px;
+    }
+    
+    .petnanny-page .additional-svgs {
+        gap: 30px;
+    }
+    
+    .petnanny-page .additional-svg {
+        max-width: 180px;
     }
 }
 
@@ -580,6 +615,10 @@
         height: 110px;
     }
 
+    .petnanny-page .phone-frame {
+        max-width: 200px;
+    }
+
     .petnanny-page .comparison-container {
         flex-direction: column;
         align-items: center;
@@ -590,10 +629,15 @@
         margin-bottom: 20px;
     }
 
+    .petnanny-page .comparison-svg {
+        max-width: 180px; /* Csökkentve */
+    }
+
     .petnanny-page .comparison-text {
         order: 3;
         width: 100%;
         padding: 0 15px;
+        text-align: center;
     }
 
     .petnanny-page .images-row {
@@ -609,9 +653,10 @@
         max-width: 280px;
         height: 200px;
     }
-
-    .petnanny-page .project-image-container {
-        max-width: 350px;
+    
+    .petnanny-page .additional-svgs {
+        justify-content: center;
+        gap: 30px;
     }
 }
 
@@ -662,8 +707,16 @@
         margin-bottom: 0;
     }
 
+    .petnanny-page .phone-frame {
+        max-width: 180px;
+    }
+
     .petnanny-page .comparison-container {
         gap: 25px;
+    }
+
+    .petnanny-page .comparison-svg {
+        max-width: 160px; /* Csökkentve */
     }
 
     .petnanny-page .images-row {
@@ -701,9 +754,13 @@
         max-width: 240px;
         height: 180px;
     }
-
-    .petnanny-page .project-image-container {
-        max-width: 300px;
+    
+    .petnanny-page .additional-svgs {
+        gap: 20px;
+    }
+    
+    .petnanny-page .additional-svg {
+        max-width: 150px;
     }
 }
 
@@ -736,8 +793,22 @@
         flex: 0 0 100%;
     }
 
-    .petnanny-page .project-image-container {
-        max-width: 280px;
+    .petnanny-page .phone-frame {
+        max-width: 160px;
+    }
+    
+    .petnanny-page .comparison-svg {
+        max-width: 140px; /* Csökkentve */
+    }
+    
+    .petnanny-page .additional-svgs {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .petnanny-page .additional-svg {
+        max-width: 120px;
     }
 }
 
@@ -770,6 +841,10 @@
         gap: 20px;
     }
 
+    .petnanny-page .comparison-svg {
+        max-width: 120px; /* Csökkentve */
+    }
+
     .petnanny-page .process-logo {
         max-width: 200px;
     }
@@ -797,8 +872,8 @@
         margin: 30px auto;
     }
 
-    .petnanny-page .project-image-container {
-        max-width: 250px;
+    .petnanny-page .phone-frame {
+        max-width: 140px;
     }
 }
 
@@ -839,7 +914,11 @@
         font-size: 0.8rem;
     }
 
-    .petnanny-page .project-image-container {
-        max-width: 220px;
+    .petnanny-page .phone-frame {
+        max-width: 130px;
+    }
+    
+    .petnanny-page .comparison-svg {
+        max-width: 100px; /* Csökkentve */
     }
 }

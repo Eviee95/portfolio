@@ -22,11 +22,13 @@ const PetNanny = () => {
   const [thirdAnimationStarted, setThirdAnimationStarted] = useState(false);
   const [thirdAnimationCompleted, setThirdAnimationCompleted] = useState(false);
   const thirdDividerLineRef = useRef(null);
-  // Animation states for comparison SVGs
-  const [niceSvgState, setNiceSvgState] = useState('open');
-  const [uglySvgState, setUglySvgState] = useState('open');
+  // Animation states for dog SVG
+  const [dogSvgState, setDogSvgState] = useState('open');
   // State for alternating kido images
   const [kidoImage, setKidoImage] = useState('kido1');
+  // State for pet animation
+  const [petImageIndex, setPetImageIndex] = useState(1);
+  const [petAnimationStarted, setPetAnimationStarted] = useState(false);
 
   // Use refs to track animation completion persistently
   const animationCompletedRef = useRef(false);
@@ -52,6 +54,21 @@ const PetNanny = () => {
       handleGoBack();
     }, 150); 
   };
+
+  // Pet animation - cycles through pet1.svg to pet11.svg
+  useEffect(() => {
+    const petInterval = setInterval(() => {
+      setPetImageIndex(prevIndex => {
+        if (prevIndex >= 11) {
+          return 1; // Reset to pet1.svg
+        } else {
+          return prevIndex + 1; // Move to next pet image
+        }
+      });
+    }, 800); // Change image every 800ms for slower animation
+
+    return () => clearInterval(petInterval);
+  }, []);
 
   // Check if first divider line is visible and start animation
   useEffect(() => {
@@ -158,44 +175,20 @@ const PetNanny = () => {
     };
   }, [thirdAnimationStarted]);
 
-  // Animation for nice/ugly SVGs - open 4s, closed very briefly (50ms)
+  // Animation for dog SVG - closed state shorter than open
   useEffect(() => {
-    let niceInterval;
-    let uglyInterval;
+    const timer = setTimeout(() => {
+      setDogSvgState(prevState => {
+        if (prevState === 'open') {
+          return 'closed';
+        } else {
+          return 'open';
+        }
+      });
+    }, dogSvgState === 'open' ? 1500 : 200); // Open: 1.5s, Closed: 0.5s
 
-    const startNiceAnimation = () => {
-      niceInterval = setInterval(() => {
-        // Show closed state very briefly
-        setNiceSvgState('closed');
-        
-        // Immediately return to open state (almost instant)
-        setTimeout(() => {
-          setNiceSvgState('open');
-        }, 200); // Extremely short closed state (50ms)
-      }, 2000); // Repeat every 4 seconds
-    };
-
-    const startUglyAnimation = () => {
-      uglyInterval = setInterval(() => {
-        // Show closed state very briefly
-        setUglySvgState('closed');
-        
-        // Immediately return to open state (almost instant)
-        setTimeout(() => {
-          setUglySvgState('open');
-        }, 200); // Extremely short closed state (50ms)
-      }, 2000); // Repeat every 4 seconds
-    };
-
-    // Start animations
-    startNiceAnimation();
-    startUglyAnimation();
-
-    return () => {
-      clearInterval(niceInterval);
-      clearInterval(uglyInterval);
-    };
-  }, []);
+    return () => clearTimeout(timer);
+  }, [dogSvgState]);
 
   // Animation for alternating kido images
   useEffect(() => {
@@ -241,17 +234,34 @@ const PetNanny = () => {
                 {/* Text */}
                 <div className="text-content">
                   <h2>What is PetNanny?</h2>
-                  <p>PetNanny is a comprehensive pet care application designed to make pet ownership easier and more organized. The app helps pet owners manage everything from feeding schedules to veterinary appointments, all in one convenient place.</p>
+                  <p>The source of this idea was actually my own little companion. He would have loved a better organizer in his life. Well, I wanted one for him. 😄 I kept thinking, "If only there was a simple app for me to use to keep everything in the same spot: when he was walked, when his vet appointments were, or even when his deworming treatment was due." Thus, the idea for PetNanny was conceived.</p>
                  
                   <p>
-                    The goal was to create an intuitive interface that even the least tech-savvy pet owners could navigate easily, while providing powerful features for those who want more control over their pet's care routine.
+                    The Goal: A digital babysitter that you could trust.
+
+I wanted this app to act like a friend that I could trust: cute, but not too cute; smart, but not a know it all. A nice, clean, friendly, and smart digital helper that doesn't annoy you but actually assists you. Its vibe should feel automatically trustworthy - like you are handing your pet over to an experienced "pet nanny". 
                   </p>
                 </div>
 
                 {/* Image */}
                 <div className="image-content">
                   <div className="project-image-container">
-                    <img src="/images/petcard.svg" alt="PetNanny App" className="project-image" />
+                    {/* Phone frame with pet animation inside */}
+                    <div className="phone-frame">
+                      <div className="phone-screen">
+                        {/* Pet animation inside phone screen */}
+                        <img 
+                          src={`/images/pet${petImageIndex}.png`} 
+                          alt="PetNanny App Animation" 
+                          className="pet-animation" 
+                        />
+                      </div>
+                      <img 
+                        src="/images/phone.svg" 
+                        alt="Phone Frame" 
+                        className="phone-frame-image" 
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -270,14 +280,23 @@ const PetNanny = () => {
               {/* Second section */}
               <div className="second-section">
                 <div className="comparison-container">
-                  <div className="comparison-text">
+                  {/* Bal oldal - váltakozó kutya SVG */}
+                  <div className="comparison-image">
                     <img 
-                      src={`/images/petnanny-illustration.svg`} 
-                      alt="PetNanny Illustration" 
-                    />   
-                    <h2>Design Philosophy</h2>
-                    <p>Since pets are part of the family, I wanted the design to feel warm, friendly, and approachable. The color palette was chosen to evoke feelings of care and comfort, with soft blues and greens that are easy on the eyes. The illustrations throughout the app feature cute, stylized animals to create an emotional connection with users.</p>
-                    <p>The interface prioritizes simplicity and clarity. Important information like medication schedules and vet appointments are highlighted, while secondary features are easily accessible but don't clutter the main views. The typography is clean and highly readable, ensuring that critical pet care information is never missed.</p>
+                      src={`/images/dog${dogSvgState === 'open' ? 'open' : 'closed'}.svg`} 
+                      alt="Animated dog" 
+                      className="comparison-svg"
+                    />
+                  </div>
+                  
+                  {/* Jobb oldal - szöveg */}
+                  <div className="comparison-text">
+                    <h2>The Challenge: Holding back the creative devil</h2>
+                    <p>Now, this was the harder part. I easily get caught up in the flow and start brainstorming all sorts of cool but complex features. Here, however, I had to consciously fight with myself: "Don't overcomplicate it!" The main goal was for every single button, menu, and reminder to be instantly understandable and easy to find. Minimalism won!</p>
+                    
+                    
+                    {/* cmmel és s-ziveggel SVG-k a szöveg alatt */}
+                   
                   </div>
                 </div>
               </div>
@@ -301,39 +320,23 @@ const PetNanny = () => {
                   <div className="design-column logos-column">
                     <h2>App Icons</h2>
                     <div className="logo-item">
-                      <div className="logo-with-background light-bg">
-                        <img src="/images/petnanny-icon.svg" alt="PetNanny App Icon" className="process-logo" />
-                      </div>
+                      
+                        <img src="/images/petlogoblack.svg" alt="PetNanny App Icon" className="process-logo" />
+                      
                     </div>
                     <div className="logo-item">
-                      <div className="logo-with-background dark-bg">
-                        <img src="/images/petnanny-icon-colored.svg" alt="Colored PetNanny Icon" className="process-logo" />
-                      </div>
+                      
+                        <img src="/images/petlogo.svg" alt="Colored PetNanny Icon" className="process-logo" />
+                     
                     </div>
                     <img src={`/images/${kidoImage}.svg`} alt="Alternating kido image"/>
                   </div>
 
                   {/* Text column */}
                   <div className="design-column text-column">
-                    <h2>Development Process</h2>
-                    <p>Started with user research and pet owner interviews, then moved to wireframes and prototyping.</p>
+                    <h2>The Solution: Simplicity and kindness</h2>
                     
-                    <h3>Key Features:</h3>
-                    <ul>
-                      <li><strong>Feeding Schedule:</strong> Customizable feeding times and portion tracking</li>
-                      <li><strong>Health Records:</strong> Vaccination history and medical records</li>
-                      <li><strong>Medication Reminders:</strong> Never miss a dose with smart notifications</li>
-                      <li><strong>Vet Appointments:</strong> Schedule and manage veterinary visits</li>
-                      <li><strong>Multiple Pets:</strong> Support for households with multiple animals</li>
-                    </ul>
-                    
-                    <h3>User Experience:</h3>
-                    <ul>
-                      <li><strong>Onboarding:</strong> Simple setup process for new users</li>
-                      <li><strong>Dashboard:</strong> At-a-glance overview of all pet activities</li>
-                      <li><strong>Notifications:</strong> Smart reminders that adapt to your schedule</li>
-                      <li><strong>Accessibility:</strong> Designed with all users in mind</li>
-                    </ul>
+                <p>So, during the design process, I prioritized simplicity and a warm atmosphere. My motto became "click and done." Well-considered icons, a logical menu structure, and colors that don't scream at you but greet you with a smile. The best part was successfully combining these two things—usability and the "good feeling."</p>
                   </div>
                   
                   {/* Balls column */}
@@ -411,6 +414,17 @@ const PetNanny = () => {
                       <p>Final Design</p>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Third divider line */}
+              <div className="divider-line-container" ref={thirdDividerLineRef}>
+                <div className="divider-line">
+                  <img 
+                    src={`/images/line${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`} 
+                    alt="Decorative divider line" 
+                    className="line-svg"
+                  />
                 </div>
               </div>
             </main>

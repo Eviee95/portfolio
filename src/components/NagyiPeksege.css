@@ -1,3 +1,20 @@
+/* FONT IMPORT - Add this at the VERY TOP of NagyiPeksege.css */
+@font-face {
+  font-family: 'HungarianFirstClass';
+  src: url('/fonts/HungarianFirstClass-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AmericanTypewriter';
+  src: url('/fonts/AmericanTypewriter-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 .nagyi-page {
     min-height: 100vh;
     width: 100%;
@@ -296,6 +313,10 @@
 
 .nagyi-page .comparison-text h2 {
     margin-top: 70px;
+    margin-bottom: 40px;
+}
+.text-column p {
+    margin-bottom: 30px;
 }
 
 .nagyi-page .third-section {
@@ -351,7 +372,7 @@
 .nagyi-page .text-column {
     flex: 2;
     justify-content: center;
-    padding: 0 0 0 120px;
+    padding: 0 0 0 40px;
 }
 
 .nagyi-page .text-column h2 {
@@ -388,7 +409,7 @@
     width: 150px;
     height: 150px;
     transition: transform 0.3s ease;
-    border-radius: 50%;
+   
 }
 
 .nagyi-page .ball-animation:hover {
@@ -398,7 +419,7 @@
 .nagyi-page .ball-hex-code {
     font-size: 1.3rem;
     font-weight: bold;
-    margin-top: 12px;
+    margin-top: 24px;
     padding: 6px 14px;
     border-radius: 20px;
     color: #000;
@@ -455,14 +476,6 @@
     border-radius: 12px;
 }
 
-.nagyi-page .light-bg {
-    background: url('/images/lightbackground.png') center center / contain no-repeat;
-}
-
-.nagyi-page .dark-bg {
-    background: url('/images/darkbackground.png') center center / contain no-repeat;
-}
-
 .nagyi-page .logo-with-background .process-logo {
     position: relative;
     z-index: 2;
@@ -478,6 +491,274 @@
     display: block;
 }
 
+/* Project Gallery - Taller Images */
+.nagyi-page .project-gallery-section {
+  width: 100%;
+  max-width: 1800px;
+  margin: 60px auto 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.nagyi-page .project-gallery-section h2 {
+  font-size: clamp(24px, 3vw, 36px);
+  margin-bottom: 40px;
+  color: #2e7d32;
+  width: 100%;
+}
+
+.nagyi-page .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.nagyi-page .gallery-item {
+  width: 100%;
+  aspect-ratio: 4/3; /* Magasabb képek - több látszik */
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: transparent; /* Fehér háttér eltávolítva */
+  cursor: pointer;
+}
+
+.nagyi-page .gallery-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.nagyi-page .gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Teljes kép látszik, nincs crop */
+  transition: transform 0.3s ease;
+}
+
+.nagyi-page .gallery-item:hover .gallery-image {
+  transform: scale(1.03);
+}
+
+/* MODAL STYLES */
+.nagyi-page .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.nagyi-page .modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nagyi-page .modal-image-container {
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nagyi-page .modal-image {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain; /* Teljes kép látszik a modalban is */
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.nagyi-page .modal-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2.5rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  z-index: 1001;
+}
+
+.nagyi-page .modal-close:hover {
+  transform: scale(1.1);
+}
+
+.nagyi-page .modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.nagyi-page .modal-nav:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.nagyi-page .modal-prev {
+  left: 20px;
+}
+
+.nagyi-page .modal-next {
+  right: 20px;
+}
+
+.nagyi-page .modal-counter {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 1.1rem;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive Gallery */
+@media (max-width: 1200px) {
+  .nagyi-page .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+}
+
+@media (max-width: 900px) {
+  .nagyi-page .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .nagyi-page .project-gallery-section {
+    margin: 40px auto 0 auto;
+    padding: 0 15px;
+  }
+
+  .nagyi-page .project-gallery-section h2 {
+    margin-bottom: 30px;
+  }
+
+  .nagyi-page .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    max-width: 500px;
+  }
+
+  .nagyi-page .gallery-item {
+    aspect-ratio: 4/3; /* Mobilnál is magasabb marad */
+  }
+}
+
+@media (max-width: 480px) {
+  .nagyi-page .project-gallery-section {
+    margin: 30px auto 0 auto;
+    padding: 0 10px;
+  }
+
+  .nagyi-page .project-gallery-section h2 {
+    margin-bottom: 25px;
+  }
+
+  .nagyi-page .gallery-grid {
+    gap: 12px;
+  }
+
+  .nagyi-page .gallery-item {
+    border-radius: 8px;
+  }
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+  .nagyi-page .modal-nav {
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+  }
+  
+  .nagyi-page .modal-prev {
+    left: 10px;
+  }
+  
+  .nagyi-page .modal-next {
+    right: 10px;
+  }
+  
+  .nagyi-page .modal-close {
+    top: -50px;
+    right: 10px;
+    font-size: 2rem;
+  }
+  
+  .nagyi-page .modal-counter {
+    bottom: -50px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nagyi-page .modal-content {
+    max-width: 95%;
+    max-height: 95%;
+  }
+  
+  .nagyi-page .modal-nav {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+  
+  .nagyi-page .modal-image {
+    max-height: 80vh;
+  }
+}
+
+/* Responsive Design */
 @media (max-width: 1600px) {
     .nagyi-page .main-content-container,
     .nagyi-page .second-section,

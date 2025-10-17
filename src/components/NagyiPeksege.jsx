@@ -31,6 +31,9 @@ const NagyiPeksege = () => {
   const [kidoImage, setKidoImage] = useState('kido1');
   // Video play state
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   // Use refs to track animation completion persistently
   const animationCompletedRef = useRef(false);
@@ -65,6 +68,55 @@ const NagyiPeksege = () => {
   const handleVideoPause = () => {
     setIsVideoPlaying(false);
   };
+
+  // Modal handlers
+  const openModal = (imageIndex) => {
+    setSelectedImage(imageIndex);
+    setIsModalOpen(true);
+    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+    document.body.style.overflow = 'auto'; // Re-enable scrolling
+  };
+
+  const goToNextImage = () => {
+    if (selectedImage < 9) {
+      setSelectedImage(selectedImage + 1);
+    } else {
+      setSelectedImage(1);
+    }
+  };
+
+  const goToPrevImage = () => {
+    if (selectedImage > 1) {
+      setSelectedImage(selectedImage - 1);
+    } else {
+      setSelectedImage(9);
+    }
+  };
+
+  // Handle keyboard events for modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (isModalOpen) {
+        if (e.key === 'Escape') {
+          closeModal();
+        } else if (e.key === 'ArrowRight') {
+          goToNextImage();
+        } else if (e.key === 'ArrowLeft') {
+          goToPrevImage();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isModalOpen, selectedImage]);
 
   // Auto-play video when it comes into view
   useEffect(() => {
@@ -341,7 +393,6 @@ const NagyiPeksege = () => {
                     />   
                     <h2>How does it look, and why like this?</h2>
                     <p>Since I enjoy making illustrations, I didn't hold back on including them throughout the site. The background idea came from old recipes—slightly yellowed, typed with an old typewriter—which also inspired one of the fonts. The second font has a slight Hungarian folk-tale feel, but since I didn't want to use the exact same style from fairy tales, I created one myself. I named it Hungarian First Class, because every child in Hungary learns to write with these letters at school—though I've never seen an adult actually write like that. For the color palette, I used natural beige and brown tones to reflect the atmosphere of a bakery. I always struggle with logos since I find it difficult to make them simple enough—but compared to my first attempt, I managed to really simplify it this time.</p>
-                    <p>For the color palette, I used natural beige and brown tones to reflect the atmosphere of a bakery. I always struggle with logos since I find it difficult to make them simple enough—but compared to my first attempt, I managed to really simplify it this time.</p>
                   </div>
                 </div>
               </div>
@@ -366,12 +417,15 @@ const NagyiPeksege = () => {
                     <h2>Logos</h2>
                     <div className="logo-item">
                       <div className="logo-with-background light-bg">
-                        <img src="/images/logoblackwhite.svg" alt="Black and White Logo" className="process-logo" />
+                        <img src="/images/nagyiold.svg" alt="Black and White Logo" className="process-logo" />
                       </div>
                     </div>
+                    <div>
+                        <img src="/images/nyildown.svg" alt="nyildown" className="process-logo" />
+                      </div>
                     <div className="logo-item">
                       <div className="logo-with-background dark-bg">
-                        <img src="/images/logocolored.svg" alt="Colored Logo" className="process-logo" />
+                        <img src="/images/nagyinew.svg" alt="Colored Logo" className="process-logo" />
                       </div>
                     </div>
                     <img src={`/images/${kidoImage}.svg`} alt="Alternating kido image"/>
@@ -380,23 +434,11 @@ const NagyiPeksege = () => {
                   {/* Text column */}
                   <div className="design-column text-column">
                     <h2>How Did I Make It? (The Design Process)</h2>
-                    <p>Started with paper (iPad) wireframes, then moved to Figma.</p>
+                    <p>For the color palette, I used natural beige and brown tones to reflect the atmosphere of a bakery. I always struggle with logos since I find it difficult to make them simple enough—but compared to my first attempt, I managed to really simplify it this time.</p>
                     
-                    <h3>Structure:</h3>
-                    <ul>
-                      <li><strong>Hero:</strong> Clear value proposition + prominent "Request Demo" button</li>
-                      <li><strong>Features:</strong> MEASURE → ANALYZE → SAVE flow with simple icons</li>
-                      <li><strong>Testimonials:</strong> Concrete results with numbers ("30% savings!")</li>
-                      <li><strong>About:</strong> Budapest roots and mission to add personality</li>
-                      <li><strong>Contact:</strong> Repeated CTA with contact information</li>
-                    </ul>
+                    <p>I know how important wireframes are, but as a junior designer I was so eager to start that I didn't always plan everything in advance. Instead, I just focused on the next step. This might have been the first project where I really paid attention to UX. The biggest challenge was designing the ordering process. I tried to make everything clear, with obvious button labels and progress indicators showing exactly where the user is in the process—especially for impatient people like me.</p>
                     
-                    <h3>Look & Feel:</h3>
-                    <ul>
-                      <li><strong>Colors:</strong> Various green shades matching the chameleon mascot</li>
-                      <li><strong>Icons:</strong> Simple, universally understood symbols</li>
-                      <li><strong>Typography:</strong> Bold headlines with high-contrast buttons</li>
-                    </ul>
+                    <p>For the About Us section, I didn't want to overdo it, since I believe most visitors don't even open that page on these kinds of sites. For the FAQ section, I added a modern twist by presenting it in a dialogue style—similar to messaging apps, which people are used to scanning quickly. I also included a "like" button—something older users especially love—which I treated as a simple way to give positive feedback to the bakery.</p>
                   </div>
                   
                   {/* Balls column */}
@@ -404,73 +446,125 @@ const NagyiPeksege = () => {
                     <h2>Colors</h2>
                     <div className="ball-animation-container">
                       <img 
-                        src="/images/paca.svg" 
+                        src="/images/B48C52.svg" 
                         alt="Animated ball" 
                         className="ball-animation"
                       />
-                      <div className="ball-hex-code">#6bd8b0</div>
+                      <div className="ball-hex-code">#B48C52</div>
                     </div>
                     
                     <div className="ball-animation-container">
                       <img 
-                        src="/images/paca.svg" 
+                        src="/images/27140F.svg" 
                         alt="Animated ball" 
                         className="ball-animation"
                       />
-                      <div className="ball-hex-code">#4caf50</div>
+                      <div className="ball-hex-code">#27140F</div>
                     </div>
                     
-                    {/* Centered Helvetica text */}
+                    {/* Fonts section */}
                     <div style={{ 
                       textAlign: 'center', 
                       marginTop: '30px',
                       width: '100%'
                     }}>
-                      <h2>Font</h2>
-                      <h2>Helvetica Neue</h2>
-                      <h3 style={{
-                        fontFamily: "Helvetica Neue",
+                      <h2>Fonts</h2>
+                      <h3>American Typewriter</h3>
+                      <div style={{
+                        fontFamily: "'AmericanTypewriter', 'Courier New', monospace",
                         textAlign: 'center',
                         margin: '0 auto',
                         padding: '20px',
-                        letterSpacing: '5px'
+                        letterSpacing: '5px',
+                        fontSize: 'clamp(16px, 2vw, 24px)',
+                        
+                        borderRadius: '10px',
+                        marginBottom: '20px',
+                        maxWidth: '800px'
                       }}>
                         aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ
-                      </h3>
+                      </div>
+                      <h3>Hungarian First Class</h3>
+                      <div style={{
+                        fontFamily: "'HungarianFirstClass', 'Times New Roman', serif",
+                        textAlign: 'center',
+                        margin: '0 auto',
+                        padding: '20px',
+                        letterSpacing: '5px',
+                        fontSize: 'clamp(16px, 2vw, 24px)',
+                        
+                        borderRadius: '10px',
+                        maxWidth: '800px'
+                      }}>
+                        aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Images below - full width */}
-                <div className="design-images-content full-width">
-                  <div className="images-row">
-                    <div className="image-with-caption">
-                      <img src="/images/GreenPulseSketch.png" alt="Grandma's Bakery Sketch" className="design-process-img" />
-                      <p>Initial Sketch</p>
+              {/* Third divider line */}
+              <div className="divider-line-container" ref={thirdDividerLineRef}>
+                <div className="divider-line">
+                  <img 
+                    src={`/images/line${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`} 
+                    alt="Decorative divider line" 
+                    className="line-svg"
+                  />
+                </div>
+              </div>
+
+              {/* Project Gallery - Images Only */}
+              <div className="project-gallery-section">
+                <h2>Project Gallery</h2>
+                
+                <div className="gallery-grid">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                    <div 
+                      key={num} 
+                      className="gallery-item"
+                      onClick={() => openModal(num)}
+                    >
+                      <img 
+                        src={`/images/nagyi${num}.png`} 
+                        alt={`Grandma's Bakery screenshot ${num}`}
+                        className="gallery-image"
+                      />
                     </div>
-                    <img 
-                      src="/images/nyil.svg" 
-                      alt="Arrow"
-                    />
-                    <div className="image-with-caption">
-                      <img src="/images/GreenPulseWireframe.png" alt="Grandma's Bakery Wireframe" className="design-process-img" />
-                      <p>Wireframe</p>
-                    </div>
-                    <img 
-                      src="/images/nyil.svg" 
-                      alt="Arrow"
-                    />
-                    <div className="image-with-caption">
-                      <img src="/images/GreenPulseFinal.jpg" alt="Grandma's Bakery Final Design" className="design-process-img" />
-                      <p>Final Design</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </main>
           </div>
         </div>
       </div>
+
+      {/* Modal for image preview */}
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>
+              ×
+            </button>
+            <button className="modal-nav modal-prev" onClick={goToPrevImage}>
+              ‹
+            </button>
+            <div className="modal-image-container">
+              <img 
+                src={`/images/nagyi${selectedImage}.png`} 
+                alt={`Grandma's Bakery screenshot ${selectedImage}`}
+                className="modal-image"
+              />
+            </div>
+            <button className="modal-nav modal-next" onClick={goToNextImage}>
+              ›
+            </button>
+            <div className="modal-counter">
+              {selectedImage} / 9
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
