@@ -1,31 +1,91 @@
+/* Hero.css - teljes fájl */
+* { box-sizing: border-box; }
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-y: auto;
+}
+
 .hero-root {
   min-height: 100vh;
   width: 100%;
   font-family: DiaryOfAWimpyKidFont, sans-serif;
   background: transparent;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.page-container,
+.page-content,
+.hero-root .main-container,
+.main-frame,
+.projects-section,
+.about-section,
+.contact-section,
+.footer-animation-container {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
 }
 
 .hero-root .main-container {
   margin: 0 auto;
   width: 100%;
-  padding-left: 7vw;
-  padding-right: 7vw;
+  max-width: 1800px;
+  padding-left: clamp(15px, 5vw, 7vw);
+  padding-right: clamp(15px, 5vw, 7vw);
   box-sizing: border-box;
-  overflow-x: hidden;
-  min-height: 100vh;
   position: relative;
 }
 
+/* Divider line container stílusok - hozzáadva */
+.divider-line-container {
+  width: 100%;
+  max-width: 1800px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.divider-line {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.line-svg {
+  width: 100%;
+  height: 180px;
+  object-fit: fill;
+}
+
+.line-svg.flipped {
+  transform: scaleX(-1);
+}
+
 .main-frame {
-  margin-top: 2vw;
+  margin-top: clamp(10px, 3vw, 2vw);
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: visible !important;
 }
 
 .main-animation-img {
   display: block;
   margin: 0 auto;
   width: 100%;
-  max-width: 1800px;
+  max-width: min(1800px, 95vw);
   height: auto;
   object-fit: contain;
   image-rendering: pixelated;
@@ -33,28 +93,15 @@
 
 .postit-stack {
   position: absolute;
-  top: 20%;
-  left: 30%;
+  top: clamp(5%, 8vw, 20%);
+  left: clamp(25%, 30vw, 30%);
   transform: translate(-50%, -50%);
-  width: 46vw;
-  max-width: 400px;
-  min-width: 180px;
+  width: clamp(120px, 25vw, 400px);
   aspect-ratio: 1/1;
   z-index: 10;
 }
 
-.postit-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-  filter: drop-shadow(6px 8px 4px rgba(0, 0, 0, 0.3));
-}
-
-.postit-svg-img {
+.postit-img, .postit-svg-img {
   position: absolute;
   top: 0;
   left: 0;
@@ -63,84 +110,73 @@
   object-fit: contain;
   pointer-events: none;
 }
-
 .postit-img {
-  z-index: 1;
-}
-
-.postit-svg-img {
-  z-index: 2;
+  filter: drop-shadow(6px 8px 4px rgba(0,0,0,0.3));
 }
 
 .aboutme-button-wrap {
   width: 100%;
   display: flex;
   justify-content: flex-start;
-  margin-top: 22px;
+  margin-top: clamp(15px, 3vw, 22px);
 }
-
-.aboutme-button-img {
-  width: 240px;
-  max-width: 60vw;
+.aboutme-button-img, .send-button-img {
+  width: clamp(100px, 20vw, 240px);
   height: auto;
   cursor: pointer;
-  transition: filter 0.13s cubic-bezier(.65,.05,.36,1), transform 0.13s cubic-bezier(.65,.05,.36,1);
+  transition: filter .13s cubic-bezier(.65,.05,.36,1), transform .13s cubic-bezier(.65,.05,.36,1);
   outline: none;
 }
-
-.aboutme-button-img.pressed, .aboutme-button-img:active {
-  transform: translateY(8px);
-  filter: brightness(0.85);
-}
-
-.aboutme-button-img:focus {
-  filter: brightness(1.04);
-}
-
-.send-button-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 22px;
-}
-
-.send-button-img {
-  width: 240px;
-  max-width: 60vw;
-  height: auto;
-  cursor: pointer;
-  transition: filter 0.13s cubic-bezier(.65,.05,.36,1), transform 0.13s cubic-bezier(.65,.05,.36,1);
-  outline: none;
-}
-
+.aboutme-button-img.pressed, .aboutme-button-img:active,
 .send-button-img.pressed, .send-button-img:active {
   transform: translateY(8px);
-  filter: brightness(0.85);
+  filter: brightness(.85);
 }
 
-.send-button-img:focus {
-  filter: brightness(1.04);
+.projects-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 4vw, 60px);
+  margin: clamp(24px, 8vw, 60px) 0 clamp(40px, 10vw, 140px) 0;
+  padding: 0 clamp(10px, 3vw, 20px);
+  width: 100%;
+}
+.projects-title-container { width: 100%; text-align: center; margin-top: -20px; }
+.projects-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: bold;
+  color: #333;
+  margin-top: -10px;
+  margin-bottom: -50px;
 }
 
-.stain-relative {
+/* Projects cards reszponzív stílusok */
+.projects-cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(20px, 4vw, 8rem);
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.project-item {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 80px);
   position: relative;
+  flex: 0 0 auto;
 }
 
-.coffeestain-contact-img {
-  position: absolute;
-  top: -80px;
-  left: 0;
-  width: 540px;
-  height: 540px;
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0.72;
-  mix-blend-mode: multiply;
+.arrow-img {
+  width: clamp(25px, 4vw, 60px);
+  flex-shrink: 0;
 }
 
-.card-container {
-  position: relative;
-  display: inline-block;
+.arrow-placeholder {
+  width: clamp(25px, 4vw, 60px);
+  visibility: hidden;
 }
 
 .card-magic-container {
@@ -149,58 +185,71 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-}
-
-.magic-container {
-  position: relative;
-  margin-bottom: -40px;
-  z-index: 10;
-}
-
-.magic-img {
-  width: 280px;
-  height: auto;
-}
-
-.project-card {
   width: 100%;
-  max-width: 320px;
-  position: relative;
-  z-index: 2;
+  max-width: clamp(200px, 30vw, 320px);
+}
+.magic-container { position: relative; margin-bottom: -30px; z-index: 10; width: clamp(120px, 20vw, 280px); }
+.magic-img { width: 100%; height: auto; }
+.project-card { width: 100%; max-width: clamp(200px, 30vw, 320px); height: auto; position: relative; z-index: 2; }
+.center-card { max-width: clamp(250px, 35vw, 400px); }
+
+/* Desktop nézet - minden nyíl látható, minden egymás mellett */
+@media (min-width: 769px) {
+  .arrow-placeholder {
+    display: none;
+  }
+  
+  .projects-cards-container {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  
+  .project-item {
+    flex-direction: row;
+  }
+  
+  /* Desktop nézetben minden nyíl látható */
+  .first-card .right-arrow,
+  .middle-card .left-arrow,
+  .middle-card .right-arrow,
+  .last-card .left-arrow {
+    display: block;
+  }
 }
 
-.center-card {
-  max-width: 400px;
-}
-
-.projects-section {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: clamp(40px, 8vw, 100px);
-  margin: clamp(24px, 8vw, 60px) 0 clamp(80px, 15vw, 140px) 0;
-  padding: 0 clamp(10px, 3vw, 20px);
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.projects-section::-webkit-scrollbar {
-  display: none;
-}
-
-.project-item {
-  display: flex;
-  align-items: center;
-  gap: clamp(40px, 5vw, 80px);
-  position: relative;
-  flex: 0 0 auto;
-}
-
-.arrow-img {
-  width: clamp(40px, 4vw, 60px);
-  flex-shrink: 0;
+/* Mobil nézet */
+@media (max-width: 768px) {
+  .projects-cards-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .project-item {
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  /* Első kártya: csak bal nyíl */
+  .first-card .right-arrow {
+    display: none;
+  }
+  
+  /* Középső kártya: mindkét nyíl */
+  .middle-card .left-arrow,
+  .middle-card .right-arrow {
+    display: block;
+  }
+  
+  /* Utolsó kártya: csak jobb nyíl */
+  .last-card .left-arrow {
+    display: none;
+  }
+  
+  .card-magic-container {
+    margin: 0 10px;
+  }
 }
 
 .about-section {
@@ -212,526 +261,246 @@
   padding: 0 clamp(10px, 3vw, 20px);
   flex-wrap: wrap;
 }
-
 .about-img {
   width: 100%;
-  max-width: 500px;
+  max-width: min(500px, 90vw);
   height: auto;
   object-fit: contain;
-  flex: 1 1 250px;
+  flex: 1 1 min(300px, 90vw);
 }
-
-.about-text {
-  flex: 1 1 300px;
-}
-
-.about-text h1 {
-  font-size: clamp(24px, 3vw, 36px);
-}
-
-.about-text p {
-  font-size: clamp(18px, 2vw, 30px);
-}
+.about-text { flex: 1 1 min(400px, 90vw); max-width: 800px; }
+.about-text h1 { font-size: clamp(20px, 4vw, 36px); margin-top: 0; color: #333; }
+.about-text p { font-size: clamp(16px, 2.5vw, 30px); line-height: 1.4; margin-bottom: 15px; }
 
 .contact-section {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: clamp(80px, 15vw, 140px) 0 clamp(80px, 15vw, 140px) 0;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(30px, 8vw, 80px);
+  margin: clamp(40px, 10vw, 140px) 0;
   padding: 0 clamp(10px, 3vw, 20px);
-  gap: clamp(24px, 5vw, 60px);
+  flex-wrap: wrap;
+  position: relative;
 }
-
 .contact-form {
-  flex: 1 1 300px;
+  flex: 1 1 min(400px, 90vw);
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-left: clamp(0px, 6vw, 90px);
+  gap: 15px;
+  max-width: 600px;
 }
-
-.contact-form h1 {
-  font-size: clamp(24px, 3vw, 36px);
-}
-
+.contact-form h1 { font-size: clamp(20px, 4vw, 36px); margin-top: 0; color: #333; }
 .contact-form input, .contact-form textarea {
   padding: 12px;
-  font-size: 18px;
+  font-size: clamp(14px, 2vw, 18px);
   border-radius: 8px;
   border: 2px solid black;
   font-family: DiaryOfAWimpyKidFont, sans-serif;
   background-color: transparent;
-}
-
-.contact-form textarea {
-  resize: vertical;
-}
-
-.contact-form button {
-  display: none;
-}
-
-.social-row {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.social-icon {
-  width: 56px;
-  height: 56px;
-  transition: transform 0.2s ease;
-}
-
-.social-icon:hover {
-  transform: scale(1.1);
-}
-
-.contact-img-col {
-  flex: 1 1 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.contact-animation-img {
   width: 100%;
-  max-width: 500px;
-  height: auto;
-  object-fit: contain;
-  image-rendering: pixelated;
+  box-sizing: border-box;
 }
+.contact-form textarea { resize: vertical; min-height: 120px; }
+.coffeestain-contact-img {
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: clamp(120px, 25vw, 540px);
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .72;
+  mix-blend-mode: multiply;
+}
+.contact-img-col { flex: 1 1 min(300px, 90vw); display: flex; justify-content: center; align-items: center; max-width: 500px; }
+.contact-animation-img { width: 100%; max-width: min(500px, 90vw); height: auto; object-fit: contain; }
+.send-button-container { width: 100%; display: flex; justify-content: flex-start; margin-top: 15px; }
+.social-row { display: flex; gap: 15px; margin-top: 20px; justify-content: flex-start; }
+.social-icon { width: clamp(40px, 8vw, 56px); height: clamp(40px, 8vw, 56px); transition: transform .2s ease; }
+.social-icon:hover { transform: scale(1.1); }
 
 .footer-animation-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: clamp(28px, 5vw, 60px) clamp(10px, 3vw, 20px) clamp(20px, 2vw, 40px);
-  margin-top: clamp(20px, 5vw, 40px);
-  gap: clamp(20px, 3vw, 40px);
+  padding: clamp(20px,5vw,60px) clamp(10px,3vw,20px);
+  margin-top: clamp(20px,5vw,40px);
+  gap: clamp(15px,3vw,40px);
   width: 100%;
   position: relative;
-  min-height: 300px;
+  min-height: 600px;
+  overflow: visible !important;
 }
-
-.footer-content-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-  max-width: 1400px;
-  gap: 60px;
-}
-
-.footer-thanks-animation {
-  position: absolute;
-  top: 8%;
-  left: 65%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 500px;
-  z-index: 10;
-  text-align: center;
-}
-
-.thanks-animation-img {
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-  object-fit: contain;
-  image-rendering: pixelated;
-}
-
-.footer-img-wrap {
-  flex: 1;
-  text-align: left;
-  margin-right: 100px;
-}
-
-.footer-guy-wrap {
-  flex: 1;
-  text-align: left;
-  margin-top: 120px;
-  margin-left: 0;
-  margin-right: 60px;
-}
-
-.footer-animation-img {
-  width: 100%;
-  max-width: 500px;
-  margin-top: 50px;
-  height: auto;
-  object-fit: contain;
-  image-rendering: pixelated;
-}
-
-.guy-animation-img {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  object-fit: contain;
-  image-rendering: pixelated;
-  margin-left: -60px;
-}
+.footer-content-wrapper { display:flex; justify-content:center; align-items:center; width:100%; max-width:min(1400px,95vw); padding:20px 0; position:relative; z-index:5; }
+.footer-beatles-animation { width:100%; text-align:center; position:relative; z-index:5; }
+.beatles-animation-img { width:100%; max-width:min(1000px,95vw); height:auto; object-fit:contain; }
 
 .footer-pencil {
   position: absolute;
-  right: 4%;
-  bottom: 20%;
-  height: 350px;
+  right: -30px;
+  bottom: -80px;
+  height: 600px;
+  width: auto;
   z-index: 100;
   transform: rotate(15deg);
-  filter: drop-shadow(8px 10px 5px rgba(0, 0, 0, 0.4));
+   filter: drop-shadow(4px 6px 3px rgba(0,0,0,0.3));
 }
-
 .footer-eraser {
   position: absolute;
-  left: 4%;
-  top: 5%;
-  height: 200px;
+  left: 3%;
+  top: 15%;
+  height: 140px;
+  width: auto;
   z-index: 100;
   transform: rotate(-10deg);
-  filter: drop-shadow(8px 10px 5px rgba(0, 0, 0, 0.4));
-}
-
-.projects-title-container {
-  width: 100%;
-  text-align: center;
-  margin-top: -20px;
-}
-
-.projects-title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-  margin-top: -10px;
-  margin-bottom: -50px;
-  padding: 0;
-}
-
-.projects-cards-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8rem;
-  width: 100%;
-}
-
-.projects-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: 2rem 0;
+  filter: drop-shadow(4px 6px 3px rgba(0,0,0,0.3));
 }
 
 @media (max-width: 1100px) {
-  .postit-stack {
-    width: 36vw;
-    max-width: 300px;
-    min-width: 120px;
-  }
-  
-  .aboutme-button-img, .send-button-img {
-    width: 180px;
-  }
-  
-  .coffeestain-contact-img {
-    width: 340px;
-    height: 340px;
-    top: -36px;
-    left: 0;
-  }
-  
-  .magic-img {
-    width: 220px;
-  }
-  
-  .project-card {
-    max-width: 280px;
-  }
-  
-  .center-card {
-    max-width: 350px;
-  }
-  
-  .projects-section {
-    gap: clamp(30px, 6vw, 80px);
-  }
-  
-  .project-item {
-    gap: clamp(30px, 4vw, 60px);
-  }
-  
-  .arrow-img {
-    width: clamp(35px, 3.5vw, 50px);
-  }
-  
-  .main-container {
-    padding-left: 3vw;
-    padding-right: 3vw;
-    max-width: 98vw;
-    width: 98vw;
-  }
-  
-  .footer-content-wrapper {
-    gap: 60px;
-  }
-  
-  .footer-img-wrap {
-    margin-right: 20px;
-  }
-  
-  .footer-guy-wrap {
-    margin-right: 40px;
-    margin-left: 0;
-  }
-  
-  .guy-animation-img {
-    margin-left: -40px;
-  }
-  
-  .footer-pencil {
-    height: 280px;
-    right: 2%;
-    bottom: 25%;
-    filter: drop-shadow(6px 8px 4px rgba(0, 0, 0, 0.35));
-  }
-  
-  .footer-eraser {
-    height: 160px;
-    left: 2%;
-    top: 8%;
-    filter: drop-shadow(6px 8px 4px rgba(0, 0, 0, 0.35));
-  }
-  
-  .postit-img {
-    filter: drop-shadow(5px 6px 3px rgba(0, 0, 0, 0.25));
-  }
+  .footer-pencil { height: 500px; right: -50px; bottom: -100px; }
+  .footer-eraser { height: 120px; }
+  .footer-animation-container { min-height: 500px; }
 }
 
 @media (max-width: 850px) {
-  .postit-stack {
-    width: 40vw;
-    max-width: 230px;
-    min-width: 90px;
+  .postit-stack { width: 35vw; max-width: 230px; }
+  .about-section, .contact-section { flex-direction: column; align-items: center; gap: 32px; }
+  .contact-form { order: 2; }
+  .contact-img-col { order: 1; }
+  .send-button-container { justify-content: center; }
+  .social-row { justify-content: center; }
+  .coffeestain-contact-img { top: -20px; left: -20px; }
+  .footer-pencil { height: 400px; right: -60px; bottom: -120px; }
+  .footer-eraser { height: 105px; left: 1%; top: 12%; }
+  .footer-animation-container { min-height: 400px; }
+  
+  /* Reszponzív divider line */
+  .divider-line-container {
+    min-height: 150px;
+    margin: 15px auto;
   }
   
-  .aboutme-button-img, .send-button-img {
-    width: 150px;
+  .line-svg {
+    height: 140px;
   }
   
-  .coffeestain-contact-img {
-    width: 180px;
-    height: 180px;
-    top: -8px;
-    left: 0;
+  /* Reszponzív kártyák */
+  .project-card { max-width: 220px; }
+  .center-card { max-width: 280px; }
+  .magic-container { width: 180px; }
+}
+
+@media (max-width: 768px) {
+  .postit-stack { top: 8%; left: 50%; transform: translateX(-50%); }
+  .beatles-animation-img { max-width: 95vw; }
+  .footer-pencil { height: 350px; right: -70px; bottom: -140px; }
+  .footer-eraser { height: 90px; left: 0; top: 10%; }
+  .footer-animation-container { min-height: 350px; }
+  
+  /* Divider line mobil nézet */
+  .divider-line-container {
+    min-height: 120px;
+    margin: 10px auto;
+    padding: 0 15px;
   }
   
-  .magic-img {
-    width: 180px;
+  .line-svg {
+    height: 110px;
   }
   
-  .project-card {
-    max-width: 240px;
-  }
-  
-  .center-card {
-    max-width: 300px;
-  }
-  
-  .projects-section {
-    gap: clamp(25px, 5vw, 60px);
-  }
-  
-  .project-item {
-    gap: clamp(25px, 3.5vw, 50px);
-  }
-  
-  .arrow-img {
-    width: clamp(30px, 3vw, 45px);
-  }
-  
-  .about-section, .contact-section {
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-  }
-  
-  .contact-form {
-    margin-left: 0;
-  }
-  
-  .footer-content-wrapper {
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
-  }
-  
-  .footer-img-wrap, .footer-guy-wrap {
-    text-align: center;
-    margin: 0;
-  }
-  
-  .footer-guy-wrap {
-    margin-top: 0;
-    order: -1;
-    margin-right: 0;
-  }
-  
-  .guy-animation-img {
-    max-width: 90vw;
-    margin-left: 0;
-  }
-  
-  .footer-pencil {
-    height: 220px;
-    right: 1%;
-    bottom: 30%;
-    filter: drop-shadow(4px 5px 3px rgba(0, 0, 0, 0.3));
-  }
-  
-  .footer-eraser {
-    height: 130px;
-    left: 1%;
-    top: 10%;
-    filter: drop-shadow(4px 5px 3px rgba(0, 0, 0, 0.3));
-  }
-  
-  .postit-img {
-    filter: drop-shadow(4px 5px 2px rgba(0, 0, 0, 0.2));
-  }
+  /* Kisebb kártyák */
+  .project-card { max-width: 200px; }
+  .center-card { max-width: 250px; }
+  .magic-container { width: 160px; }
 }
 
 @media (max-width: 600px) {
-  .postit-stack {
-    position: absolute;
-    left: 50%;
-    top: 7vw;
-    transform: translate(-50%, 0);
-    width: 55vw;
-    max-width: 160px;
-    min-width: 70px;
+  .postit-stack { position: absolute; left: 50%; top: 7vw; transform: translate(-50%,0); width: 55vw; max-width: 160px; }
+  .aboutme-button-img, .send-button-img { width: 110px; }
+  .magic-img { width: 150px; }
+  .project-card { max-width: 180px; }
+  .center-card { max-width: 220px; }
+  .main-container { padding-left: 2vw; padding-right: 2vw; margin: 0; max-width: 100vw; width: 100vw; }
+  .footer-pencil { height: 300px; right: -80px; bottom: -160px; }
+  .footer-eraser { height: 75px; left: -2%; top: 8%; }
+  .footer-animation-container { min-height: 300px; padding: 15px 10px; }
+  .beatles-animation-img { max-width: 98vw; }
+  
+  /* Divider line extra kis képernyő */
+  .divider-line-container {
+    min-height: 100px;
+    margin: 5px auto;
+    padding: 0 10px;
   }
   
-  .aboutme-button-img, .send-button-img {
-    width: 110px;
+  .line-svg {
+    height: 90px;
   }
   
-  .coffeestain-contact-img {
-    width: 120px;
-    height: 120px;
-    top: 0;
-    left: 0;
-  }
-  
-  .magic-img {
-    width: 150px;
-  }
-  
-  .project-card {
-    max-width: 200px;
-  }
-  
-  .center-card {
-    max-width: 250px;
-  }
-  
-  .projects-section {
-    gap: clamp(20px, 4vw, 40px);
-  }
-  
-  .project-item {
-    gap: clamp(20px, 3vw, 40px);
-  }
-  
-  .arrow-img {
-    width: clamp(25px, 2.5vw, 35px);
-  }
-  
-  .main-container {
-    padding-left: 2vw;
-    padding-right: 2vw;
-    margin: 0;
-    max-width: 100vw;
-    width: 100vw;
-  }
-  
-  .main-animation-img, .about-img, .contact-animation-img, .footer-animation-img, .guy-animation-img {
-    max-width: 98vw;
-  }
-  
-  .about-text h1, .contact-form h1 {
-    font-size: 1.3rem;
-  }
-  
-  .about-text p {
-    font-size: 1rem;
-  }
-  
-  .coffeestain-contact-img {
-    width: 120px;
-    height: 120px;
-    top: 0;
-    left: 0;
-  }
-  
-  .footer-content-wrapper {
-    gap: 30px;
-  }
-  
-  .footer-pencil {
-    height: 180px;
-    right: 0;
-    bottom: 35%;
-    filter: drop-shadow(3px 4px 2px rgba(0, 0, 0, 0.25));
-  }
-  
-  .footer-eraser {
-    height: 100px;
-    left: 0;
-    top: 12%;
-    filter: drop-shadow(3px 4px 2px rgba(0, 0, 0, 0.25));
-  }
-  
-  .footer-animation-container {
-    min-height: 400px;
-  }
-  
-  .postit-img {
-    filter: drop-shadow(3px 4px 2px rgba(0, 0, 0, 0.2));
-  }
+  /* Kisebb about és contact képek */
+  .about-img, .contact-animation-img { max-width: 85vw; }
 }
 
-@media (min-width: 1400px) {
-  .guy-animation-img {
-    max-width: 600px;
-    margin-left: -80px;
+@media (max-width: 480px) {
+  .postit-stack { top: 6%; width: 100px; }
+  .about-section, .contact-section { gap: 15px; }
+  .footer-pencil { height: 250px; right: -90px; bottom: -180px; }
+  .footer-eraser { height: 65px; left: -5%; top: 6%; }
+  .footer-animation-container { min-height: 250px; }
+  
+  /* Divider line telefon nézet */
+  .divider-line-container {
+    min-height: 80px;
   }
   
-  .footer-guy-wrap {
-    margin-top: 400px;
-    margin-right: 80px;
+  .line-svg {
+    height: 70px;
   }
+  
+  /* Extra kis kártyák */
+  .project-card { max-width: 160px; }
+  .center-card { max-width: 200px; }
+  .magic-container { width: 130px; }
+}
 
-  .footer-pencil {
-    height: 780px;
-    right: 2%;
-    bottom: 12%;
-    filter: drop-shadow(10px 12px 6px rgba(0, 0, 0, 0.45));
+@media (min-width: 1200px) {
+  .footer-pencil { height: 650px; right: -20px; bottom: -40px; }
+  .footer-eraser { height: 155px; left: 3%; top: 18%; }
+  .beatles-animation-img { max-width: 900px; }
+  .footer-animation-container { min-height: 550px; }
+  .contact-section { gap: 100px; }
+}
+
+@media (min-width: 1600px) {
+  .footer-pencil { height: 700px; right: -15px; bottom: -30px; }
+  .footer-eraser { height: 170px; left: 4%; top: 20%; }
+  .beatles-animation-img { max-width: 1000px; }
+  .footer-animation-container { min-height: 600px; }
+}
+
+@media (min-width: 2000px) {
+  .footer-pencil { height: 800px; right: 0; bottom: 0; }
+  .footer-eraser { height: 185px; left: 5%; top: 22%; }
+  .beatles-animation-img { max-width: 1200px; }
+  .footer-animation-container { min-height: 700px; }
+}
+
+@media (max-width: 360px) {
+  .postit-stack { width: 80px; }
+  .aboutme-button-img, .send-button-img { width: 90px; }
+  .project-card { max-width: 150px; }
+  .center-card { max-width: 180px; }
+  .magic-img { width: 120px; }
+  .footer-pencil { height: 220px; right: -100px; bottom: -200px; }
+  .footer-eraser { height: 55px; left: -8%; top: 4%; }
+  .footer-animation-container { min-height: 200px; }
+  
+  /* Divider line extra kis méret */
+  .divider-line-container {
+    min-height: 60px;
   }
   
-  .footer-eraser {
-    height: 160px;
-    left: 0%;
-    top: -16%;
-    filter: drop-shadow(10px 12px 6px rgba(0, 0, 0, 0.45));
-  }
-  
-  .postit-img {
-    filter: drop-shadow(8px 10px 5px rgba(0, 0, 0, 0.35));
+  .line-svg {
+    height: 50px;
   }
 }

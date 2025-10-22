@@ -4,108 +4,239 @@ import './GreenPulse.css';
 
 const GreenPulse = () => {
   const navigate = useNavigate();
-  
-  // Video ref
   const videoRef = useRef(null);
-  // Back button state
+
   const [backBtnDown, setBackBtnDown] = useState(false);
-  // Line SVG state
   const [lineSvgIndex, setLineSvgIndex] = useState(1);
   const [animationStarted, setAnimationStarted] = useState(false);
   const [animationCompleted, setAnimationCompleted] = useState(false);
   const dividerLineRef = useRef(null);
-  // Second line animation state
+
   const [secondLineSvgIndex, setSecondLineSvgIndex] = useState(1);
   const [secondAnimationStarted, setSecondAnimationStarted] = useState(false);
   const [secondAnimationCompleted, setSecondAnimationCompleted] = useState(false);
   const secondDividerLineRef = useRef(null);
-  // Third line animation state
+
   const [thirdLineSvgIndex, setThirdLineSvgIndex] = useState(1);
   const [thirdAnimationStarted, setThirdAnimationStarted] = useState(false);
   const [thirdAnimationCompleted, setThirdAnimationCompleted] = useState(false);
   const thirdDividerLineRef = useRef(null);
-  // Fourth line animation state (new one before images)
+
   const [fourthLineSvgIndex, setFourthLineSvgIndex] = useState(1);
   const [fourthAnimationStarted, setFourthAnimationStarted] = useState(false);
   const [fourthAnimationCompleted, setFourthAnimationCompleted] = useState(false);
   const fourthDividerLineRef = useRef(null);
-  // Animation states for comparison SVGs
+
   const [niceSvgState, setNiceSvgState] = useState('open');
   const [uglySvgState, setUglySvgState] = useState('open');
-  // State for alternating kido images
   const [kidoImage, setKidoImage] = useState('kido1');
-  // Video play state
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
-  // Use refs to track animation completion persistently
+  const [showMrBean, setShowMrBean] = useState(false);
+  const [audioPlayed, setAudioPlayed] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
+
   const animationCompletedRef = useRef(false);
   const secondAnimationCompletedRef = useRef(false);
   const thirdAnimationCompletedRef = useRef(false);
   const fourthAnimationCompletedRef = useRef(false);
 
-  // Mindig az oldal tetejére görbünk, amikor betöltődik az oldal
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const audioRef = useRef(null);
+  // New: keep an AudioContext to resume on user gesture (helps unblocking WebAudio)
+  const audioContextRef = useRef(null);
 
-  const handleGoBack = () => {
-    navigate("/");
+  // Play hello sound but only after a gesture-resume step
+  const playHelloSound = async () => {
+    if (audioPlayed) {
+      console.log('Audio already played, skipping');
+      return;
+    }
+
+    // Must not attempt to play before user interaction
+    if (!userInteracted) {
+      console.log('playHelloSound: waiting for user interaction');
+      return;
+    }
+
+    try {
+      // Create audio element once
+      if (!audioRef.current) {
+        audioRef.current = new Audio('/images/hello.mp3');
+        audioRef.current.volume = 0.8;
+        audioRef.current.preload = 'auto';
+        audioRef.current.addEventListener('ended', () => {
+          console.log('Audio finished playing');
+          setShowMrBean(false);
+          setAudioPlayed(true);
+        });
+      }
+
+      // If we use AudioContext in the app, ensure it's resumed first
+      if (audioContextRef.current) {
+        try {
+          await audioContextRef.current.resume();
+          console.log('AudioContext resumed before playing audio');
+        } catch (err) {
+          console.warn('AudioContext resume failed', err);
+        }
+      }
+
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log('Audio playing successfully from /images/hello.mp3');
+            setAudioPlayed(true);
+            setShowMrBean(true);
+          })
+          .catch(error => {
+            console.error('Audio play failed:', error);
+            // fallback display Mr. Bean briefly if audio can't play
+            setShowMrBean(true);
+            setTimeout(() => setShowMrBean(false), 3000);
+          });
+      }
+    } catch (error) {
+      console.error('Audio error:', error);
+      setShowMrBean(true);
+      setTimeout(() => setShowMrBean(false), 3000);
+    }
   };
 
+  const handleImageError = () => {
+    console.log('Mr. Bean image failed to load');
+    setImageError(true);
+  };
+
+  // Centralized handler for the first user gesture
+  const handleUserInteraction = async () => {
+    if (!userInteracted) {
+      console.log('User interaction detected - unlocking audio/video features');
+      setUserInteracted(true);
+
+      // Try to create/resume an AudioContext. Many browsers require this to be resumed by gesture.
+      try {
+        if (!audioContextRef.current && (window.AudioContext || window.webkitAudioContext)) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          audioContextRef.current = new AC();
+        }
+        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+          await audioContextRef.current.resume();
+          console.log('AudioContext resumed on user gesture');
+        }
+      } catch (err) {
+        console.warn('Failed to create/resume AudioContext:', err);
+      }
+
+      // Now safe to attempt playback
+      playHelloSound();
+    }
+  };
+
+  // Initial page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setAudioPlayed(false);
+    setUserInteracted(false);
+    setShowMrBean(true);
+
+    const fallbackTimer = setTimeout(() => {
+      if (!userInteracted && !audioPlayed) {
+        console.log('No user interaction - hiding Mr. Bean');
+        setShowMrBean(false);
+      }
+    }, 3000);
+
+    return () => {
+      clearTimeout(fallbackTimer);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      if (audioContextRef.current) {
+        try {
+          audioContextRef.current.close();
+        } catch (e) { /* ignore */ }
+        audioContextRef.current = null;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Add "once" event listeners to unlock on first gesture
+  useEffect(() => {
+    const events = ['click', 'keydown', 'touchstart'];
+    const interactionHandler = () => {
+      handleUserInteraction();
+    };
+
+    events.forEach(event => {
+      document.addEventListener(event, interactionHandler, { once: true, passive: true });
+    });
+
+    return () => {
+      events.forEach(event => document.removeEventListener(event, interactionHandler));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Try to play once userInteracted changes (will be true only after gesture)
+  useEffect(() => {
+    if (userInteracted && !audioPlayed) {
+      console.log('User interacted - calling playHelloSound()');
+      playHelloSound();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInteracted]);
+
+  const handleGoBack = () => navigate('/');
   const handleBackBtnDown = () => setBackBtnDown(true);
   const handleBackBtnUp = () => setBackBtnDown(false);
-
   const handleBackClick = () => {
+    handleUserInteraction();
     handleBackBtnDown();
     setTimeout(() => {
       handleBackBtnUp();
       handleGoBack();
-    }, 150); 
+    }, 150);
   };
 
-  // Video play/pause handlers
-  const handleVideoPlay = () => {
-    setIsVideoPlaying(true);
-  };
+  const handleVideoPlay = () => setIsVideoPlaying(true);
+  const handleVideoPause = () => setIsVideoPlaying(false);
 
-  const handleVideoPause = () => {
-    setIsVideoPlaying(false);
-  };
-
-  // Auto-play video when it comes into view
+  // IntersectionObserver to autoplay muted video when in view
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && videoRef.current) {
-          videoRef.current.play().catch(error => {
-            console.log('Auto-play prevented:', error);
-          });
-        } else if (videoRef.current) {
+        if (!videoRef.current) return;
+        if (entry.isIntersecting) {
+          // Allowed: autoplay only while muted
+          if (videoRef.current.paused) {
+            videoRef.current.muted = true;
+            videoRef.current.play().catch(err => {
+              console.log('Auto-play prevented or failed:', err);
+            });
+          }
+        } else {
           videoRef.current.pause();
         }
       },
       { threshold: 0.5 }
     );
 
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
-
+    if (videoRef.current) observer.observe(videoRef.current);
     return () => {
-      if (videoRef.current) {
-        observer.unobserve(videoRef.current);
-      }
+      if (videoRef.current) observer.unobserve(videoRef.current);
     };
   }, []);
 
-  // Check if first divider line is visible and start animation
+  // The rest of your existing animation and observer logic unchanged...
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !animationStarted && !animationCompletedRef.current) {
           setAnimationStarted(true);
-          
-          // Animate through the line SVGs
           let currentIndex = 1;
           const interval = setInterval(() => {
             if (currentIndex < 15) {
@@ -121,26 +252,15 @@ const GreenPulse = () => {
       },
       { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
     );
-
-    if (dividerLineRef.current) {
-      observer.observe(dividerLineRef.current);
-    }
-
-    return () => {
-      if (dividerLineRef.current) {
-        observer.unobserve(dividerLineRef.current);
-      }
-    };
+    if (dividerLineRef.current) observer.observe(dividerLineRef.current);
+    return () => { if (dividerLineRef.current) observer.unobserve(dividerLineRef.current); };
   }, [animationStarted]);
 
-  // Check if second divider line is visible and start animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !secondAnimationStarted && !secondAnimationCompletedRef.current) {
           setSecondAnimationStarted(true);
-          
-          // Animate through the line SVGs
           let currentIndex = 1;
           const interval = setInterval(() => {
             if (currentIndex < 15) {
@@ -156,26 +276,15 @@ const GreenPulse = () => {
       },
       { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
     );
-
-    if (secondDividerLineRef.current) {
-      observer.observe(secondDividerLineRef.current);
-    }
-
-    return () => {
-      if (secondDividerLineRef.current) {
-        observer.unobserve(secondDividerLineRef.current);
-      }
-    };
+    if (secondDividerLineRef.current) observer.observe(secondDividerLineRef.current);
+    return () => { if (secondDividerLineRef.current) observer.unobserve(secondDividerLineRef.current); };
   }, [secondAnimationStarted]);
 
-  // Check if third divider line is visible and start animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !thirdAnimationStarted && !thirdAnimationCompletedRef.current) {
           setThirdAnimationStarted(true);
-          
-          // Animate through the line SVGs
           let currentIndex = 1;
           const interval = setInterval(() => {
             if (currentIndex < 15) {
@@ -191,26 +300,15 @@ const GreenPulse = () => {
       },
       { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
     );
-
-    if (thirdDividerLineRef.current) {
-      observer.observe(thirdDividerLineRef.current);
-    }
-
-    return () => {
-      if (thirdDividerLineRef.current) {
-        observer.unobserve(thirdDividerLineRef.current);
-      }
-    };
+    if (thirdDividerLineRef.current) observer.observe(thirdDividerLineRef.current);
+    return () => { if (thirdDividerLineRef.current) observer.unobserve(thirdDividerLineRef.current); };
   }, [thirdAnimationStarted]);
 
-  // Check if fourth divider line is visible and start animation (new one)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !fourthAnimationStarted && !fourthAnimationCompletedRef.current) {
           setFourthAnimationStarted(true);
-          
-          // Animate through the line SVGs
           let currentIndex = 1;
           const interval = setInterval(() => {
             if (currentIndex < 15) {
@@ -226,72 +324,62 @@ const GreenPulse = () => {
       },
       { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
     );
-
-    if (fourthDividerLineRef.current) {
-      observer.observe(fourthDividerLineRef.current);
-    }
-
-    return () => {
-      if (fourthDividerLineRef.current) {
-        observer.unobserve(fourthDividerLineRef.current);
-      }
-    };
+    if (fourthDividerLineRef.current) observer.observe(fourthDividerLineRef.current);
+    return () => { if (fourthDividerLineRef.current) observer.unobserve(fourthDividerLineRef.current); };
   }, [fourthAnimationStarted]);
 
-  // Animation for nice/ugly SVGs - open 4s, closed very briefly (50ms)
   useEffect(() => {
     let niceInterval;
     let uglyInterval;
-
     const startNiceAnimation = () => {
       niceInterval = setInterval(() => {
-        // Show closed state very briefly
         setNiceSvgState('closed');
-        
-        // Immediately return to open state (almost instant)
-        setTimeout(() => {
-          setNiceSvgState('open');
-        }, 200); // Extremely short closed state (50ms)
-      }, 2000); // Repeat every 4 seconds
+        setTimeout(() => setNiceSvgState('open'), 200);
+      }, 2000);
     };
-
     const startUglyAnimation = () => {
       uglyInterval = setInterval(() => {
-        // Show closed state very briefly
         setUglySvgState('closed');
-        
-        // Immediately return to open state (almost instant)
-        setTimeout(() => {
-          setUglySvgState('open');
-        }, 200); // Extremely short closed state (50ms)
-      }, 2000); // Repeat every 4 seconds
+        setTimeout(() => setUglySvgState('open'), 200);
+      }, 2000);
     };
-
-    // Start animations
     startNiceAnimation();
     startUglyAnimation();
-
-    return () => {
-      clearInterval(niceInterval);
-      clearInterval(uglyInterval);
-    };
+    return () => { clearInterval(niceInterval); clearInterval(uglyInterval); };
   }, []);
 
-  // Animation for alternating kido images
   useEffect(() => {
-    const interval = setInterval(() => {
-      setKidoImage(prev => prev === 'kido1' ? 'kido2' : 'kido1');
-    }, 500); // Change every second
-
+    const interval = setInterval(() => setKidoImage(prev => prev === 'kido1' ? 'kido2' : 'kido1'), 500);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="page-container greenpulse-page">
+    <div className="page-container greenpulse-page" onClick={handleUserInteraction}>
+      {showMrBean && (
+        <div className="mrbean-overlay" onClick={(e) => { e.stopPropagation(); /* allow clicks to interact but don't close layer */ }}>
+          {!imageError ? (
+            <img
+              src="/images/mrbean.svg"
+              alt="Mr. Bean"
+              className="mrbean-image"
+              onError={handleImageError}
+            />
+          ) : (
+            <div className="mrbean-fallback">
+              <span>👋 Mr. Bean says Hello!</span>
+              {!userInteracted && !audioPlayed && (
+                <div style={{ fontSize: '14px', marginTop: '8px', color: '#666' }}>
+                  Click anywhere to hear me!
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="page-content">
         <div className="main-container">
           <div className="greenpulse-content-container">
-            {/* Back button */}
             <div className="back-button-container">
               <img
                 src="/images/back.svg"
@@ -313,12 +401,11 @@ const GreenPulse = () => {
                 style={{ cursor: 'pointer' }}
               />
             </div>
-            
+
             <main className="greenpulse-content">
               <h1>GreenPulse Project</h1>
-              
+
               <div className="main-content-container">
-                {/* Text */}
                 <div className="text-content">
                   <h2>What Was This All About Anyway?</h2>
                   <p>GreenPulse is a Budapest-based startup, they make this smart energy monitoring thing for SMEs. The task was to create a landing page that:</p>
@@ -327,17 +414,14 @@ const GreenPulse = () => {
                     <li>Doesn't make them seem sketchy; there needs to be something that makes you believe they're actually good.</li>
                     <li>Encourages you to request a demo or contact them.</li>
                   </ul>
-                  <p>
-                    The target audience is like, business leaders, finance people who want to save on their electricity bill and want to be a bit greener.
-                  </p>
+                  <p>The target audience is like, business leaders, finance people who want to save on their electricity bill and want to be a bit greener.</p>
                 </div>
 
-                {/* Computer with video playing on screen */}
                 <div className="image-content">
                   <div className="computer-with-video">
                     <img src="/images/computer.svg" alt="Computer displaying GreenPulse" className="computer-frame" />
                     <div className="video-screen">
-                      <video 
+                      <video
                         ref={videoRef}
                         className="greenpulse-screen-video"
                         muted
@@ -352,9 +436,19 @@ const GreenPulse = () => {
                       </video>
                       {!isVideoPlaying && (
                         <div className="video-play-overlay">
-                          <button 
+                          <button
                             className="play-button"
-                            onClick={() => videoRef.current?.play()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // mark as user interaction so audio can play after this
+                              handleUserInteraction();
+                              // unmute only after gesture (if you want sound on the video)
+                              if (videoRef.current) {
+                                // keep autoplay behavior muted — do not unmute automatically,
+                                // but if you explicitly want sound, require the user to toggle it
+                                videoRef.current.play().catch(err => console.log('Play blocked:', err));
+                              }
+                            }}
                           >
                             ▶
                           </button>
@@ -364,32 +458,26 @@ const GreenPulse = () => {
                   </div>
                 </div>
               </div>
-              
-              {/* First divider line */}
+
               <div className="divider-line-container" ref={dividerLineRef}>
                 <div className="divider-line">
-                  <img 
-                    src={`/images/line${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`} 
-                    alt="Decorative divider line" 
+                  <img
+                    src={`/images/line${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`}
+                    alt="Decorative divider line"
                     className="line-svg"
                   />
                 </div>
               </div>
-              
-              {/* Second section */}
+
               <div className="second-section">
                 <h2>What was wrong with the old version? (Which obviously doesn't exist 😊)</h2>
-                
+
                 <div className="comparison-container">
                   <div className="comparison-image">
-                    <img 
-                      src={`/images/nice${niceSvgState}.svg`} 
-                      alt="Good design example" 
-                      className="comparison-svg" 
-                    />
+                    <img src={`/images/nice${niceSvgState}.svg`} alt="Good design example" className="comparison-svg" />
                     <p>Good design</p>
                   </div>
-                  
+
                   <div className="comparison-text">
                     <p>Well, there were some issues...</p>
                     <ul>
@@ -399,36 +487,28 @@ const GreenPulse = () => {
                     </ul>
                     <p>They didn't tell me what to do. There was no clear button for "request a demo".</p>
                   </div>
-                  
+
                   <div className="comparison-image">
-                    <img 
-                      src={`/images/ugly${uglySvgState}.svg`} 
-                      alt="Bad design example" 
-                      className="comparison-svg" 
-                    />
+                    <img src={`/images/ugly${uglySvgState}.svg`} alt="Bad design example" className="comparison-svg" />
                     <p>Bad design</p>
                   </div>
                 </div>
               </div>
 
-              {/* Second divider line - flipped horizontally */}
               <div className="divider-line-container flipped" ref={secondDividerLineRef}>
                 <div className="divider-line">
-                  <img 
-                    src={`/images/line${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`} 
-                    alt="Decorative divider line" 
+                  <img
+                    src={`/images/line${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`}
+                    alt="Decorative divider line"
                     className="line-svg flipped"
                   />
                 </div>
               </div>
 
-              {/* Third section - Design Process */}
               <div className="third-section">
-                {/* Three columns side by side */}
                 <div className="design-process-row">
-                  
                   <div className="design-column logos-column">
-                    <h2 style={{ fontSize: "2rem",  }}>Logos</h2>
+                    <h2 style={{ fontSize: "2rem", }}>Logos</h2>
                     <div className="logo-item">
                       <div className="logo-with-background light-bg">
                         <img src="/images/logoblackwhite.svg" alt="Black and White Logo" className="process-logo" />
@@ -439,14 +519,12 @@ const GreenPulse = () => {
                         <img src="/images/logocolored.svg" alt="Colored Logo" className="process-logo" />
                       </div>
                     </div>
-                    <img src={`/images/${kidoImage}.svg`} alt="Alternating kido image"/>
+                    <img src={`/images/${kidoImage}.svg`} alt="Alternating kido image" />
                   </div>
 
-                  {/* Text column */}
                   <div className="design-column text-column">
                     <h2>How Did I Make It? (The Design Process)</h2>
                     <p>Started with paper (iPad) wireframes, then moved to Figma.</p>
-                    
                     <h3>Structure:</h3>
                     <ul>
                       <li><strong>Hero:</strong> Clear value proposition + prominent "Request Demo" button</li>
@@ -455,7 +533,6 @@ const GreenPulse = () => {
                       <li><strong>About:</strong> Budapest roots and mission to add personality</li>
                       <li><strong>Contact:</strong> Repeated CTA with contact information</li>
                     </ul>
-                    
                     <h3>Look & Feel:</h3>
                     <ul>
                       <li><strong>Colors:</strong> Various green shades matching the chameleon mascot</li>
@@ -463,80 +540,49 @@ const GreenPulse = () => {
                       <li><strong>Typography:</strong> Bold headlines with high-contrast buttons</li>
                     </ul>
                   </div>
-                  
-                  {/* Balls column */}
+
                   <div className="design-column balls-column">
-                    <h2 style={{ fontSize: "2rem",  }}>Colors</h2>
+                    <h2 style={{ fontSize: "2rem", }}>Colors</h2>
                     <div className="ball-animation-container">
-                      <img 
-                        src="/images/00696F.svg" 
-                        alt="Animated ball" 
-                        className="ball-animation"
-                      />
+                      <img src="/images/00696F.svg" alt="Animated ball" className="ball-animation" />
                       <div className="ball-hex-code">#00696F</div>
                     </div>
-                    
                     <div className="ball-animation-container">
-                      <img 
-                        src="/images/6BD8B0.svg" 
-                        alt="Animated ball" 
-                        className="ball-animation"
-                      />
+                      <img src="/images/6BD8B0.svg" alt="Animated ball" className="ball-animation" />
                       <div className="ball-hex-code">#6BD8B0</div>
                     </div>
-                    
-                    {/* Centered Helvetica text */}
-                    <div style={{ 
-                      textAlign: 'center', 
-                      marginTop: '30px',
-                      width: '100%'
-                    }}>
-                      <h2 style={{ fontSize: "2rem",  }}>Font</h2>
+                    <div style={{ textAlign: 'center', marginTop: '30px', width: '100%' }}>
+                      <h2 style={{ fontSize: "2rem", }}>Font</h2>
                       <h2 style={{ fontSize: "2rem", color: "#00696F" }}>Helvetica Neue</h2>
-                      
-                      <h3 style={{
-                        fontFamily: "Helvetica Neue",
-                        textAlign: 'center',
-                        margin: '0 auto',
-                        padding: '20px',
-                        letterSpacing: '5px'
-                      }}>
+                      <h3 style={{ fontFamily: "Helvetica Neue", textAlign: 'center', margin: '0 auto', padding: '20px', letterSpacing: '5px' }}>
                         aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ
                       </h3>
                     </div>
-                  </div> 
+                  </div>
                 </div>
 
-                {/* Fourth divider line - before the final images */}
                 <div className="divider-line-container" ref={fourthDividerLineRef}>
                   <div className="divider-line">
-                    <img 
-                      src={`/images/line${fourthAnimationCompletedRef.current ? 15 : fourthLineSvgIndex}.svg`} 
-                      alt="Decorative divider line" 
+                    <img
+                      src={`/images/line${fourthAnimationCompletedRef.current ? 15 : fourthLineSvgIndex}.svg`}
+                      alt="Decorative divider line"
                       className="line-svg"
                     />
                   </div>
                 </div>
 
-                {/* Images below - full width */}
                 <div className="design-images-content full-width">
                   <div className="images-row">
                     <div className="image-with-caption">
                       <img src="/images/GreenPulseSketch.png" alt="GreenPulse Sketch" className="design-process-img" />
                       <p>Initial Sketch</p>
                     </div>
-                    <img 
-                      src="/images/nyil.svg" 
-                      alt="Arrow"
-                    />
+                    <img src="/images/nyil.svg" alt="Arrow" />
                     <div className="image-with-caption">
                       <img src="/images/GreenPulseWireframe.png" alt="GreenPulse Wireframe" className="design-process-img" />
                       <p>Wireframe</p>
                     </div>
-                    <img 
-                      src="/images/nyil.svg" 
-                      alt="Arrow"
-                    />
+                    <img src="/images/nyil.svg" alt="Arrow" />
                     <div className="image-with-caption">
                       <img src="/images/GreenPulseFinal.jpg" alt="GreenPulse Final Design" className="design-process-img" />
                       <p>Final Design</p>

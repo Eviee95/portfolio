@@ -4,82 +4,212 @@ import './NagyiPeksege.css';
 
 const NagyiPeksege = () => {
   const navigate = useNavigate();
-  
-  // Video ref
   const videoRef = useRef(null);
-  // Back button state
+
   const [backBtnDown, setBackBtnDown] = useState(false);
-  // Line SVG state
   const [lineSvgIndex, setLineSvgIndex] = useState(1);
   const [animationStarted, setAnimationStarted] = useState(false);
   const [animationCompleted, setAnimationCompleted] = useState(false);
   const dividerLineRef = useRef(null);
-  // Second line animation state
+
   const [secondLineSvgIndex, setSecondLineSvgIndex] = useState(1);
   const [secondAnimationStarted, setSecondAnimationStarted] = useState(false);
   const [secondAnimationCompleted, setSecondAnimationCompleted] = useState(false);
   const secondDividerLineRef = useRef(null);
-  // Third line animation state
+
   const [thirdLineSvgIndex, setThirdLineSvgIndex] = useState(1);
   const [thirdAnimationStarted, setThirdAnimationStarted] = useState(false);
   const [thirdAnimationCompleted, setThirdAnimationCompleted] = useState(false);
   const thirdDividerLineRef = useRef(null);
-  // Animation states for comparison SVGs
+
   const [niceSvgState, setNiceSvgState] = useState('open');
   const [uglySvgState, setUglySvgState] = useState('open');
-  // State for alternating kido images
   const [kidoImage, setKidoImage] = useState('kido1');
-  // Video play state
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  // Modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
 
-  // Use refs to track animation completion persistently
+  const [showMrBean, setShowMrBean] = useState(false);
+  const [audioPlayed, setAudioPlayed] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
+
   const animationCompletedRef = useRef(false);
   const secondAnimationCompletedRef = useRef(false);
   const thirdAnimationCompletedRef = useRef(false);
 
-  // Mindig az oldal tetejére görbünk, amikor betöltődik az oldal
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const audioRef = useRef(null);
+  const audioContextRef = useRef(null);
 
-  const handleGoBack = () => {
-    navigate("/");
+  // Play hello sound but only after a gesture-resume step
+  const playHelloSound = async () => {
+    if (audioPlayed) {
+      console.log('Audio already played, skipping');
+      return;
+    }
+
+    // Must not attempt to play before user interaction
+    if (!userInteracted) {
+      console.log('playHelloSound: waiting for user interaction');
+      return;
+    }
+
+    try {
+      // Create audio element once
+      if (!audioRef.current) {
+        audioRef.current = new Audio('/images/hello.mp3');
+        audioRef.current.volume = 0.8;
+        audioRef.current.preload = 'auto';
+        audioRef.current.addEventListener('ended', () => {
+          console.log('Audio finished playing');
+          setShowMrBean(false);
+          setAudioPlayed(true);
+        });
+      }
+
+      // If we use AudioContext in the app, ensure it's resumed first
+      if (audioContextRef.current) {
+        try {
+          await audioContextRef.current.resume();
+          console.log('AudioContext resumed before playing audio');
+        } catch (err) {
+          console.warn('AudioContext resume failed', err);
+        }
+      }
+
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log('Audio playing successfully from /images/hello.mp3');
+            setAudioPlayed(true);
+            setShowMrBean(true);
+          })
+          .catch(error => {
+            console.error('Audio play failed:', error);
+            // fallback display Mr. Bean briefly if audio can't play
+            setShowMrBean(true);
+            setTimeout(() => setShowMrBean(false), 3000);
+          });
+      }
+    } catch (error) {
+      console.error('Audio error:', error);
+      setShowMrBean(true);
+      setTimeout(() => setShowMrBean(false), 3000);
+    }
   };
 
+  const handleImageError = () => {
+    console.log('Mr. Bean image failed to load');
+    setImageError(true);
+  };
+
+  // Centralized handler for the first user gesture
+  const handleUserInteraction = async () => {
+    if (!userInteracted) {
+      console.log('User interaction detected - unlocking audio/video features');
+      setUserInteracted(true);
+
+      // Try to create/resume an AudioContext. Many browsers require this to be resumed by gesture.
+      try {
+        if (!audioContextRef.current && (window.AudioContext || window.webkitAudioContext)) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          audioContextRef.current = new AC();
+        }
+        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+          await audioContextRef.current.resume();
+          console.log('AudioContext resumed on user gesture');
+        }
+      } catch (err) {
+        console.warn('Failed to create/resume AudioContext:', err);
+      }
+
+      // Now safe to attempt playback
+      playHelloSound();
+    }
+  };
+
+  // Initial page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setAudioPlayed(false);
+    setUserInteracted(false);
+    setShowMrBean(true);
+
+    const fallbackTimer = setTimeout(() => {
+      if (!userInteracted && !audioPlayed) {
+        console.log('No user interaction - hiding Mr. Bean');
+        setShowMrBean(false);
+      }
+    }, 3000);
+
+    return () => {
+      clearTimeout(fallbackTimer);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      if (audioContextRef.current) {
+        try {
+          audioContextRef.current.close();
+        } catch (e) { /* ignore */ }
+        audioContextRef.current = null;
+      }
+    };
+  }, []);
+
+  // Add "once" event listeners to unlock on first gesture
+  useEffect(() => {
+    const events = ['click', 'keydown', 'touchstart'];
+    const interactionHandler = () => {
+      handleUserInteraction();
+    };
+
+    events.forEach(event => {
+      document.addEventListener(event, interactionHandler, { once: true, passive: true });
+    });
+
+    return () => {
+      events.forEach(event => document.removeEventListener(event, interactionHandler));
+    };
+  }, []);
+
+  // Try to play once userInteracted changes (will be true only after gesture)
+  useEffect(() => {
+    if (userInteracted && !audioPlayed) {
+      console.log('User interacted - calling playHelloSound()');
+      playHelloSound();
+    }
+  }, [userInteracted]);
+
+  const handleGoBack = () => navigate('/');
   const handleBackBtnDown = () => setBackBtnDown(true);
   const handleBackBtnUp = () => setBackBtnDown(false);
-
   const handleBackClick = () => {
+    handleUserInteraction();
     handleBackBtnDown();
     setTimeout(() => {
       handleBackBtnUp();
       handleGoBack();
-    }, 150); 
+    }, 150);
   };
 
-  // Video play/pause handlers
-  const handleVideoPlay = () => {
-    setIsVideoPlaying(true);
-  };
+  const handleVideoPlay = () => setIsVideoPlaying(true);
+  const handleVideoPause = () => setIsVideoPlaying(false);
 
-  const handleVideoPause = () => {
-    setIsVideoPlaying(false);
-  };
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   // Modal handlers
   const openModal = (imageIndex) => {
     setSelectedImage(imageIndex);
     setIsModalOpen(true);
-    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+    document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
-    document.body.style.overflow = 'auto'; // Re-enable scrolling
+    document.body.style.overflow = 'auto';
   };
 
   const goToNextImage = () => {
@@ -118,29 +248,29 @@ const NagyiPeksege = () => {
     };
   }, [isModalOpen, selectedImage]);
 
-  // Auto-play video when it comes into view
+  // IntersectionObserver to autoplay muted video when in view
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && videoRef.current) {
-          videoRef.current.play().catch(error => {
-            console.log('Auto-play prevented:', error);
-          });
-        } else if (videoRef.current) {
+        if (!videoRef.current) return;
+        if (entry.isIntersecting) {
+          // Allowed: autoplay only while muted
+          if (videoRef.current.paused) {
+            videoRef.current.muted = true;
+            videoRef.current.play().catch(err => {
+              console.log('Auto-play prevented or failed:', err);
+            });
+          }
+        } else {
           videoRef.current.pause();
         }
       },
       { threshold: 0.5 }
     );
 
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
-
+    if (videoRef.current) observer.observe(videoRef.current);
     return () => {
-      if (videoRef.current) {
-        observer.unobserve(videoRef.current);
-      }
+      if (videoRef.current) observer.unobserve(videoRef.current);
     };
   }, []);
 
@@ -150,8 +280,6 @@ const NagyiPeksege = () => {
       ([entry]) => {
         if (entry.isIntersecting && !animationStarted && !animationCompletedRef.current) {
           setAnimationStarted(true);
-          
-          // Animate through the line SVGs
           let currentIndex = 1;
           const interval = setInterval(() => {
             if (currentIndex < 15) {
@@ -167,16 +295,8 @@ const NagyiPeksege = () => {
       },
       { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
     );
-
-    if (dividerLineRef.current) {
-      observer.observe(dividerLineRef.current);
-    }
-
-    return () => {
-      if (dividerLineRef.current) {
-        observer.unobserve(dividerLineRef.current);
-      }
-    };
+    if (dividerLineRef.current) observer.observe(dividerLineRef.current);
+    return () => { if (dividerLineRef.current) observer.unobserve(dividerLineRef.current); };
   }, [animationStarted]);
 
   // Check if second divider line is visible and start animation
@@ -185,8 +305,6 @@ const NagyiPeksege = () => {
       ([entry]) => {
         if (entry.isIntersecting && !secondAnimationStarted && !secondAnimationCompletedRef.current) {
           setSecondAnimationStarted(true);
-          
-          // Animate through the line SVGs
           let currentIndex = 1;
           const interval = setInterval(() => {
             if (currentIndex < 15) {
@@ -202,16 +320,8 @@ const NagyiPeksege = () => {
       },
       { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
     );
-
-    if (secondDividerLineRef.current) {
-      observer.observe(secondDividerLineRef.current);
-    }
-
-    return () => {
-      if (secondDividerLineRef.current) {
-        observer.unobserve(secondDividerLineRef.current);
-      }
-    };
+    if (secondDividerLineRef.current) observer.observe(secondDividerLineRef.current);
+    return () => { if (secondDividerLineRef.current) observer.unobserve(secondDividerLineRef.current); };
   }, [secondAnimationStarted]);
 
   // Check if third divider line is visible and start animation
@@ -220,8 +330,6 @@ const NagyiPeksege = () => {
       ([entry]) => {
         if (entry.isIntersecting && !thirdAnimationStarted && !thirdAnimationCompletedRef.current) {
           setThirdAnimationStarted(true);
-          
-          // Animate through the line SVGs
           let currentIndex = 1;
           const interval = setInterval(() => {
             if (currentIndex < 15) {
@@ -237,72 +345,64 @@ const NagyiPeksege = () => {
       },
       { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
     );
-
-    if (thirdDividerLineRef.current) {
-      observer.observe(thirdDividerLineRef.current);
-    }
-
-    return () => {
-      if (thirdDividerLineRef.current) {
-        observer.unobserve(thirdDividerLineRef.current);
-      }
-    };
+    if (thirdDividerLineRef.current) observer.observe(thirdDividerLineRef.current);
+    return () => { if (thirdDividerLineRef.current) observer.unobserve(thirdDividerLineRef.current); };
   }, [thirdAnimationStarted]);
 
-  // Animation for nice/ugly SVGs - open 4s, closed very briefly (50ms)
+  // Animation for nice/ugly SVGs
   useEffect(() => {
     let niceInterval;
     let uglyInterval;
-
     const startNiceAnimation = () => {
       niceInterval = setInterval(() => {
-        // Show closed state very briefly
         setNiceSvgState('closed');
-        
-        // Immediately return to open state (almost instant)
-        setTimeout(() => {
-          setNiceSvgState('open');
-        }, 200); // Extremely short closed state (50ms)
-      }, 2000); // Repeat every 4 seconds
+        setTimeout(() => setNiceSvgState('open'), 200);
+      }, 2000);
     };
-
     const startUglyAnimation = () => {
       uglyInterval = setInterval(() => {
-        // Show closed state very briefly
         setUglySvgState('closed');
-        
-        // Immediately return to open state (almost instant)
-        setTimeout(() => {
-          setUglySvgState('open');
-        }, 200); // Extremely short closed state (50ms)
-      }, 2000); // Repeat every 4 seconds
+        setTimeout(() => setUglySvgState('open'), 200);
+      }, 2000);
     };
-
-    // Start animations
     startNiceAnimation();
     startUglyAnimation();
-
-    return () => {
-      clearInterval(niceInterval);
-      clearInterval(uglyInterval);
-    };
+    return () => { clearInterval(niceInterval); clearInterval(uglyInterval); };
   }, []);
 
   // Animation for alternating kido images
   useEffect(() => {
-    const interval = setInterval(() => {
-      setKidoImage(prev => prev === 'kido1' ? 'kido2' : 'kido1');
-    }, 500); // Change every second
-
+    const interval = setInterval(() => setKidoImage(prev => prev === 'kido1' ? 'kido2' : 'kido1'), 500);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="page-container nagyi-page">
+    <div className="page-container nagyi-page" onClick={handleUserInteraction}>
+      {showMrBean && (
+        <div className="mrbean-overlay" onClick={(e) => { e.stopPropagation(); /* allow clicks to interact but don't close layer */ }}>
+          {!imageError ? (
+            <img
+              src="/images/mrbean.svg"
+              alt="Mr. Bean"
+              className="mrbean-image"
+              onError={handleImageError}
+            />
+          ) : (
+            <div className="mrbean-fallback">
+              <span>👋 Mr. Bean says Hello!</span>
+              {!userInteracted && !audioPlayed && (
+                <div style={{ fontSize: '14px', marginTop: '8px', color: '#666' }}>
+                  Click anywhere to hear me!
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="page-content">
         <div className="main-container">
           <div className="greenpulse-content-container">
-            {/* Back button */}
             <div className="back-button-container">
               <img
                 src="/images/back.svg"
@@ -324,12 +424,11 @@ const NagyiPeksege = () => {
                 style={{ cursor: 'pointer' }}
               />
             </div>
-            
+
             <main className="greenpulse-content">
               <h1>Grandma's Bakery Project</h1>
-              
+
               <div className="main-content-container">
-                {/* Text */}
                 <div className="text-content">
                   <h2>How did Grandma's Bakery come to life?</h2>
                   <p>This was an independent practical project. The only thing I was sure about at the beginning was that I wanted to create a webshop. Then the bakery idea came up, since it felt less cliche. The final concept was inspired by an old red embroidered wall hanging with quotes that I found at my grandparents' house. That's how "Grandma's Bakery" was born, along with the hero section illustration.</p>
@@ -339,12 +438,11 @@ const NagyiPeksege = () => {
                   </p>
                 </div>
 
-                {/* Computer with video playing on screen */}
                 <div className="image-content">
                   <div className="computer-with-video">
                     <img src="/images/computer.svg" alt="Computer displaying Grandma's Bakery" className="computer-frame" />
                     <div className="video-screen">
-                      <video 
+                      <video
                         ref={videoRef}
                         className="greenpulse-screen-video"
                         muted
@@ -359,9 +457,16 @@ const NagyiPeksege = () => {
                       </video>
                       {!isVideoPlaying && (
                         <div className="video-play-overlay">
-                          <button 
+                          <button
                             className="play-button"
-                            onClick={() => videoRef.current?.play()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // mark as user interaction so audio can play after this
+                              handleUserInteraction();
+                              if (videoRef.current) {
+                                videoRef.current.play().catch(err => console.log('Play blocked:', err));
+                              }
+                            }}
                           >
                             ▶
                           </button>
@@ -371,19 +476,17 @@ const NagyiPeksege = () => {
                   </div>
                 </div>
               </div>
-              
-              {/* First divider line */}
+
               <div className="divider-line-container" ref={dividerLineRef}>
                 <div className="divider-line">
-                  <img 
-                    src={`/images/line${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`} 
-                    alt="Decorative divider line" 
+                  <img
+                    src={`/images/line${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`}
+                    alt="Decorative divider line"
                     className="line-svg"
                   />
                 </div>
               </div>
-              
-              {/* Second section */}
+
               <div className="second-section">
                 <div className="comparison-container">
                   <div className="comparison-text">
@@ -397,20 +500,17 @@ const NagyiPeksege = () => {
                 </div>
               </div>
 
-              {/* Second divider line - flipped horizontally */}
               <div className="divider-line-container flipped" ref={secondDividerLineRef}>
                 <div className="divider-line">
-                  <img 
-                    src={`/images/line${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`} 
-                    alt="Decorative divider line" 
+                  <img
+                    src={`/images/line${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`}
+                    alt="Decorative divider line"
                     className="line-svg flipped"
                   />
                 </div>
               </div>
 
-              {/* Third section - Design Process */}
               <div className="third-section">
-                {/* Three columns side by side */}
                 <div className="design-process-row">
                   
                   <div className="design-column logos-column">
@@ -431,7 +531,6 @@ const NagyiPeksege = () => {
                     <img src={`/images/${kidoImage}.svg`} alt="Alternating kido image"/>
                   </div>
 
-                  {/* Text column */}
                   <div className="design-column text-column">
                     <h2>How Did I Make It? (The Design Process)</h2>
                     <p>For the color palette, I used natural beige and brown tones to reflect the atmosphere of a bakery. I always struggle with logos since I find it difficult to make them simple enough—but compared to my first attempt, I managed to really simplify it this time.</p>
@@ -440,34 +539,18 @@ const NagyiPeksege = () => {
                     
                     <p>For the About Us section, I didn't want to overdo it, since I believe most visitors don't even open that page on these kinds of sites. For the FAQ section, I added a modern twist by presenting it in a dialogue style—similar to messaging apps, which people are used to scanning quickly. I also included a "like" button—something older users especially love—which I treated as a simple way to give positive feedback to the bakery.</p>
                   </div>
-                  
-                  {/* Balls column */}
+
                   <div className="design-column balls-column">
                     <h2>Colors</h2>
                     <div className="ball-animation-container">
-                      <img 
-                        src="/images/B48C52.svg" 
-                        alt="Animated ball" 
-                        className="ball-animation"
-                      />
+                      <img src="/images/B48C52.svg" alt="Animated ball" className="ball-animation" />
                       <div className="ball-hex-code">#B48C52</div>
                     </div>
-                    
                     <div className="ball-animation-container">
-                      <img 
-                        src="/images/27140F.svg" 
-                        alt="Animated ball" 
-                        className="ball-animation"
-                      />
+                      <img src="/images/27140F.svg" alt="Animated ball" className="ball-animation" />
                       <div className="ball-hex-code">#27140F</div>
                     </div>
-                    
-                    {/* Fonts section */}
-                    <div style={{ 
-                      textAlign: 'center', 
-                      marginTop: '30px',
-                      width: '100%'
-                    }}>
+                    <div style={{ textAlign: 'center', marginTop: '30px', width: '100%' }}>
                       <h2>Fonts</h2>
                       <h3>American Typewriter</h3>
                       <div style={{
@@ -477,7 +560,6 @@ const NagyiPeksege = () => {
                         padding: '20px',
                         letterSpacing: '5px',
                         fontSize: 'clamp(16px, 2vw, 24px)',
-                        
                         borderRadius: '10px',
                         marginBottom: '20px',
                         maxWidth: '800px'
@@ -492,7 +574,6 @@ const NagyiPeksege = () => {
                         padding: '20px',
                         letterSpacing: '5px',
                         fontSize: 'clamp(16px, 2vw, 24px)',
-                        
                         borderRadius: '10px',
                         maxWidth: '800px'
                       }}>
@@ -501,37 +582,35 @@ const NagyiPeksege = () => {
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Third divider line */}
-              <div className="divider-line-container" ref={thirdDividerLineRef}>
-                <div className="divider-line">
-                  <img 
-                    src={`/images/line${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`} 
-                    alt="Decorative divider line" 
-                    className="line-svg"
-                  />
+                <div className="divider-line-container" ref={thirdDividerLineRef}>
+                  <div className="divider-line">
+                    <img
+                      src={`/images/line${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`}
+                      alt="Decorative divider line"
+                      className="line-svg"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              {/* Project Gallery - Images Only */}
-              <div className="project-gallery-section">
-                <h2>Project Gallery</h2>
-                
-                <div className="gallery-grid">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-                    <div 
-                      key={num} 
-                      className="gallery-item"
-                      onClick={() => openModal(num)}
-                    >
-                      <img 
-                        src={`/images/nagyi${num}.png`} 
-                        alt={`Grandma's Bakery screenshot ${num}`}
-                        className="gallery-image"
-                      />
-                    </div>
-                  ))}
+                <div className="project-gallery-section">
+                  <h2>Project Gallery</h2>
+                  
+                  <div className="gallery-grid">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                      <div 
+                        key={num} 
+                        className="gallery-item"
+                        onClick={() => openModal(num)}
+                      >
+                        <img 
+                          src={`/images/nagyi${num}.png`} 
+                          alt={`Grandma's Bakery screenshot ${num}`}
+                          className="gallery-image"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </main>

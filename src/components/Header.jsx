@@ -201,8 +201,8 @@ const Header = () => {
         }
 
         .dropdown-arrow {
-          width: 14px;
-          height: 14px;
+          width: 25px;
+          height: 25px;
           transition: transform 0.3s ease;
         }
 

@@ -130,7 +130,6 @@
     height: auto;
 }
 
-/* Phone frame styles */
 .petnanny-page .phone-frame {
     position: relative;
     width: 100%;
@@ -195,7 +194,6 @@
     transform: scaleX(-1);
 }
 
-/* Second section styles */
 .petnanny-page .second-section {
     width: 100%;
     max-width: 1800px;
@@ -207,7 +205,7 @@
 .petnanny-page .comparison-container {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Középre igazítás függőlegesen */
+    align-items: center;
     gap: 60px;
     margin-top: 30px;
     width: 100%;
@@ -217,13 +215,13 @@
     flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center; /* Középre igazítás */
+    align-items: center;
     min-width: 200px;
 }
 
 .petnanny-page .comparison-svg {
     width: 100%;
-    max-width: 250px; /* Csökkentve 400px-ről */
+    max-width: 250px;
     height: auto;
 }
 
@@ -247,7 +245,6 @@
     margin-bottom: 15px;
 }
 
-/* Additional SVGs styling */
 .petnanny-page .additional-svgs {
     display: flex;
     justify-content: center;
@@ -296,7 +293,8 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
+    margin-top: 20px;
 }
 
 .petnanny-page .logo-item:last-child {
@@ -312,9 +310,9 @@
 }
 
 .petnanny-page .text-column {
-    flex: 2;
+    flex: 3;
     justify-content: center;
-    padding: 0 0 0 120px;
+    padding: 0 0 0 40px;
 }
 
 .petnanny-page .text-column h2 {
@@ -351,7 +349,6 @@
     width: 150px;
     height: 150px;
     transition: transform 0.3s ease;
-    border-radius: 50%;
 }
 
 .petnanny-page .ball-animation:hover {
@@ -361,7 +358,7 @@
 .petnanny-page .ball-hex-code {
     font-size: 1.3rem;
     font-weight: bold;
-    margin-top: 12px;
+    margin-top: 24px;
     padding: 6px 14px;
     border-radius: 20px;
     color: #000;
@@ -371,6 +368,7 @@
 .petnanny-page .design-images-content.full-width {
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin-top: 40px;
     padding: 0 20px;
@@ -410,8 +408,8 @@
 .petnanny-page .logo-with-background {
     position: relative;
     width: 100%;
-    max-width: 380px;
-    height: 260px;
+    max-width: 420px;
+    height: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -429,12 +427,154 @@
 .petnanny-page .logo-with-background .process-logo {
     position: relative;
     z-index: 2;
-    width: 80%;
-    max-width: 260px;
+    width: 85%;
+    max-width: 250px;
     height: auto;
 }
 
-/* Reszponzív beállítások */
+.petnanny-page .process-logo {
+    width: 80%;
+    max-width: 350px;
+    height: auto;
+}
+
+.petnanny-page .thumbnail-gallery {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 20px 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #1976d2 transparent;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.petnanny-page .thumbnail-gallery::-webkit-scrollbar {
+    height: 8px;
+}
+
+.petnanny-page .thumbnail-gallery::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.petnanny-page .thumbnail-gallery::-webkit-scrollbar-thumb {
+    background-color: #1976d2;
+    border-radius: 4px;
+}
+
+.petnanny-page .thumbnail-container {
+    flex: 0 0 auto;
+    width: 160px;
+    height: 320px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent;
+}
+
+.petnanny-page .thumbnail-container:hover,
+.petnanny-page .thumbnail-container:focus {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-color: #1976d2;
+    outline: none;
+}
+
+.petnanny-page .thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.petnanny-page .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.petnanny-page .modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.petnanny-page .modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    transition: background-color 0.3s ease;
+}
+
+.petnanny-page .modal-close-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.petnanny-page .modal-image {
+    max-width: 100%;
+    max-height: calc(90vh - 60px);
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.petnanny-page .modal-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    transition: background-color 0.3s ease;
+}
+
+.petnanny-page .modal-nav-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.petnanny-page .modal-prev-btn {
+    left: 15px;
+}
+
+.petnanny-page .modal-next-btn {
+    right: 15px;
+}
+
 @media (max-width: 1600px) {
     .petnanny-page .main-content-container,
     .petnanny-page .second-section,
@@ -444,6 +584,24 @@
     .petnanny-page .petnanny-content h1 {
         max-width: 1600px;
         padding: 0 30px;
+    }
+    
+    .petnanny-page .process-logo {
+        max-width: 320px;
+    }
+    
+    .petnanny-page .logo-with-background {
+        max-width: 380px;
+        height: 280px;
+    }
+    
+    .petnanny-page .logo-with-background .process-logo {
+        max-width: 280px;
+    }
+    
+    .petnanny-page .thumbnail-container {
+        width: 110px;
+        height: 110px;
     }
 }
 
@@ -471,7 +629,35 @@
     }
     
     .petnanny-page .comparison-svg {
-        max-width: 220px; /* Csökkentve */
+        max-width: 220px;
+    }
+    
+    .petnanny-page .logos-column {
+        padding: 25px 15px;
+        gap: 35px;
+    }
+    
+    .petnanny-page .logo-item {
+        margin-bottom: 35px;
+        padding: 15px;
+    }
+    
+    .petnanny-page .process-logo {
+        max-width: 300px;
+    }
+    
+    .petnanny-page .logo-with-background {
+        max-width: 350px;
+        height: 260px;
+    }
+    
+    .petnanny-page .logo-with-background .process-logo {
+        max-width: 260px;
+    }
+    
+    .petnanny-page .thumbnail-container {
+        width: 100px;
+        height: 100px;
     }
 }
 
@@ -527,7 +713,7 @@
     }
 
     .petnanny-page .comparison-svg {
-        max-width: 200px; /* Csökkentve */
+        max-width: 200px;
     }
 
     .petnanny-page .image-with-caption {
@@ -546,6 +732,33 @@
     
     .petnanny-page .additional-svg {
         max-width: 180px;
+    }
+    
+    .petnanny-page .logos-column {
+        padding: 20px 10px;
+        gap: 30px;
+    }
+    
+    .petnanny-page .logo-item {
+        margin-bottom: 30px;
+        padding: 15px;
+    }
+    
+    .petnanny-page .logo-item p {
+        margin: 20px 0 0 0;
+    }
+    
+    .petnanny-page .process-logo {
+        max-width: 280px;
+    }
+    
+    .petnanny-page .logo-with-background .process-logo {
+        max-width: 240px;
+    }
+    
+    .petnanny-page .thumbnail-container {
+        width: 90px;
+        height: 90px;
     }
 }
 
@@ -630,7 +843,7 @@
     }
 
     .petnanny-page .comparison-svg {
-        max-width: 180px; /* Csökkentve */
+        max-width: 180px;
     }
 
     .petnanny-page .comparison-text {
@@ -657,6 +870,29 @@
     .petnanny-page .additional-svgs {
         justify-content: center;
         gap: 30px;
+    }
+    
+    .petnanny-page .logos-column {
+        padding: 20px 10px;
+        gap: 30px;
+    }
+    
+    .petnanny-page .logo-item {
+        margin-bottom: 30px;
+        padding: 15px;
+    }
+    
+    .petnanny-page .process-logo {
+        max-width: 260px;
+    }
+    
+    .petnanny-page .logo-with-background .process-logo {
+        max-width: 220px;
+    }
+    
+    .petnanny-page .thumbnail-container {
+        width: 80px;
+        height: 80px;
     }
 }
 
@@ -696,11 +932,14 @@
     .petnanny-page .logos-column {
         flex-direction: column;
         gap: 30px;
+        padding: 15px 8px;
+        gap: 25px;
     }
 
     .petnanny-page .logo-item {
         flex: 0 0 100%;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
+        padding: 12px;
     }
 
     .petnanny-page .logo-item:last-child {
@@ -716,7 +955,7 @@
     }
 
     .petnanny-page .comparison-svg {
-        max-width: 160px; /* Csökkentve */
+        max-width: 160px;
     }
 
     .petnanny-page .images-row {
@@ -762,6 +1001,43 @@
     .petnanny-page .additional-svg {
         max-width: 150px;
     }
+    
+    .petnanny-page .logo-item p {
+        margin: 15px 0 0 0;
+    }
+    
+    .petnanny-page .process-logo {
+        max-width: 240px;
+    }
+    
+    .petnanny-page .logo-with-background .process-logo {
+        max-width: 200px;
+    }
+    
+    .petnanny-page .thumbnail-container {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .petnanny-page .modal-content {
+        max-width: 95%;
+        max-height: 95%;
+        padding: 15px;
+    }
+    
+    .petnanny-page .modal-close-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+        top: 8px;
+        right: 12px;
+    }
+
+    .petnanny-page .modal-nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -798,7 +1074,7 @@
     }
     
     .petnanny-page .comparison-svg {
-        max-width: 140px; /* Csökkentve */
+        max-width: 140px;
     }
     
     .petnanny-page .additional-svgs {
@@ -809,6 +1085,19 @@
     
     .petnanny-page .additional-svg {
         max-width: 120px;
+    }
+    
+    .petnanny-page .process-logo {
+        max-width: 220px;
+    }
+    
+    .petnanny-page .logo-with-background .process-logo {
+        max-width: 180px;
+    }
+    
+    .petnanny-page .thumbnail-container {
+        width: 60px;
+        height: 60px;
     }
 }
 
@@ -842,7 +1131,7 @@
     }
 
     .petnanny-page .comparison-svg {
-        max-width: 120px; /* Csökkentve */
+        max-width: 120px;
     }
 
     .petnanny-page .process-logo {
@@ -874,6 +1163,47 @@
 
     .petnanny-page .phone-frame {
         max-width: 140px;
+    }
+    
+    .petnanny-page .logos-column {
+        padding: 10px 5px;
+        gap: 20px;
+    }
+    
+    .petnanny-page .logo-item {
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+    
+    .petnanny-page .logo-item p {
+        margin: 12px 0 0 0;
+    }
+    
+    .petnanny-page .process-logo {
+        max-width: 200px;
+    }
+    
+    .petnanny-page .logo-with-background .process-logo {
+        max-width: 160px;
+    }
+    
+    .petnanny-page .thumbnail-container {
+        width: 55px;
+        height: 55px;
+    }
+
+    .petnanny-page .modal-nav-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+    }
+    
+    .petnanny-page .modal-prev-btn {
+        left: 10px;
+    }
+    
+    .petnanny-page .modal-next-btn {
+        right: 10px;
     }
 }
 
@@ -919,6 +1249,19 @@
     }
     
     .petnanny-page .comparison-svg {
-        max-width: 100px; /* Csökkentve */
+        max-width: 100px;
+    }
+    
+    .petnanny-page .process-logo {
+        max-width: 180px;
+    }
+    
+    .petnanny-page .logo-with-background .process-logo {
+        max-width: 140px;
+    }
+    
+    .petnanny-page .thumbnail-container {
+        width: 50px;
+        height: 50px;
     }
 }

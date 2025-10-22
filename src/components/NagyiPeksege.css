@@ -15,6 +15,50 @@
   font-display: swap;
 }
 
+/* Mr. Bean overlay styles - Frissítve */
+.mrbean-overlay {
+  position: fixed;
+  top: 70px; /* 20px-ről 60px-re változott, hogy lejjebb kerüljön */
+  right: 20px;
+  z-index: 10000;
+  animation: slideInOutRight 3s ease-in-out forwards;
+}
+
+.mrbean-image {
+  width: 220px; /* 180px-ről 220px-re változott, hogy még nagyobb legyen */
+  height: auto;
+}
+
+.mrbean-fallback {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 2px solid #B48C52;
+  font-size: 16px; /* Hozzáadva a jobb olvashatóság érdekében */
+}
+
+@keyframes slideInOutRight {
+  0% {
+    opacity: 1;
+    transform: translateX(100px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(100px); /* Jobbra csúszik ki ahogy jött */
+  }
+}
+
 .nagyi-page {
     min-height: 100vh;
     width: 100%;
@@ -518,12 +562,12 @@
 
 .nagyi-page .gallery-item {
   width: 100%;
-  aspect-ratio: 4/3; /* Magasabb képek - több látszik */
+  aspect-ratio: 4/3;
   overflow: hidden;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-color: transparent; /* Fehér háttér eltávolítva */
+  background-color: transparent;
   cursor: pointer;
 }
 
@@ -535,7 +579,7 @@
 .nagyi-page .gallery-image {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Teljes kép látszik, nincs crop */
+  object-fit: contain;
   transition: transform 0.3s ease;
 }
 
@@ -578,7 +622,7 @@
 .nagyi-page .modal-image {
   max-width: 100%;
   max-height: 90vh;
-  object-fit: contain; /* Teljes kép látszik a modalban is */
+  object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -690,7 +734,7 @@
   }
 
   .nagyi-page .gallery-item {
-    aspect-ratio: 4/3; /* Mobilnál is magasabb marad */
+    aspect-ratio: 4/3;
   }
 }
 
@@ -1053,6 +1097,21 @@
         height: 45px;
         font-size: 16px;
     }
+
+    /* Mr. Bean responsive - Frissítve */
+    .mrbean-overlay {
+        top: 30px; /* 10px-ről 30px-re változott */
+        right: 10px;
+    }
+    
+    .mrbean-image {
+        width: 150px; /* 120px-ről 150px-re változott */
+    }
+    
+    .mrbean-fallback {
+        padding: 10px;
+        font-size: 14px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -1094,6 +1153,21 @@
         width: 74%;
         height: 64%;
         border-radius: 8px;
+    }
+
+    /* Mr. Bean responsive - Frissítve */
+    .mrbean-overlay {
+        top: 25px; /* 5px-ről 25px-re változott */
+        right: 5px;
+    }
+    
+    .mrbean-image {
+        width: 120px; /* 100px-ről 120px-re változott */
+    }
+    
+    .mrbean-fallback {
+        padding: 8px;
+        font-size: 12px;
     }
 }
 
@@ -1170,6 +1244,32 @@
         height: 40px;
         font-size: 14px;
     }
+
+    .greenpulse-page .third-section .divider-line-container {
+        max-width: 480px;
+        padding: 0 8px;
+        min-height: 120px;
+        margin: 20px auto 10px auto;
+    }
+    
+    .greenpulse-page .third-section .line-svg {
+        height: 110px;
+    }
+
+    /* Mr. Bean responsive - Frissítve */
+    .mrbean-overlay {
+        top: 20px; /* 3px-ről 20px-re változott */
+        right: 3px;
+    }
+    
+    .mrbean-image {
+        width: 100px; /* 80px-ről 100px-re változott */
+    }
+    
+    .mrbean-fallback {
+        padding: 6px;
+        font-size: 11px;
+    }
 }
 
 @media (max-width: 360px) {
@@ -1225,5 +1325,20 @@
         width: 35px;
         height: 35px;
         font-size: 12px;
+    }
+
+    /* Mr. Bean responsive - Frissítve */
+    .mrbean-overlay {
+        top: 15px; /* 2px-ről 15px-re változott */
+        right: 2px;
+    }
+    
+    .mrbean-image {
+        width: 80px; /* 65px-ről 80px-re változott */
+    }
+    
+    .mrbean-fallback {
+        padding: 5px;
+        font-size: 10px;
     }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"; 
+import { useEffect, useState, useRef } from "react"; 
 import { useNavigate } from "react-router-dom";
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -30,6 +30,38 @@ const Hero = () => {
 
   const [currentThanksFrame, setCurrentThanksFrame] = useState(1);
 
+  // Új állapotok a divider line animációkhoz
+  const [firstLineSvgIndex, setFirstLineSvgIndex] = useState(1);
+  const [firstAnimationStarted, setFirstAnimationStarted] = useState(false);
+  const [firstAnimationCompleted, setFirstAnimationCompleted] = useState(false);
+  const firstDividerLineRef = useRef(null);
+
+  const [secondLineSvgIndex, setSecondLineSvgIndex] = useState(1);
+  const [secondAnimationStarted, setSecondAnimationStarted] = useState(false);
+  const [secondAnimationCompleted, setSecondAnimationCompleted] = useState(false);
+  const secondDividerLineRef = useRef(null);
+
+  const [thirdLineSvgIndex, setThirdLineSvgIndex] = useState(1);
+  const [thirdAnimationStarted, setThirdAnimationStarted] = useState(false);
+  const [thirdAnimationCompleted, setThirdAnimationCompleted] = useState(false);
+  const thirdDividerLineRef = useRef(null);
+
+  const [fourthLineSvgIndex, setFourthLineSvgIndex] = useState(1);
+  const [fourthAnimationStarted, setFourthAnimationStarted] = useState(false);
+  const [fourthAnimationCompleted, setFourthAnimationCompleted] = useState(false);
+  const fourthDividerLineRef = useRef(null);
+
+  const [fifthLineSvgIndex, setFifthLineSvgIndex] = useState(1);
+  const [fifthAnimationStarted, setFifthAnimationStarted] = useState(false);
+  const [fifthAnimationCompleted, setFifthAnimationCompleted] = useState(false);
+  const fifthDividerLineRef = useRef(null);
+
+  const firstAnimationCompletedRef = useRef(false);
+  const secondAnimationCompletedRef = useRef(false);
+  const thirdAnimationCompletedRef = useRef(false);
+  const fourthAnimationCompletedRef = useRef(false);
+  const fifthAnimationCompletedRef = useRef(false);
+
   const navigate = useNavigate();
 
   const totalFrames = 8;
@@ -38,7 +70,7 @@ const Hero = () => {
   const totalContactFrames = 6;
   const contactFps = 3;
   const totalFooterFrames = 11;
-  const footerFps = 5;
+  const footerFps = 1;
   
   const totalGuyFrames = 8;
   const guyFps = 3;
@@ -50,6 +82,128 @@ const Hero = () => {
   const totalThanksFrames = 5;
   const thanksFps = 3;
 
+  // Divider line animációk
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !firstAnimationStarted && !firstAnimationCompletedRef.current) {
+          setFirstAnimationStarted(true);
+          let currentIndex = 1;
+          const interval = setInterval(() => {
+            if (currentIndex < 15) {
+              currentIndex++;
+              setFirstLineSvgIndex(currentIndex);
+            } else {
+              clearInterval(interval);
+              setFirstAnimationCompleted(true);
+              firstAnimationCompletedRef.current = true;
+            }
+          }, 100);
+        }
+      },
+      { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
+    );
+    if (firstDividerLineRef.current) observer.observe(firstDividerLineRef.current);
+    return () => { if (firstDividerLineRef.current) observer.unobserve(firstDividerLineRef.current); };
+  }, [firstAnimationStarted]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !secondAnimationStarted && !secondAnimationCompletedRef.current) {
+          setSecondAnimationStarted(true);
+          let currentIndex = 1;
+          const interval = setInterval(() => {
+            if (currentIndex < 15) {
+              currentIndex++;
+              setSecondLineSvgIndex(currentIndex);
+            } else {
+              clearInterval(interval);
+              setSecondAnimationCompleted(true);
+              secondAnimationCompletedRef.current = true;
+            }
+          }, 100);
+        }
+      },
+      { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
+    );
+    if (secondDividerLineRef.current) observer.observe(secondDividerLineRef.current);
+    return () => { if (secondDividerLineRef.current) observer.unobserve(secondDividerLineRef.current); };
+  }, [secondAnimationStarted]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !thirdAnimationStarted && !thirdAnimationCompletedRef.current) {
+          setThirdAnimationStarted(true);
+          let currentIndex = 1;
+          const interval = setInterval(() => {
+            if (currentIndex < 15) {
+              currentIndex++;
+              setThirdLineSvgIndex(currentIndex);
+            } else {
+              clearInterval(interval);
+              setThirdAnimationCompleted(true);
+              thirdAnimationCompletedRef.current = true;
+            }
+          }, 100);
+        }
+      },
+      { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
+    );
+    if (thirdDividerLineRef.current) observer.observe(thirdDividerLineRef.current);
+    return () => { if (thirdDividerLineRef.current) observer.unobserve(thirdDividerLineRef.current); };
+  }, [thirdAnimationStarted]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !fourthAnimationStarted && !fourthAnimationCompletedRef.current) {
+          setFourthAnimationStarted(true);
+          let currentIndex = 1;
+          const interval = setInterval(() => {
+            if (currentIndex < 15) {
+              currentIndex++;
+              setFourthLineSvgIndex(currentIndex);
+            } else {
+              clearInterval(interval);
+              setFourthAnimationCompleted(true);
+              fourthAnimationCompletedRef.current = true;
+            }
+          }, 100);
+        }
+      },
+      { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
+    );
+    if (fourthDividerLineRef.current) observer.observe(fourthDividerLineRef.current);
+    return () => { if (fourthDividerLineRef.current) observer.unobserve(fourthDividerLineRef.current); };
+  }, [fourthAnimationStarted]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !fifthAnimationStarted && !fifthAnimationCompletedRef.current) {
+          setFifthAnimationStarted(true);
+          let currentIndex = 1;
+          const interval = setInterval(() => {
+            if (currentIndex < 15) {
+              currentIndex++;
+              setFifthLineSvgIndex(currentIndex);
+            } else {
+              clearInterval(interval);
+              setFifthAnimationCompleted(true);
+              fifthAnimationCompletedRef.current = true;
+            }
+          }, 100);
+        }
+      },
+      { threshold: 0.8, rootMargin: '0px 0px -50px 0px' }
+    );
+    if (fifthDividerLineRef.current) observer.observe(fifthDividerLineRef.current);
+    return () => { if (fifthDividerLineRef.current) observer.unobserve(fifthDividerLineRef.current); };
+  }, [fifthAnimationStarted]);
+
+  // Egyéb useEffect-ek változatlanok
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentFrame((prev) => (prev % totalFrames) + 1);
@@ -171,25 +325,14 @@ const Hero = () => {
   useEffect(() => {
     if (!footerPlayed) return;
     
-    const startTimeout = setTimeout(() => {
-      setFooterFrame(1);
-      let frame = 1;
-      const interval = setInterval(() => {
-        frame++;
-        if (frame <= totalFooterFrames) {
-          setFooterFrame(frame);
-        }
-        if (frame === totalFooterFrames) {
-          clearInterval(interval);
-        }
-      }, 1000 / footerFps);
+    let frame = 1;
+    const interval = setInterval(() => {
+      frame = (frame % totalFooterFrames) + 1;
+      setFooterFrame(frame);
+    }, 1000 / footerFps);
 
-      return () => {
-        clearInterval(interval);
-        clearTimeout(startTimeout);
-      };
-    }, 200);
-  }, [footerPlayed]);
+    return () => clearInterval(interval);
+  }, [footerPlayed, totalFooterFrames, footerFps]);
 
   const handleAboutBtnDown = () => setAboutBtnDown(true);
   const handleAboutBtnUp = () => setAboutBtnDown(false);
@@ -316,6 +459,17 @@ const Hero = () => {
             </div>
           </div>
 
+          {/* 1. Divider line - fő animáció után */}
+          <div className="divider-line-container" ref={firstDividerLineRef}>
+            <div className="divider-line">
+              <img
+                src={`/images/line${firstAnimationCompletedRef.current ? 15 : firstLineSvgIndex}.svg`}
+                alt="Decorative divider line"
+                className="line-svg"
+              />
+            </div>
+          </div>
+
           <div id="about" className="about-section">
             <img src={`/images/girl${currentGirl}.svg`} alt="Girl" className="about-img" />
             <div className="about-text">
@@ -347,18 +501,30 @@ const Hero = () => {
             </div>
           </div>
 
+          {/* 2. Divider line - about szakasz után */}
+          <div className="divider-line-container" ref={secondDividerLineRef}>
+            <div className="divider-line">
+              <img
+                src={`/images/line${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`}
+                alt="Decorative divider line"
+                className="line-svg flipped"
+              />
+            </div>
+          </div>
+
           <div id="projects" className="projects-section">
             <div className="projects-title-container">
               <h1 className="projects-title">My Projects</h1>
             </div>
             
             <div className="projects-cards-container">
-              <div className="project-item">
+              {/* 1. kártya - Nagyi Peksege */}
+              <div className="project-item first-card">
                 <img
                   src="/images/arrow-right.svg"
                   alt="Left"
                   style={{ transform: "scaleX(-1)" }}
-                  className="arrow-img"
+                  className="arrow-img left-arrow"
                 />
 
                 <div 
@@ -380,9 +546,15 @@ const Hero = () => {
                     <img src="/images/nagyicard.svg" alt="Nagyi Peksege Card" className="project-card" />
                   </div>
                 </div>
+
+                {/* Üres hely a jobb oldali nyíl helyett mobil nézetben */}
+                <div className="arrow-placeholder"></div>
               </div>
 
-              <div className="project-item">
+              {/* 2. kártya - GreenPulse */}
+              <div className="project-item middle-card">
+                
+
                 <div 
                   className="card-magic-container center-card"
                   onMouseEnter={() => handleMagicHover(1)}
@@ -402,9 +574,15 @@ const Hero = () => {
                     <img src="/images/greenpulsecard.svg" alt="GreenPulse Card" className="project-card" />
                   </div>
                 </div>
+
+               
               </div>
 
-              <div className="project-item">
+              {/* 3. kártya - PetNanny */}
+              <div className="project-item last-card">
+                {/* Üres hely a bal oldali nyíl helyett mobil nézetben */}
+                <div className="arrow-placeholder"></div>
+
                 <div 
                   className="card-magic-container"
                   onMouseEnter={() => handleMagicHover(2)}
@@ -425,8 +603,23 @@ const Hero = () => {
                   </div>
                 </div>
 
-                <img src="/images/arrow-right.svg" alt="Right" className="arrow-img" />
+                <img 
+                  src="/images/arrow-right.svg" 
+                  alt="Right" 
+                  className="arrow-img right-arrow" 
+                />
               </div>
+            </div>
+          </div>
+
+          {/* 3. Divider line - projects szakasz után */}
+          <div className="divider-line-container" ref={thirdDividerLineRef}>
+            <div className="divider-line">
+              <img
+                src={`/images/line${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`}
+                alt="Decorative divider line"
+                className="line-svg"
+              />
             </div>
           </div>
 
@@ -509,34 +702,33 @@ const Hero = () => {
             </div>
           </div>
 
+          {/* 4. Divider line - contact szakasz után */}
+          <div className="divider-line-container" ref={fourthDividerLineRef}>
+            <div className="divider-line">
+              <img
+                src={`/images/line${fourthAnimationCompletedRef.current ? 15 : fourthLineSvgIndex}.svg`}
+                alt="Decorative divider line"
+                className="line-svg flipped"
+              />
+            </div>
+          </div>
+
           <div className="footer-animation-container">
             <img src="/images/pencil.png" alt="Pencil" className="footer-pencil" />
             <img src="/images/eraser.png" alt="Eraser" className="footer-eraser" />
             
             <div className="footer-content-wrapper">
-              <div className="footer-thanks-animation">
+              <div className="footer-beatles-animation">
                 <img
-                  src={`/images/thanks${currentThanksFrame}.svg`}
-                  alt={`Thanks frame ${currentThanksFrame}`}
-                  className="thanks-animation-img"
-                />
-              </div>
-              <div className="footer-img-wrap">
-                <img
-                  src={`/images/footer${footerFrame}.svg`}
-                  alt={`Footer frame ${footerFrame}`}
-                  className="footer-animation-img"
-                />
-              </div>
-              <div className="footer-guy-wrap">
-                <img
-                  src={`/images/guy${currentGuyFrame}.svg`}
-                  alt={`Guy frame ${currentGuyFrame}`}
-                  className="guy-animation-img"
+                  src={`/images/beatles${footerFrame}.svg`}
+                  alt={`Beatles frame ${footerFrame}`}
+                  className="beatles-animation-img"
                 />
               </div>
             </div>
           </div>
+
+          
         </div>
       </div>
     </div>
