@@ -43,133 +43,95 @@ const GreenPulse = () => {
   const fourthAnimationCompletedRef = useRef(false);
 
   const audioRef = useRef(null);
-  // New: keep an AudioContext to resume on user gesture (helps unblocking WebAudio)
   const audioContextRef = useRef(null);
 
-  // Play hello sound but only after a gesture-resume step
   const playHelloSound = async () => {
-    if (audioPlayed) {
-      console.log('Audio already played, skipping');
-      return;
-    }
-
-    // Must not attempt to play before user interaction
-    if (!userInteracted) {
-      console.log('playHelloSound: waiting for user interaction');
-      return;
-    }
+    if (audioPlayed) return;
+    if (!userInteracted) return;
 
     try {
-      // Create audio element once
       if (!audioRef.current) {
         audioRef.current = new Audio('/images/hello.mp3');
         audioRef.current.volume = 0.8;
         audioRef.current.preload = 'auto';
         audioRef.current.addEventListener('ended', () => {
-          console.log('Audio finished playing');
           setShowMrBean(false);
           setAudioPlayed(true);
         });
       }
-
-      // If we use AudioContext in the app, ensure it's resumed first
       if (audioContextRef.current) {
-        try {
-          await audioContextRef.current.resume();
-          console.log('AudioContext resumed before playing audio');
-        } catch (err) {
-          console.warn('AudioContext resume failed', err);
-        }
+        try { await audioContextRef.current.resume(); } catch (e) { /* ignore */ }
       }
-
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log('Audio playing successfully from /images/hello.mp3');
-            setAudioPlayed(true);
-            setShowMrBean(true);
-          })
-          .catch(error => {
-            console.error('Audio play failed:', error);
-            // fallback display Mr. Bean briefly if audio can't play
-            setShowMrBean(true);
-            setTimeout(() => setShowMrBean(false), 3000);
-          });
+      const p = audioRef.current.play();
+      if (p) {
+        p.then(() => { setAudioPlayed(true); setShowMrBean(true); })
+         .catch(() => { setShowMrBean(true); setTimeout(() => setShowMrBean(false), 3000); });
       }
-    } catch (error) {
-      console.error('Audio error:', error);
+    } catch (err) {
       setShowMrBean(true);
       setTimeout(() => setShowMrBean(false), 3000);
     }
   };
 
-  const handleImageError = () => {
-    console.log('Mr. Bean image failed to load');
-    setImageError(true);
-  };
+  const handleImageError = () => setImageError(true);
 
-  // Centralized handler for the first user gesture
   const handleUserInteraction = async () => {
-    if (!userInteracted) {
-      console.log('User interaction detected - unlocking audio/video features');
-      setUserInteracted(true);
-
-      // Try to create/resume an AudioContext. Many browsers require this to be resumed by gesture.
-      try {
-        if (!audioContextRef.current && (window.AudioContext || window.webkitAudioContext)) {
-          const AC = window.AudioContext || window.webkitAudioContext;
-          audioContextRef.current = new AC();
-        }
-        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-          await audioContextRef.current.resume();
-          console.log('AudioContext resumed on user gesture');
-        }
-      } catch (err) {
-        console.warn('Failed to create/resume AudioContext:', err);
+    if (userInteracted) return;
+    setUserInteracted(true);
+    try {
+      if (!audioContextRef.current && (window.AudioContext || window.webkitAudioContext)) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        audioContextRef.current = new AC();
       }
-
-      // Now safe to attempt playback
-      playHelloSound();
-    }
+      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume();
+      }
+    } catch (e) { /* ignore */ }
+    playHelloSound();
   };
 
-  // Initial page load
+  // On mount: ensure scroll top for window and common inner containers
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const t = setTimeout(() => {
+      try { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); } catch (e) {}
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+
+      const selectors = ['.page-content', '.main-container', '.page-container', '.greenpulse-page'];
+      selectors.forEach(sel => {
+        const el = document.querySelector(sel);
+        if (el) {
+          if (typeof el.scrollTo === 'function') {
+            try { el.scrollTo({ top: 0, left: 0, behavior: 'auto' }); } catch (err) { el.scrollTop = 0; }
+          } else {
+            el.scrollTop = 0;
+          }
+        }
+      });
+    }, 12);
+
     setAudioPlayed(false);
     setUserInteracted(false);
     setShowMrBean(true);
 
     const fallbackTimer = setTimeout(() => {
       if (!userInteracted && !audioPlayed) {
-        console.log('No user interaction - hiding Mr. Bean');
         setShowMrBean(false);
       }
     }, 3000);
 
     return () => {
+      clearTimeout(t);
       clearTimeout(fallbackTimer);
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-      if (audioContextRef.current) {
-        try {
-          audioContextRef.current.close();
-        } catch (e) { /* ignore */ }
-        audioContextRef.current = null;
-      }
+      if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+      if (audioContextRef.current) { try { audioContextRef.current.close(); } catch (e) {} audioContextRef.current = null; }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Add "once" event listeners to unlock on first gesture
   useEffect(() => {
     const events = ['click', 'keydown', 'touchstart'];
-    const interactionHandler = () => {
-      handleUserInteraction();
-    };
+    const interactionHandler = () => handleUserInteraction();
 
     events.forEach(event => {
       document.addEventListener(event, interactionHandler, { once: true, passive: true });
@@ -181,12 +143,8 @@ const GreenPulse = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Try to play once userInteracted changes (will be true only after gesture)
   useEffect(() => {
-    if (userInteracted && !audioPlayed) {
-      console.log('User interacted - calling playHelloSound()');
-      playHelloSound();
-    }
+    if (userInteracted && !audioPlayed) playHelloSound();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInteracted]);
 
@@ -196,27 +154,20 @@ const GreenPulse = () => {
   const handleBackClick = () => {
     handleUserInteraction();
     handleBackBtnDown();
-    setTimeout(() => {
-      handleBackBtnUp();
-      handleGoBack();
-    }, 150);
+    setTimeout(() => { handleBackBtnUp(); handleGoBack(); }, 150);
   };
 
   const handleVideoPlay = () => setIsVideoPlaying(true);
   const handleVideoPause = () => setIsVideoPlaying(false);
 
-  // IntersectionObserver to autoplay muted video when in view
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!videoRef.current) return;
         if (entry.isIntersecting) {
-          // Allowed: autoplay only while muted
           if (videoRef.current.paused) {
             videoRef.current.muted = true;
-            videoRef.current.play().catch(err => {
-              console.log('Auto-play prevented or failed:', err);
-            });
+            videoRef.current.play().catch(err => console.log('Auto-play prevented or failed:', err));
           }
         } else {
           videoRef.current.pause();
@@ -226,12 +177,10 @@ const GreenPulse = () => {
     );
 
     if (videoRef.current) observer.observe(videoRef.current);
-    return () => {
-      if (videoRef.current) observer.unobserve(videoRef.current);
-    };
+    return () => { if (videoRef.current) observer.unobserve(videoRef.current); };
   }, []);
 
-  // The rest of your existing animation and observer logic unchanged...
+  // divider anims (unchanged)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -356,14 +305,9 @@ const GreenPulse = () => {
   return (
     <div className="page-container greenpulse-page" onClick={handleUserInteraction}>
       {showMrBean && (
-        <div className="mrbean-overlay" onClick={(e) => { e.stopPropagation(); /* allow clicks to interact but don't close layer */ }}>
+        <div className="mrbean-overlay" onClick={(e) => { e.stopPropagation(); }}>
           {!imageError ? (
-            <img
-              src="/images/mrbean.svg"
-              alt="Mr. Bean"
-              className="mrbean-image"
-              onError={handleImageError}
-            />
+            <img src="/images/mrbean.svg" alt="Mr. Bean" className="mrbean-image" onError={handleImageError} />
           ) : (
             <div className="mrbean-fallback">
               <span>👋 Mr. Bean says Hello!</span>
@@ -408,13 +352,18 @@ const GreenPulse = () => {
               <div className="main-content-container">
                 <div className="text-content">
                   <h2>What Was This All About Anyway?</h2>
-                  <p>GreenPulse is a Budapest-based startup, they make this smart energy monitoring thing for SMEs. The task was to create a landing page that:</p>
+                  <p>
+                    GreenPulse is a Budapest-based startup, they make this smart energy monitoring thing for SMEs.
+                    The task was to create a landing page that:
+                  </p>
                   <ul>
                     <li>Quickly says what they do (because nobody has time to read).</li>
                     <li>Doesn't make them seem sketchy; there needs to be something that makes you believe they're actually good.</li>
                     <li>Encourages you to request a demo or contact them.</li>
                   </ul>
-                  <p>The target audience is like, business leaders, finance people who want to save on their electricity bill and want to be a bit greener.</p>
+                  <p>
+                    The target audience is business leaders and finance people who want to save on their electricity bill and be a bit greener.
+                  </p>
                 </div>
 
                 <div className="image-content">
@@ -434,18 +383,16 @@ const GreenPulse = () => {
                         <source src="/images/greenpulse.mov" type="video/quicktime" />
                         Your browser does not support the video tag.
                       </video>
+
                       {!isVideoPlaying && (
                         <div className="video-play-overlay">
                           <button
                             className="play-button"
+                            aria-label="Play video"
                             onClick={(e) => {
                               e.stopPropagation();
-                              // mark as user interaction so audio can play after this
                               handleUserInteraction();
-                              // unmute only after gesture (if you want sound on the video)
                               if (videoRef.current) {
-                                // keep autoplay behavior muted — do not unmute automatically,
-                                // but if you explicitly want sound, require the user to toggle it
                                 videoRef.current.play().catch(err => console.log('Play blocked:', err));
                               }
                             }}
@@ -481,7 +428,7 @@ const GreenPulse = () => {
                   <div className="comparison-text">
                     <p>Well, there were some issues...</p>
                     <ul>
-                      <li>You couldn't understand in 5 seconds who they are and what they want. That's a problem. If a CFO doesn't get it quickly, they bounce.</li>
+                      <li>You couldn't understand in 5 seconds who they are and what they want. That's a problem.</li>
                       <li>Zero trust. No numbers, no stories, no reviews, nothing. It felt like they were just making promises.</li>
                       <li>The design looked like it was made in 2005. But they're a cool AT & IoT startup, not a corner shop.</li>
                     </ul>
@@ -508,7 +455,7 @@ const GreenPulse = () => {
               <div className="third-section">
                 <div className="design-process-row">
                   <div className="design-column logos-column">
-                    <h2 style={{ fontSize: "2rem", }}>Logos</h2>
+                    <h2 style={{ fontSize: "2rem" }}>Logos</h2>
                     <div className="logo-item">
                       <div className="logo-with-background light-bg">
                         <img src="/images/logoblackwhite.svg" alt="Black and White Logo" className="process-logo" />
@@ -542,7 +489,7 @@ const GreenPulse = () => {
                   </div>
 
                   <div className="design-column balls-column">
-                    <h2 style={{ fontSize: "2rem", }}>Colors</h2>
+                    <h2 style={{ fontSize: "2rem" }}>Colors</h2>
                     <div className="ball-animation-container">
                       <img src="/images/00696F.svg" alt="Animated ball" className="ball-animation" />
                       <div className="ball-hex-code">#00696F</div>
@@ -552,7 +499,7 @@ const GreenPulse = () => {
                       <div className="ball-hex-code">#6BD8B0</div>
                     </div>
                     <div style={{ textAlign: 'center', marginTop: '30px', width: '100%' }}>
-                      <h2 style={{ fontSize: "2rem", }}>Font</h2>
+                      <h2 style={{ fontSize: "2rem" }}>Font</h2>
                       <h2 style={{ fontSize: "2rem", color: "#00696F" }}>Helvetica Neue</h2>
                       <h3 style={{ fontFamily: "Helvetica Neue", textAlign: 'center', margin: '0 auto', padding: '20px', letterSpacing: '5px' }}>
                         aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ
@@ -561,10 +508,10 @@ const GreenPulse = () => {
                   </div>
                 </div>
 
-                <div className="divider-line-container" ref={fourthDividerLineRef}>
+                <div className="divider-line-container" ref={thirdDividerLineRef}>
                   <div className="divider-line">
                     <img
-                      src={`/images/line${fourthAnimationCompletedRef.current ? 15 : fourthLineSvgIndex}.svg`}
+                      src={`/images/line${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`}
                       alt="Decorative divider line"
                       className="line-svg"
                     />
@@ -587,6 +534,16 @@ const GreenPulse = () => {
                       <img src="/images/GreenPulseFinal.jpg" alt="GreenPulse Final Design" className="design-process-img" />
                       <p>Final Design</p>
                     </div>
+                  </div>
+                </div>
+
+                <div className="divider-line-container" ref={fourthDividerLineRef}>
+                  <div className="divider-line">
+                    <img
+                      src={`/images/line${fourthAnimationCompletedRef.current ? 15 : fourthLineSvgIndex}.svg`}
+                      alt="Decorative divider line"
+                      className="line-svg"
+                    />
                   </div>
                 </div>
               </div>
