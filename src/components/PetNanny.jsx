@@ -33,15 +33,160 @@ const PetNanny = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
+  // Mr. Bean animation states
+  const [showMrBean, setShowMrBean] = useState(false);
+  const [audioPlayed, setAudioPlayed] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
+
   // Use refs to track animation completion persistently
   const animationCompletedRef = useRef(false);
   const secondAnimationCompletedRef = useRef(false);
   const thirdAnimationCompletedRef = useRef(false);
 
+  const audioRef = useRef(null);
+  const audioContextRef = useRef(null);
+
+  // Play hello sound but only after a gesture-resume step
+  const playHelloSound = async () => {
+    if (audioPlayed) {
+      console.log('Audio already played, skipping');
+      return;
+    }
+
+    // Must not attempt to play before user interaction
+    if (!userInteracted) {
+      console.log('playHelloSound: waiting for user interaction');
+      return;
+    }
+
+    try {
+      // Create audio element once
+      if (!audioRef.current) {
+        audioRef.current = new Audio('/images/hello.mp3');
+        audioRef.current.volume = 0.8;
+        audioRef.current.preload = 'auto';
+        audioRef.current.addEventListener('ended', () => {
+          console.log('Audio finished playing');
+          setShowMrBean(false);
+          setAudioPlayed(true);
+        });
+      }
+
+      // If we use AudioContext in the app, ensure it's resumed first
+      if (audioContextRef.current) {
+        try {
+          await audioContextRef.current.resume();
+          console.log('AudioContext resumed before playing audio');
+        } catch (err) {
+          console.warn('AudioContext resume failed', err);
+        }
+      }
+
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log('Audio playing successfully from /images/hello.mp3');
+            setAudioPlayed(true);
+            setShowMrBean(true);
+          })
+          .catch(error => {
+            console.error('Audio play failed:', error);
+            // fallback display Mr. Bean briefly if audio can't play
+            setShowMrBean(true);
+            setTimeout(() => setShowMrBean(false), 3000);
+          });
+      }
+    } catch (error) {
+      console.error('Audio error:', error);
+      setShowMrBean(true);
+      setTimeout(() => setShowMrBean(false), 3000);
+    }
+  };
+
+  const handleImageError = () => {
+    console.log('Mr. Bean image failed to load');
+    setImageError(true);
+  };
+
+  // Centralized handler for the first user gesture
+  const handleUserInteraction = async () => {
+    if (!userInteracted) {
+      console.log('User interaction detected - unlocking audio/video features');
+      setUserInteracted(true);
+
+      // Try to create/resume an AudioContext. Many browsers require this to be resumed by gesture.
+      try {
+        if (!audioContextRef.current && (window.AudioContext || window.webkitAudioContext)) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          audioContextRef.current = new AC();
+        }
+        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+          await audioContextRef.current.resume();
+          console.log('AudioContext resumed on user gesture');
+        }
+      } catch (err) {
+        console.warn('Failed to create/resume AudioContext:', err);
+      }
+
+      // Now safe to attempt playback
+      playHelloSound();
+    }
+  };
+
   // Mindig az oldal tetejére görbünk, amikor betöltődik az oldal
   useEffect(() => {
     window.scrollTo(0, 0);
+    setAudioPlayed(false);
+    setUserInteracted(false);
+    setShowMrBean(true);
+
+    const fallbackTimer = setTimeout(() => {
+      if (!userInteracted && !audioPlayed) {
+        console.log('No user interaction - hiding Mr. Bean');
+        setShowMrBean(false);
+      }
+    }, 3000);
+
+    return () => {
+      clearTimeout(fallbackTimer);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      if (audioContextRef.current) {
+        try {
+          audioContextRef.current.close();
+        } catch (e) { /* ignore */ }
+        audioContextRef.current = null;
+      }
+    };
   }, []);
+
+  // Add "once" event listeners to unlock on first gesture
+  useEffect(() => {
+    const events = ['click', 'keydown', 'touchstart'];
+    const interactionHandler = () => {
+      handleUserInteraction();
+    };
+
+    events.forEach(event => {
+      document.addEventListener(event, interactionHandler, { once: true, passive: true });
+    });
+
+    return () => {
+      events.forEach(event => document.removeEventListener(event, interactionHandler));
+    };
+  }, []);
+
+  // Try to play once userInteracted changes (will be true only after gesture)
+  useEffect(() => {
+    if (userInteracted && !audioPlayed) {
+      console.log('User interacted - calling playHelloSound()');
+      playHelloSound();
+    }
+  }, [userInteracted]);
 
   const handleGoBack = () => {
     navigate("/");
@@ -51,6 +196,7 @@ const PetNanny = () => {
   const handleBackBtnUp = () => setBackBtnDown(false);
 
   const handleBackClick = () => {
+    handleUserInteraction();
     handleBackBtnDown();
     setTimeout(() => {
       handleBackBtnUp();
@@ -60,6 +206,7 @@ const PetNanny = () => {
 
   // Handle image click to open modal
   const handleImageClick = (imageIndex) => {
+    handleUserInteraction();
     setSelectedImage(imageIndex);
     setModalOpen(true);
   };
@@ -254,7 +401,29 @@ const PetNanny = () => {
   }, []);
 
   return (
-    <div className="page-container petnanny-page">
+    <div className="page-container petnanny-page" onClick={handleUserInteraction}>
+      {showMrBean && (
+        <div className="mrbean-overlay" onClick={(e) => { e.stopPropagation(); /* allow clicks to interact but don't close layer */ }}>
+          {!imageError ? (
+            <img
+              src="/images/mrbean.svg"
+              alt="Mr. Bean"
+              className="mrbean-image"
+              onError={handleImageError}
+            />
+          ) : (
+            <div className="mrbean-fallback">
+              <span>👋 Mr. Bean says Hello!</span>
+              {!userInteracted && !audioPlayed && (
+                <div style={{ fontSize: '14px', marginTop: '8px', color: '#666' }}>
+                  Click anywhere to hear me!
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="page-content">
         <div className="main-container">
           <div className="petnanny-content-container">
@@ -318,7 +487,7 @@ I wanted this app to act like a friend that I could trust: cute, but not too cut
               <div className="divider-line-container" ref={dividerLineRef}>
                 <div className="divider-line">
                   <img 
-                    src={`/images/line${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`} 
+                    src={`/images/linep${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`} 
                     alt="Decorative divider line" 
                     className="line-svg"
                   />
@@ -345,7 +514,7 @@ I wanted this app to act like a friend that I could trust: cute, but not too cut
               <div className="divider-line-container flipped" ref={secondDividerLineRef}>
                 <div className="divider-line">
                   <img 
-                    src={`/images/line${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`} 
+                    src={`/images/linep${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`} 
                     alt="Decorative divider line" 
                     className="line-svg flipped"
                   />
@@ -427,7 +596,7 @@ I wanted this app to act like a friend that I could trust: cute, but not too cut
                 <div className="divider-line-container" ref={thirdDividerLineRef}>
                   <div className="divider-line">
                     <img 
-                      src={`/images/line${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`} 
+                      src={`/images/linep${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`} 
                       alt="Decorative divider line" 
                       className="line-svg"
                     />
@@ -435,7 +604,7 @@ I wanted this app to act like a friend that I could trust: cute, but not too cut
                 </div>
 
                 <div className="design-images-content full-width">
-                  <h2 style={{textAlign: 'center', marginBottom: '30px', color: '#1976d2'}}>Design Process Images</h2>
+                  <h2 style={{textAlign: 'center', marginBottom: '30px', color: '#1B95AA'}}>Design Process Images</h2>
                   <div className="thumbnail-gallery">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((index) => (
                       <div 

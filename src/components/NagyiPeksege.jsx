@@ -480,7 +480,7 @@ const NagyiPeksege = () => {
               <div className="divider-line-container" ref={dividerLineRef}>
                 <div className="divider-line">
                   <img
-                    src={`/images/line${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`}
+                    src={`/images/linen${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`}
                     alt="Decorative divider line"
                     className="line-svg"
                   />
@@ -503,7 +503,7 @@ const NagyiPeksege = () => {
               <div className="divider-line-container flipped" ref={secondDividerLineRef}>
                 <div className="divider-line">
                   <img
-                    src={`/images/line${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`}
+                    src={`/images/linen${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`}
                     alt="Decorative divider line"
                     className="line-svg flipped"
                   />
@@ -586,7 +586,7 @@ const NagyiPeksege = () => {
                 <div className="divider-line-container" ref={thirdDividerLineRef}>
                   <div className="divider-line">
                     <img
-                      src={`/images/line${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`}
+                      src={`/images/linen${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`}
                       alt="Decorative divider line"
                       className="line-svg"
                     />

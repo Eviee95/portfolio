@@ -409,7 +409,7 @@ const GreenPulse = () => {
               <div className="divider-line-container" ref={dividerLineRef}>
                 <div className="divider-line">
                   <img
-                    src={`/images/line${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`}
+                    src={`/images/lineg${animationCompletedRef.current ? 15 : lineSvgIndex}.svg`}
                     alt="Decorative divider line"
                     className="line-svg"
                   />
@@ -445,7 +445,7 @@ const GreenPulse = () => {
               <div className="divider-line-container flipped" ref={secondDividerLineRef}>
                 <div className="divider-line">
                   <img
-                    src={`/images/line${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`}
+                    src={`/images/lineg${secondAnimationCompletedRef.current ? 15 : secondLineSvgIndex}.svg`}
                     alt="Decorative divider line"
                     className="line-svg flipped"
                   />
@@ -511,7 +511,7 @@ const GreenPulse = () => {
                 <div className="divider-line-container" ref={thirdDividerLineRef}>
                   <div className="divider-line">
                     <img
-                      src={`/images/line${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`}
+                      src={`/images/lineg${thirdAnimationCompletedRef.current ? 15 : thirdLineSvgIndex}.svg`}
                       alt="Decorative divider line"
                       className="line-svg"
                     />
@@ -537,15 +537,7 @@ const GreenPulse = () => {
                   </div>
                 </div>
 
-                <div className="divider-line-container" ref={fourthDividerLineRef}>
-                  <div className="divider-line">
-                    <img
-                      src={`/images/line${fourthAnimationCompletedRef.current ? 15 : fourthLineSvgIndex}.svg`}
-                      alt="Decorative divider line"
-                      className="line-svg"
-                    />
-                  </div>
-                </div>
+               
               </div>
             </main>
           </div>

@@ -3,7 +3,7 @@
 /* Mr. Bean overlay styles - Frissítve */
 .mrbean-overlay {
   position: fixed;
-  top: 70px; /* 20px-ről 40px-re változott, hogy lejjebb kerüljön */
+  top: 70px; /* 20px-ről 70px-re változott, hogy lejjebb kerüljön */
   right: 20px;
   z-index: 10000;
   animation: slideInOutRight 3s ease-in-out forwards;
@@ -142,7 +142,7 @@
 .greenpulse-page .text-content h2 {
     font-size: clamp(24px, 3vw, 36px);
     margin-top: 0;
-    color: #2e7d32;
+    color: #00696F;
     margin-bottom: 20px;
 }
 
@@ -283,7 +283,7 @@
 .greenpulse-page .second-section h2 {
     font-size: clamp(24px, 3vw, 36px);
     margin-top: 0;
-    color: #2e7d32;
+    color: #00696F;
     width: 100%;
 }
 
@@ -306,7 +306,7 @@
 
 .greenpulse-page .comparison-svg {
     width: 100%;
-    max-width: 400px;
+    max-width: 380px; /* MÉG KISEBB alapértelmezett */
     height: auto;
     transition: opacity 0.5s ease-in-out;
 }
@@ -314,7 +314,7 @@
 .greenpulse-page .comparison-image p {
     margin-top: 10px;
     font-weight: bold;
-    font-size: clamp(16px, 1.5vw, 20px);
+    font-size: clamp(14px, 1.3vw, 18px); /* Kisebb szöveg */
 }
 
 .greenpulse-page .comparison-text {
@@ -404,7 +404,7 @@
 .greenpulse-page .text-column h2 {
     font-size: clamp(26px, 3.2vw, 38px);
     margin-top: 0;
-    color: #2e7d32;
+    color: #00696F;
     margin-bottom: 25px;
 }
 
@@ -486,7 +486,7 @@
 .greenpulse-page .image-with-caption p {
     margin-top: 10px;
     font-weight: bold;
-    font-size: clamp(16px, 1.5vw, 20px);
+    font-size: clamp(14px, 1.3vw, 18px); /* Kisebb szöveg */
     text-align: center;
     color: #000;
 }
@@ -531,6 +531,13 @@
     animation: pulse 4s ease-in-out infinite;
 }
 
+/* Animation for mobile */
+@keyframes pulse-mobile {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.01); } /* Kisebb skálázás mobilra */
+    100% { transform: scale(1); }
+}
+
 /* Ensure the fourth divider line has proper spacing */
 .greenpulse-page .third-section .divider-line-container {
   margin: 40px auto 20px auto;
@@ -555,6 +562,10 @@
         max-width: 1600px;
         padding: 0 30px;
     }
+    
+    .greenpulse-page .comparison-svg {
+        max-width: 320px; /* MÉG KISEBB */
+    }
 }
 
 @media (max-width: 1400px) {
@@ -566,6 +577,10 @@
     .greenpulse-page .greenpulse-content h1 {
         max-width: 1400px;
         padding: 0 25px;
+    }
+    
+    .greenpulse-page .comparison-svg {
+        max-width: 280px; /* MÉG KISEBB */
     }
 }
 
@@ -614,6 +629,14 @@
 
     .greenpulse-page .comparison-container {
         gap: 40px;
+    }
+    
+    .greenpulse-page .comparison-svg {
+        max-width: 240px; /* MÉG KISEBB */
+    }
+    
+    .greenpulse-page .comparison-image {
+        min-width: 220px; /* Kisebb minimum */
     }
 
     .greenpulse-page .image-with-caption {
@@ -695,18 +718,24 @@
     }
 
     .greenpulse-page .ball-animation {
-        width: 110px;
-        height: 110px;
+        width: 100px; /* KISEBB */
+        height: 100px;
+    }
+    
+    .greenpulse-page .ball-hex-code {
+        font-size: 1rem; /* Kisebb szöveg */
+        padding: 4px 10px;
+        margin-top: 10px;
     }
 
     .greenpulse-page .comparison-container {
         flex-direction: column;
         align-items: center;
-        gap: 30px;
+        gap: 25px; /* Kisebb gap */
     }
 
     .greenpulse-page .comparison-image {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     .greenpulse-page .comparison-text {
@@ -714,23 +743,31 @@
         width: 100%;
         padding: 0 15px;
     }
+    
+    .greenpulse-page .comparison-svg {
+        max-width: 200px; /* MÉG KISEBB */
+    }
+    
+    .greenpulse-page .comparison-image {
+        min-width: 180px;
+    }
 
     .greenpulse-page .images-row {
-        gap: 40px;
+        gap: 30px; /* Kisebb gap */
     }
 
     .greenpulse-page .image-with-caption {
-        min-width: 280px;
+        min-width: 250px; /* Kisebb */
         max-width: 100%;
     }
 
     .greenpulse-page .logo-with-background {
-        max-width: 280px;
-        height: 200px;
+        max-width: 260px; /* Kisebb */
+        height: 180px;
     }
 
     .greenpulse-page .computer-with-video {
-        max-width: 550px;
+        max-width: 500px; /* Kisebb */
     }
 
     .greenpulse-page .video-screen {
@@ -754,13 +791,13 @@
     .greenpulse-page .divider-line-container,
     .greenpulse-page .greenpulse-content h1 {
         max-width: 768px;
-        padding: 0 15px;
+        padding: 0 10px; /* Kisebb padding */
     }
 
     .greenpulse-page .greenpulse-content h1 {
-        font-size: 2rem;
-        margin: 0 0 30px 0;
-        padding: 0 10px;
+        font-size: 1.8rem; /* Kisebb cím */
+        margin: 0 0 25px 0;
+        padding: 0 5px;
     }
 
     .greenpulse-page .text-content,
@@ -769,24 +806,24 @@
     }
 
     .greenpulse-page .divider-line-container {
-        margin: 40px 0;
-        min-height: 150px;
-        width: 90%;
+        margin: 30px 0; /* Kisebb margin */
+        min-height: 120px; /* Kisebb */
+        width: 95%;
     }
 
     .greenpulse-page .line-svg {
-        height: 140px;
+        height: 110px; /* Kisebb */
         width: 100%;
     }
 
     .greenpulse-page .logos-column {
         flex-direction: column;
-        gap: 30px;
+        gap: 20px; /* Kisebb gap */
     }
 
     .greenpulse-page .logo-item {
         flex: 0 0 100%;
-        margin-bottom: 30px;
+        margin-bottom: 20px; /* Kisebb margin */
     }
 
     .greenpulse-page .logo-item:last-child {
@@ -794,47 +831,67 @@
     }
 
     .greenpulse-page .comparison-container {
-        gap: 25px;
+        gap: 20px; /* Kisebb gap */
+    }
+    
+    /* Good/Bad design animációk MÉG KISEBB méretűek */
+    .greenpulse-page .comparison-svg {
+        max-width: 160px; /* MÉG KISEBB */
+        animation: pulse-mobile 4s ease-in-out infinite;
+    }
+    
+    .greenpulse-page .comparison-image {
+        min-width: 150px; /* MÉG KISEBB minimum méret */
+    }
+    
+    .greenpulse-page .comparison-image p {
+        font-size: 12px; /* Kisebb szöveg */
+        margin-top: 5px;
     }
 
     .greenpulse-page .images-row {
-        gap: 25px;
+        gap: 20px; /* Kisebb gap */
         justify-content: center;
     }
 
     .greenpulse-page .image-with-caption {
-        min-width: 220px;
+        min-width: 180px; /* MÉG KISEBB */
+    }
+    
+    .greenpulse-page .image-with-caption p {
+        font-size: 12px; /* Kisebb szöveg */
     }
 
     .greenpulse-page .balls-column {
         flex-direction: row;
         padding: 0;
         justify-content: center;
-        gap: 20px;
+        gap: 15px; /* Kisebb gap */
     }
 
     .greenpulse-page .ball-animation-container {
-        flex: 0 0 calc(50% - 10px);
+        flex: 0 0 calc(50% - 7.5px);
         margin-bottom: 0;
     }
 
     .greenpulse-page .ball-animation {
-        width: 90px;
-        height: 90px;
+        width: 75px; /* MÉG KISEBB */
+        height: 75px;
     }
 
     .greenpulse-page .ball-hex-code {
-        font-size: 1.1rem;
-        padding: 5px 12px;
+        font-size: 0.9rem; /* MÉG KISEBB szöveg */
+        padding: 3px 8px;
+        margin-top: 8px;
     }
 
     .greenpulse-page .logo-with-background {
-        max-width: 240px;
-        height: 180px;
+        max-width: 200px; /* MÉG KISEBB */
+        height: 140px;
     }
 
     .greenpulse-page .computer-with-video {
-        max-width: 500px;
+        max-width: 380px; /* MÉG KISEBB */
     }
 
     .greenpulse-page .video-screen {
@@ -842,39 +899,44 @@
         left: 12.8%;
         width: 77%;
         height: 65%;
-        border-radius: 10px;
+        border-radius: 6px; /* Kisebb radius */
     }
 
     .greenpulse-page .play-button {
-        width: 45px;
-        height: 45px;
-        font-size: 16px;
+        width: 35px; /* Kisebb */
+        height: 35px;
+        font-size: 14px;
     }
 
     .greenpulse-page .third-section .divider-line-container {
         max-width: 768px;
-        padding: 0 15px;
-        min-height: 150px;
-        margin: 30px auto 15px auto;
+        padding: 0 10px;
+        min-height: 120px; /* Kisebb */
+        margin: 20px auto 10px auto;
     }
     
     .greenpulse-page .third-section .line-svg {
-        height: 140px;
+        height: 110px; /* Kisebb */
     }
 
-    /* Mr. Bean responsive - Frissítve */
+    /* Mr. Bean responsive - MÉG KISEBB */
     .mrbean-overlay {
-        top: 30px; /* 10px-ről 30px-re változott */
-        right: 10px;
+        top: 20px; /* MÉG ALACSONYABB */
+        right: 5px;
     }
     
     .mrbean-image {
-        width: 150px; /* 120px-ről 150px-re változott */
+        width: 100px; /* MÉG KISEBB */
     }
     
     .mrbean-fallback {
-        padding: 10px;
-        font-size: 14px;
+        padding: 8px;
+        font-size: 12px;
+    }
+    
+    /* BACK BUTTON MÉG KISEBB */
+    .greenpulse-page .back-button-img {
+        width: 140px; /* MÉG KISEBB */
     }
 }
 
@@ -886,21 +948,23 @@
     .greenpulse-page .divider-line-container,
     .greenpulse-page .greenpulse-content h1 {
         max-width: 600px;
-        padding: 0 10px;
+        padding: 0 8px; /* Kisebb padding */
     }
 
     .greenpulse-page .images-row {
         flex-direction: column;
         align-items: center;
+        gap: 15px; /* Kisebb gap */
     }
 
     .greenpulse-page .image-with-caption {
-        max-width: 100%;
+        max-width: 90%; /* Szélesebb */
+        min-width: 0; /* Nincs minimum */
     }
 
     .greenpulse-page .balls-column {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px; /* Kisebb gap */
     }
 
     .greenpulse-page .ball-animation-container {
@@ -908,7 +972,7 @@
     }
 
     .greenpulse-page .computer-with-video {
-        max-width: 450px;
+        max-width: 320px; /* MÉG KISEBB */
     }
 
     .greenpulse-page .video-screen {
@@ -916,22 +980,40 @@
         left: 13%;
         width: 74%;
         height: 64%;
-        border-radius: 8px;
+        border-radius: 4px; /* Még kisebb radius */
+    }
+    
+    /* Good/Bad design animációk MÉG KISEBB */
+    .greenpulse-page .comparison-svg {
+        max-width: 130px; /* MÉG KISEBB */
+    }
+    
+    .greenpulse-page .comparison-image {
+        min-width: 120px;
+    }
+    
+    .greenpulse-page .comparison-image p {
+        font-size: 11px; /* MÉG KISEBB szöveg */
     }
 
-    /* Mr. Bean responsive - Frissítve */
+    /* Mr. Bean responsive - MÉG KISEBB */
     .mrbean-overlay {
-        top: 25px; /* 5px-ről 25px-re változott */
-        right: 5px;
+        top: 15px;
+        right: 3px;
     }
     
     .mrbean-image {
-        width: 120px; /* 100px-ről 120px-re változott */
+        width: 80px; /* MÉG KISEBB */
     }
     
     .mrbean-fallback {
-        padding: 8px;
-        font-size: 12px;
+        padding: 6px;
+        font-size: 10px;
+    }
+    
+    /* BACK BUTTON MÉG KISEBB */
+    .greenpulse-page .back-button-img {
+        width: 120px; /* MÉG KISEBB */
     }
 }
 
@@ -943,7 +1025,7 @@
     .greenpulse-page .divider-line-container,
     .greenpulse-page .greenpulse-content h1 {
         max-width: 480px;
-        padding: 0 8px;
+        padding: 0 5px; /* Minimális padding */
     }
 
     .greenpulse-page .text-content,
@@ -952,47 +1034,62 @@
     }
 
     .greenpulse-page .divider-line-container {
-        min-height: 120px;
-        margin: 30px 0;
+        min-height: 90px; /* MÉG KISEBB */
+        margin: 20px 0;
     }
 
     .greenpulse-page .line-svg {
-        height: 110px;
+        height: 80px; /* MÉG KISEBB */
     }
 
     .greenpulse-page .comparison-container {
-        gap: 20px;
+        gap: 15px; /* MÉG KISEBB gap */
+    }
+    
+    /* Good/Bad design animációk MÉG KISEBB */
+    .greenpulse-page .comparison-svg {
+        max-width: 110px; /* MÉG KISEBB */
+        animation-duration: 6s; /* Lassabb animáció */
+    }
+    
+    .greenpulse-page .comparison-image {
+        min-width: 100px;
+    }
+    
+    .greenpulse-page .comparison-image p {
+        font-size: 10px; /* MÉG KISEBB szöveg */
+        margin-top: 3px;
     }
 
     .greenpulse-page .process-logo {
-        max-width: 200px;
+        max-width: 150px; /* MÉG KISEBB */
     }
 
     .greenpulse-page .ball-animation {
-        width: 80px;
-        height: 80px;
+        width: 60px; /* MÉG KISEBB */
+        height: 60px;
     }
 
     .greenpulse-page .ball-hex-code {
-        font-size: 1rem;
-        padding: 4px 10px;
+        font-size: 0.8rem; /* MÉG KISEBB szöveg */
+        padding: 2px 6px;
     }
 
     .greenpulse-page .logo-with-background {
-        max-width: 200px;
-        height: 160px;
+        max-width: 160px; /* MÉG KISEBB */
+        height: 110px;
     }
 
     .greenpulse-page .design-column {
-        padding: 0 5px;
+        padding: 0 3px;
     }
 
     .greenpulse-page .third-section {
-        margin: 30px auto;
+        margin: 20px auto; /* Kisebb margin */
     }
 
     .greenpulse-page .computer-with-video {
-        max-width: 400px;
+        max-width: 280px; /* MÉG KISEBB */
     }
 
     .greenpulse-page .video-screen {
@@ -1000,39 +1097,44 @@
         left: 13.5%;
         width: 73%;
         height: 63%;
-        border-radius: 6px;
+        border-radius: 3px; /* Minimális radius */
     }
 
     .greenpulse-page .play-button {
-        width: 40px;
-        height: 40px;
-        font-size: 14px;
+        width: 30px; /* MÉG KISEBB */
+        height: 30px;
+        font-size: 12px;
     }
 
     .greenpulse-page .third-section .divider-line-container {
         max-width: 480px;
-        padding: 0 8px;
-        min-height: 120px;
-        margin: 20px auto 10px auto;
+        padding: 0 5px;
+        min-height: 90px; /* MÉG KISEBB */
+        margin: 15px auto 5px auto;
     }
     
     .greenpulse-page .third-section .line-svg {
-        height: 110px;
+        height: 80px; /* MÉG KISEBB */
     }
 
-    /* Mr. Bean responsive - Frissítve */
+    /* Mr. Bean responsive - MÉG KISEBB */
     .mrbean-overlay {
-        top: 20px; /* 3px-ről 20px-re változott */
-        right: 3px;
+        top: 10px;
+        right: 2px;
     }
     
     .mrbean-image {
-        width: 100px; /* 80px-ről 100px-re változott */
+        width: 60px; /* MÉG KISEBB */
     }
     
     .mrbean-fallback {
-        padding: 6px;
-        font-size: 11px;
+        padding: 4px;
+        font-size: 9px;
+    }
+    
+    /* BACK BUTTON MÉG KISEBB */
+    .greenpulse-page .back-button-img {
+        width: 100px; /* MÉG KISEBB */
     }
 }
 
@@ -1044,17 +1146,18 @@
     .greenpulse-page .divider-line-container,
     .greenpulse-page .greenpulse-content h1 {
         max-width: 360px;
-        padding: 0 5px;
+        padding: 0 3px; /* Minimális padding */
     }
 
     .greenpulse-page .greenpulse-content h1 {
-        font-size: 1.6rem;
+        font-size: 1.4rem; /* MÉG KISEBB */
+        margin: 0 0 15px 0;
     }
 
     .greenpulse-page .text-content h2,
     .greenpulse-page .second-section h2,
     .greenpulse-page .text-column h2 {
-        font-size: 1.4rem;
+        font-size: 1.2rem; /* MÉG KISEBB */
     }
 
     .greenpulse-page .text-content p,
@@ -1063,18 +1166,33 @@
     .greenpulse-page .comparison-text ul,
     .greenpulse-page .text-column p,
     .greenpulse-page .text-column ul {
-        font-size: 0.9rem;
+        font-size: 0.8rem; /* MÉG KISEBB */
     }
 
     .greenpulse-page .comparison-image p,
     .greenpulse-page .image-with-caption p,
     .greenpulse-page .logo-item p,
     .greenpulse-page .ball-hex-code {
-        font-size: 0.8rem;
+        font-size: 0.7rem; /* MÉG KISEBB */
+    }
+    
+    /* Good/Bad design animációk MÉG KISEBB */
+    .greenpulse-page .comparison-svg {
+        max-width: 90px; /* MÉG KISEBB */
+        animation: none; /* Animáció kikapcsolva */
+    }
+    
+    .greenpulse-page .comparison-image {
+        min-width: 80px;
+    }
+    
+    .greenpulse-page .comparison-image p {
+        font-size: 9px; /* MÉG KISEBB */
+        margin-top: 2px;
     }
 
     .greenpulse-page .computer-with-video {
-        max-width: 320px;
+        max-width: 240px; /* MÉG KISEBB */
     }
 
     .greenpulse-page .video-screen {
@@ -1082,27 +1200,55 @@
         left: 14%;
         width: 72%;
         height: 62%;
-        border-radius: 4px;
+        border-radius: 2px; /* Minimális radius */
     }
 
     .greenpulse-page .play-button {
-        width: 35px;
-        height: 35px;
-        font-size: 12px;
+        width: 25px; /* MÉG KISEBB */
+        height: 25px;
+        font-size: 10px;
     }
 
-    /* Mr. Bean responsive - Frissítve */
+    /* Mr. Bean responsive - MÉG KISEBB */
     .mrbean-overlay {
-        top: 15px; /* 2px-ről 15px-re változott */
-        right: 2px;
+        top: 8px;
+        right: 1px;
     }
     
     .mrbean-image {
-        width: 80px; /* 65px-ről 80px-re változott */
+        width: 50px; /* MÉG KISEBB */
     }
     
     .mrbean-fallback {
-        padding: 5px;
-        font-size: 10px;
+        padding: 3px;
+        font-size: 8px;
+    }
+    
+    /* BACK BUTTON MÉG KISEBB */
+    .greenpulse-page .back-button-img {
+        width: 80px; /* MÉG KISEBB */
+    }
+}
+
+/* Extra kicsi képernyők */
+@media (max-width: 320px) {
+    .greenpulse-page .comparison-svg {
+        max-width: 80px; /* EXTRA KICSI */
+    }
+    
+    .greenpulse-page .comparison-image {
+        min-width: 70px;
+    }
+    
+    .mrbean-image {
+        width: 40px; /* EXTRA KICSI */
+    }
+    
+    .greenpulse-page .back-button-img {
+        width: 70px; /* EXTRA KICSI */
+    }
+    
+    .greenpulse-page .computer-with-video {
+        max-width: 220px; /* EXTRA KICSI */
     }
 }

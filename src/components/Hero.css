@@ -1,4 +1,3 @@
-/* Hero.css - teljes fájl */
 * { box-sizing: border-box; }
 html, body, #root {
   height: 100%;
@@ -41,8 +40,116 @@ html, body, #root {
   position: relative;
 }
 
-/* Divider line container stílusok - hozzáadva */
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 16px;
+  border: 3px solid #333;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  font-family: DiaryOfAWimpyKidFont, sans-serif;
+  position: relative;
+  animation: modalPopIn 0.3s ease-out;
+}
+
+@keyframes modalPopIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-text {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  color: #333;
+  margin-bottom: 25px;
+  line-height: 1.4;
+}
+
+.modal-close-btn {
+  background: #ff6b6b;
+  color: white;
+  border: 2px solid #333;
+  padding: 10px 25px;
+  border-radius: 8px;
+  font-family: DiaryOfAWimpyKidFont, sans-serif;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.modal-close-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.modal-close-btn:active {
+  transform: translateY(1px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Make arrows clickable with hover effect */
+.arrow-img {
+  transition: transform 0.2s ease;
+}
+
+.arrow-img:hover {
+  transform: scale(1.1);
+}
+
+/* Procreate floating animation styles */
+.procreate-floating-container {
+  position: absolute;
+  top: 60%;
+  right: 10%;
+  transform: translateY(-50%) rotate(15deg);
+  z-index: 5;
+  width: clamp(60px, 8vw, 120px);
+  animation: floating 3s ease-in-out infinite;
+}
+
+.procreate-floating-img {
+  width: 100%;
+  height: auto;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(-50%) rotate(15deg) translateY(0px);
+  }
+  50% {
+    transform: translateY(-50%) rotate(15deg) translateY(-15px);
+  }
+  100% {
+    transform: translateY(-50%) rotate(15deg) translateY(0px);
+  }
+}
+
+/* Divider line container stílusok */
 .divider-line-container {
+  position: relative;
   width: 100%;
   max-width: 1800px;
   margin: 20px auto;
@@ -101,7 +208,7 @@ html, body, #root {
   z-index: 10;
 }
 
-.postit-img, .postit-svg-img {
+.postit-img {
   position: absolute;
   top: 0;
   left: 0;
@@ -109,24 +216,44 @@ html, body, #root {
   height: 100%;
   object-fit: contain;
   pointer-events: none;
-}
-.postit-img {
   filter: drop-shadow(6px 8px 4px rgba(0,0,0,0.3));
+}
+
+/* A "Love me" felirat nagyobb legyen és kitöltse jobban a teret */
+.postit-svg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  pointer-events: none;
+  padding: 8% !important;
+  box-sizing: border-box !important;
+  transform: translateY(0) rotate(0deg) !important;
 }
 
 .aboutme-button-wrap {
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-start; /* Desktop: balra igazítás */
   margin-top: clamp(15px, 3vw, 22px);
 }
+
+/* Alapértelmezett méret - About Me gomb nagyobb */
 .aboutme-button-img, .send-button-img {
-  width: clamp(100px, 20vw, 240px);
+  width: clamp(120px, 25vw, 280px);
   height: auto;
   cursor: pointer;
   transition: filter .13s cubic-bezier(.65,.05,.36,1), transform .13s cubic-bezier(.65,.05,.36,1);
   outline: none;
 }
+
+/* About Me gomb külön nagyobb alapértelmezettben is */
+.aboutme-button-img {
+  width: clamp(130px, 28vw, 300px);
+}
+
 .aboutme-button-img.pressed, .aboutme-button-img:active,
 .send-button-img.pressed, .send-button-img:active {
   transform: translateY(8px);
@@ -142,13 +269,21 @@ html, body, #root {
   padding: 0 clamp(10px, 3vw, 20px);
   width: 100%;
 }
-.projects-title-container { width: 100%; text-align: center; margin-top: -20px; }
+
+/* PROJECTS TITLE - MINIMAL MÓDOSÍTÁSOK */
+.projects-title-container { 
+  width: 100%; 
+  text-align: center; 
+  margin-top: -15px; /* Kevésbé negatív */
+  margin-bottom: 5px; /* Kis hely az SVG alatt */
+}
+
 .projects-title {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: bold;
   color: #333;
-  margin-top: -10px;
-  margin-bottom: -50px;
+  margin-top: -5px; /* Kevésbé negatív */
+  margin-bottom: -15px; /* -50 helyett -15 */
 }
 
 /* Projects cards reszponzív stílusok */
@@ -156,7 +291,7 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: clamp(20px, 4vw, 8rem);
+  gap: clamp(20px, 8vw, 8rem);
   width: 100%;
   flex-wrap: wrap;
 }
@@ -250,6 +385,17 @@ html, body, #root {
   .card-magic-container {
     margin: 0 10px;
   }
+  
+  /* Mobil nézetben egy kicsit több hely */
+  .projects-title-container {
+    margin-top: -5px; /* Mobilban kevésbé negatív */
+    margin-bottom: 10px; /* Mobilban egy kicsit több */
+  }
+  
+  .projects-title {
+    margin-top: 0; /* Mobilban 0 */
+    margin-bottom: -5px; /* Mobilban csak -5 */
+  }
 }
 
 .about-section {
@@ -268,9 +414,18 @@ html, body, #root {
   object-fit: contain;
   flex: 1 1 min(300px, 90vw);
 }
-.about-text { flex: 1 1 min(400px, 90vw); max-width: 800px; }
-.about-text h1 { font-size: clamp(20px, 4vw, 36px); margin-top: 0; color: #333; }
-.about-text p { font-size: clamp(16px, 2.5vw, 30px); line-height: 1.4; margin-bottom: 15px; }
+.about-text { flex: 1 1 min(400px, 90vw); max-width: 1000px; }
+.about-text h1 { 
+  font-size: clamp(20px, 4vw, 36px); 
+  margin-top: 0; 
+  color: #333; 
+  margin-bottom: 25px; /* Nagyobb margin alul */
+}
+.about-text p { 
+  font-size: clamp(16px, 2.5vw, 30px); 
+  line-height: 1.4; 
+  margin-bottom: 15px; 
+}
 
 .contact-section {
   display: flex;
@@ -323,7 +478,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: clamp(20px,5vw,60px) clamp(10px,3vw,20px);
+ 
   margin-top: clamp(20px,5vw,40px);
   gap: clamp(15px,3vw,40px);
   width: 100%;
@@ -332,7 +487,7 @@ html, body, #root {
   overflow: visible !important;
 }
 .footer-content-wrapper { display:flex; justify-content:center; align-items:center; width:100%; max-width:min(1400px,95vw); padding:20px 0; position:relative; z-index:5; }
-.footer-beatles-animation { width:100%; text-align:center; position:relative; z-index:5; }
+.footer-beatles-animation { width:100%; text-align:center; position:relative; z-index: 5; }
 .beatles-animation-img { width:100%; max-width:min(1000px,95vw); height:auto; object-fit:contain; }
 
 .footer-pencil {
@@ -356,6 +511,78 @@ html, body, #root {
   filter: drop-shadow(4px 6px 3px rgba(0,0,0,0.3));
 }
 
+/* THEEND SVG - MÉG KISEBB ÉS MÉG FELJEBB MOBIL NÉZETBEN */
+.theend {
+  display: block;
+  margin: 0 auto;
+  max-width: 250px;
+  width: 100%;
+}
+
+/* Responsive modal */
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 30px 20px;
+    margin: 20px;
+  }
+  
+  .modal-text {
+    font-size: 1.1rem;
+  }
+  
+  /* Extra kis mobilokon */
+  .projects-title-container {
+    margin-top: 0; /* Teljesen 0 */
+    margin-bottom: 15px; /* Egy kicsit több */
+  }
+  
+  .projects-title {
+    margin-bottom: 0; /* Teljesen 0 */
+  }
+}
+
+/* Reszponzív procreate floating */
+@media (max-width: 768px) {
+  .procreate-floating-container {
+    right: 5%;
+    width: clamp(50px, 10vw, 80px);
+    transform: translateY(-50%) rotate(15deg);
+  }
+  
+  @keyframes floating {
+    0% {
+      transform: translateY(-50%) rotate(15deg) translateY(0px);
+    }
+    50% {
+      transform: translateY(-50%) rotate(15deg) translateY(-10px);
+    }
+    100% {
+      transform: translateY(-50%) rotate(15deg) translateY(0px);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .procreate-floating-container {
+    right: 3%;
+    width: clamp(40px, 12vw, 60px);
+    transform: translateY(-50%) rotate(15deg);
+  }
+}
+
+/* Tablet és kisebb desktop méretek */
+@media (max-width: 1100px) and (min-width: 769px) {
+  .postit-stack {
+    left: clamp(20px, 8vw, 100px); /* Köztes méretekre is balra igazítás */
+    transform: translateY(-50%) rotate(15deg); /* Eredeti forgatás */
+  }
+  
+  .postit-svg-img {
+    padding: 10% !important;
+    transform: rotate(0deg) !important;
+  }
+}
+
 @media (max-width: 1100px) {
   .footer-pencil { height: 500px; right: -50px; bottom: -100px; }
   .footer-eraser { height: 120px; }
@@ -363,12 +590,108 @@ html, body, #root {
 }
 
 @media (max-width: 850px) {
-  .postit-stack { width: 35vw; max-width: 230px; }
-  .about-section, .contact-section { flex-direction: column; align-items: center; gap: 32px; }
+  /* Mobil nézet - bal oldalra igazítás */
+  .postit-stack { 
+    top: 8%; 
+    left: clamp(15px, 5vw, 30px); /* Bal oldalról 15px vagy 5vw */
+    transform: translateX(0) rotate(-5deg); /* Ne legyen középre igazítás, kis forgatás */
+    right: auto; /* Jobb oldali pozíciót töröljük */
+    width: clamp(80px, 25vw, 180px); /* Kisebb méret mobilra */
+  }
+  
+  /* A "Love me" felirat mobil nézetben */
+  .postit-svg-img {
+    padding: 5% !important;
+    transform: rotate(-5deg) !important;
+  }
+  
+  /* Girl SVG kisebb mobil nézetben */
+  .about-img {
+    max-width: min(280px, 70vw) !important;
+  }
+  
+  /* Contact animation kisebb mobil nézetben */
+  .contact-animation-img {
+    max-width: min(350px, 75vw) !important;
+  }
+  
+  /* THEEND SVG - MÉG KISEBB ÉS FELJEBB */
+  .theend {
+    max-width: 140px !important; /* Kisebb */
+    margin: -40px auto 0 auto !important; /* Feljebb */
+  }
+  
+  /* About Me gomb mobil nézetben - NAGYOBB */
+  .aboutme-button-img {
+    width: clamp(150px, 35vw, 350px) !important;
+  }
+  
+  /* Send gomb ugyanakkora mint az About Me gomb mobil nézetben */
+  .send-button-img {
+    width: clamp(150px, 35vw, 350px) !important;
+  }
+  
+  /* About section mobil nézetben - kisebb gap és margin */
+  .about-section {
+    gap: 20px !important;
+    margin: 20px 0 !important;
+  }
+  
+  /* About Me cím és szöveg között nagyobb hézag mobilon */
+  .about-text h1 {
+    margin-bottom: 20px !important;
+  }
+  
+  .about-text p {
+    margin-bottom: 12px !important;
+  }
+  
+  /* Contact section mobil nézetben - kisebb gap */
+  .contact-section {
+    gap: 25px !important;
+  }
+  
+  /* Contact form szélesebb mobil nézetben */
+  .contact-form {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 10px !important;
+  }
+  
+  /* CONTACT INPUT MEZŐK - RÖVIDEBB MOBILNÉZETBEN */
+  .contact-form input,
+  .contact-form textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: clamp(16px, 3vw, 20px) !important;
+    padding: 10px 12px !important; /* Kisebb padding */
+    border-radius: 8px !important;
+    border-width: 2px !important;
+  }
+  
+  /* Textarea rövidebb mobil nézetben */
+  .contact-form textarea {
+    min-height: 100px !important; /* Rövidebb */
+  }
+  
+  /* About Me gomb középen mobilon */
+  .aboutme-button-wrap {
+    justify-content: center !important;
+  }
+  
+  /* Contact gomb is középen mobilon */
+  .send-button-container {
+    justify-content: center !important;
+  }
+  
+  /* Social ikonok is középen mobilon */
+  .social-row {
+    justify-content: center !important;
+  }
+  
+  .contact-section { flex-direction: column; align-items: center; }
   .contact-form { order: 2; }
   .contact-img-col { order: 1; }
-  .send-button-container { justify-content: center; }
-  .social-row { justify-content: center; }
   .coffeestain-contact-img { top: -20px; left: -20px; }
   .footer-pencil { height: 400px; right: -60px; bottom: -120px; }
   .footer-eraser { height: 105px; left: 1%; top: 12%; }
@@ -391,7 +714,85 @@ html, body, #root {
 }
 
 @media (max-width: 768px) {
-  .postit-stack { top: 8%; left: 50%; transform: translateX(-50%); }
+  /* A "Love me" felirat mobil nézetben */
+  .postit-svg-img {
+    padding: 4% !important;
+    transform: rotate(-5deg) !important;
+  }
+  
+  /* Girl SVG még kisebb */
+  .about-img {
+    max-width: min(240px, 65vw) !important;
+  }
+  
+  /* Contact animation még kisebb */
+  .contact-animation-img {
+    max-width: min(300px, 70vw) !important;
+  }
+  
+  /* THEEND SVG - MÉG KISEBB ÉS MÉG FELJEBB */
+  .theend {
+    max-width: 120px !important; /* Még kisebb */
+    margin: -50px auto 0 auto !important; /* Még feljebb */
+  }
+  
+  /* About Me gomb még nagyobb kisebb képernyőkön */
+  .aboutme-button-img {
+    width: clamp(140px, 32vw, 330px) !important;
+  }
+  
+  /* Send gomb ugyanakkora mint az About Me gomb */
+  .send-button-img {
+    width: clamp(140px, 32vw, 330px) !important;
+  }
+  
+  /* About section még kisebb képernyőkön */
+  .about-section {
+    gap: 15px !important;
+    margin: 15px 0 !important;
+  }
+  
+  /* About Me cím és szöveg között nagyobb hézag */
+  .about-text h1 {
+    margin-bottom: 18px !important;
+  }
+  
+  .about-text p {
+    margin-bottom: 10px !important;
+  }
+  
+  /* Contact section még kisebb képernyőkön */
+  .contact-section {
+    gap: 20px !important;
+  }
+  
+  /* Input mezők még rövidebbek kisebb képernyőkön */
+  .contact-form input,
+  .contact-form textarea {
+    font-size: clamp(16px, 3.5vw, 22px) !important;
+    padding: 9px 11px !important;
+  }
+  
+  .contact-form textarea {
+    min-height: 90px !important;
+  }
+  
+  /* About Me gomb középen */
+  .aboutme-button-wrap {
+    justify-content: center !important;
+  }
+  
+  /* Contact gomb középen */
+  .send-button-container {
+    justify-content: center !important;
+  }
+  
+  /* Social ikonok középen */
+  .social-row {
+    justify-content: center !important;
+  }
+  
+  .postit-stack { top: 8%; }
   .beatles-animation-img { max-width: 95vw; }
   .footer-pencil { height: 350px; right: -70px; bottom: -140px; }
   .footer-eraser { height: 90px; left: 0; top: 10%; }
@@ -415,8 +816,94 @@ html, body, #root {
 }
 
 @media (max-width: 600px) {
-  .postit-stack { position: absolute; left: 50%; top: 7vw; transform: translate(-50%,0); width: 55vw; max-width: 160px; }
-  .aboutme-button-img, .send-button-img { width: 110px; }
+  .postit-stack { 
+    position: absolute; 
+    left: clamp(10px, 3vw, 20px); /* Még közelebb a bal széléhez */
+    top: 7vw; 
+    transform: translate(0,0) rotate(-5deg); /* Ne legyen középre igazítás */
+    width: clamp(70px, 22vw, 140px); 
+    max-width: 140px;
+  }
+  
+  /* A "Love me" felirat kisebb képernyőkön */
+  .postit-svg-img {
+    padding: 3% !important;
+    transform: rotate(-5deg) !important;
+  }
+  
+  /* Girl SVG még kisebb */
+  .about-img {
+    max-width: min(200px, 60vw) !important;
+  }
+  
+  /* Contact animation még kisebb */
+  .contact-animation-img {
+    max-width: min(250px, 65vw) !important;
+  }
+  
+  /* THEEND SVG - MÉG KISEBB ÉS MÉG FELJEBB KISEBB KÉPERNYŐKÖN */
+  .theend {
+    max-width: 100px !important; /* Még kisebb */
+    margin: -60px auto 0 auto !important; /* Még feljebb */
+  }
+  
+  /* About Me gomb kisebb képernyőkön, de még mindig nagyobb */
+  .aboutme-button-img {
+    width: clamp(130px, 30vw, 310px) !important;
+  }
+  
+  /* Send gomb ugyanakkora mint az About Me gomb */
+  .send-button-img {
+    width: clamp(130px, 30vw, 310px) !important;
+  }
+  
+  /* About section extra kis képernyőkön */
+  .about-section {
+    gap: 12px !important;
+    margin: 12px 0 !important;
+  }
+  
+  /* About Me cím és szöveg között nagyobb hézag */
+  .about-text h1 {
+    margin-bottom: 16px !important;
+  }
+  
+  .about-text p {
+    margin-bottom: 8px !important;
+  }
+  
+  /* Contact section extra kis képernyőkön */
+  .contact-section {
+    gap: 15px !important;
+  }
+  
+  /* Input mezők extra rövidek kis képernyőkön */
+  .contact-form input,
+  .contact-form textarea {
+    font-size: clamp(15px, 2.8vw, 18px) !important;
+    padding: 8px 10px !important;
+    border-radius: 7px !important;
+  }
+  
+  .contact-form textarea {
+    min-height: 80px !important;
+  }
+  
+  /* About Me gomb középen */
+  .aboutme-button-wrap {
+    justify-content: center !important;
+  }
+  
+  /* Contact gomb középen */
+  .send-button-container {
+    justify-content: center !important;
+  }
+  
+  /* Social ikonok középen */
+  .social-row {
+    justify-content: center !important;
+  }
+  
   .magic-img { width: 150px; }
   .project-card { max-width: 180px; }
   .center-card { max-width: 220px; }
@@ -436,13 +923,102 @@ html, body, #root {
   .line-svg {
     height: 90px;
   }
-  
-  /* Kisebb about és contact képek */
-  .about-img, .contact-animation-img { max-width: 85vw; }
 }
 
 @media (max-width: 480px) {
-  .postit-stack { top: 6%; width: 100px; }
+  .postit-stack { 
+    top: 6%; 
+    left: 10px; /* Fix 10px a bal széltől */
+    width: 90px; /* Kisebb méret */
+    transform: rotate(-5deg);
+  }
+  
+  /* A "Love me" felirat extra kis képernyőkön */
+  .postit-svg-img {
+    padding: 2% !important;
+    transform: rotate(-5deg) !important;
+  }
+  
+  /* Girl SVG extra kis képernyőkön */
+  .about-img {
+    max-width: min(160px, 55vw) !important;
+  }
+  
+  /* Contact animation extra kis képernyőkön */
+  .contact-animation-img {
+    max-width: min(200px, 60vw) !important;
+  }
+  
+  /* THEEND SVG - EXTRA KIS KÉPERNYŐKÖN */
+  .theend {
+    max-width: 80px !important; /* Legkisebb */
+    margin: -70px auto 0 auto !important; /* Legfeljebb */
+  }
+  
+  /* About Me gomb telefon nézetben */
+  .aboutme-button-img {
+    width: clamp(120px, 28vw, 290px) !important;
+  }
+  
+  /* Send gomb ugyanakkora mint az About Me gomb */
+  .send-button-img {
+    width: clamp(120px, 28vw, 290px) !important;
+  }
+  
+  /* About section telefon nézetben */
+  .about-section {
+    gap: 10px !important;
+    margin: 10px 0 !important;
+  }
+  
+  /* About Me cím és szöveg között nagyobb hézag */
+  .about-text h1 {
+    margin-bottom: 14px !important;
+  }
+  
+  .about-text p {
+    margin-bottom: 6px !important;
+  }
+  
+  /* Contact section telefon nézetben */
+  .contact-section {
+    gap: 12px !important;
+  }
+  
+  /* Input mezők extra rövidek telefon nézetben */
+  .contact-form input,
+  .contact-form textarea {
+    font-size: clamp(14px, 2.5vw, 16px) !important;
+    padding: 7px 9px !important;
+    border-radius: 6px !important;
+    border-width: 2px !important;
+  }
+  
+  .contact-form textarea {
+    min-height: 70px !important;
+  }
+  
+  /* Social ikonok kicsit nagyobbak telefon nézetben */
+  .social-icon {
+    width: clamp(45px, 10vw, 60px) !important;
+    height: clamp(45px, 10vw, 60px) !important;
+  }
+  
+  /* About Me gomb középen */
+  .aboutme-button-wrap {
+    justify-content: center !important;
+  }
+  
+  /* Contact gomb középen */
+  .send-button-container {
+    justify-content: center !important;
+  }
+  
+  /* Social ikonok középen */
+  .social-row {
+    justify-content: center !important;
+  }
+  
   .about-section, .contact-section { gap: 15px; }
   .footer-pencil { height: 250px; right: -90px; bottom: -180px; }
   .footer-eraser { height: 65px; left: -5%; top: 6%; }
@@ -461,6 +1037,111 @@ html, body, #root {
   .project-card { max-width: 160px; }
   .center-card { max-width: 200px; }
   .magic-container { width: 130px; }
+}
+
+@media (max-width: 360px) {
+  .postit-stack { width: 80px; }
+  
+  /* A "Love me" felirat extra extra kis képernyőkön */
+  .postit-svg-img {
+    padding: 1% !important;
+    transform: rotate(-5deg) !important;
+  }
+  
+  /* Girl SVG nagyon kis képernyőkön */
+  .about-img {
+    max-width: min(140px, 50vw) !important;
+  }
+  
+  /* Contact animation nagyon kis képernyőkön */
+  .contact-animation-img {
+    max-width: min(180px, 55vw) !important;
+  }
+  
+  /* THEEND SVG - NAGYON KIS KÉPERNYŐKÖN */
+  .theend {
+    max-width: 70px !important; /* Extra kicsi */
+    margin: -80px auto 0 auto !important; /* Extra feljebb */
+  }
+  
+  /* About Me gomb nagyon kis képernyőkön */
+  .aboutme-button-img {
+    width: clamp(110px, 26vw, 270px) !important;
+  }
+  
+  /* Send gomb ugyanakkora mint az About Me gomb */
+  .send-button-img {
+    width: clamp(110px, 26vw, 270px) !important;
+  }
+  
+  /* About section nagyon kis képernyőkön */
+  .about-section {
+    gap: 8px !important;
+    margin: 8px 0 !important;
+  }
+  
+  /* About Me cím és szöveg között nagyobb hézag */
+  .about-text h1 {
+    margin-bottom: 12px !important;
+  }
+  
+  .about-text p {
+    margin-bottom: 5px !important;
+  }
+  
+  /* Contact section nagyon kis képernyőkön */
+  .contact-section {
+    gap: 10px !important;
+  }
+  
+  /* Input mezők nagyon rövidek nagyon kis képernyőkön */
+  .contact-form input,
+  .contact-form textarea {
+    font-size: clamp(13px, 2.2vw, 15px) !important;
+    padding: 6px 8px !important;
+    border-radius: 5px !important;
+  }
+  
+  .contact-form textarea {
+    min-height: 60px !important;
+  }
+  
+  /* Social ikonok nagyobbak nagyon kis képernyőkön */
+  .social-icon {
+    width: clamp(50px, 12vw, 65px) !important;
+    height: clamp(50px, 12vw, 65px) !important;
+  }
+  
+  /* About Me gomb középen */
+  .aboutme-button-wrap {
+    justify-content: center !important;
+  }
+  
+  /* Contact gomb középen */
+  .send-button-container {
+    justify-content: center !important;
+  }
+  
+  /* Social ikonok középen */
+  .social-row {
+    justify-content: center !important;
+  }
+  
+  .project-card { max-width: 150px; }
+  .center-card { max-width: 180px; }
+  .magic-img { width: 120px; }
+  .footer-pencil { height: 220px; right: -100px; bottom: -200px; }
+  .footer-eraser { height: 55px; left: -8%; top: 4%; }
+  .footer-animation-container { min-height: 200px; }
+  
+  /* Divider line extra kis méret */
+  .divider-line-container {
+    min-height: 60px;
+  }
+  
+  .line-svg {
+    height: 50px;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -485,22 +1166,292 @@ html, body, #root {
   .footer-animation-container { min-height: 700px; }
 }
 
-@media (max-width: 360px) {
-  .postit-stack { width: 80px; }
-  .aboutme-button-img, .send-button-img { width: 90px; }
-  .project-card { max-width: 150px; }
-  .center-card { max-width: 180px; }
-  .magic-img { width: 120px; }
-  .footer-pencil { height: 220px; right: -100px; bottom: -200px; }
-  .footer-eraser { height: 55px; left: -8%; top: 4%; }
-  .footer-animation-container { min-height: 200px; }
+/* MOBIL OPTIMALIZÁLÁS - KEVESEBB HÉZAGOK */
+@media (max-width: 850px) {
+  /* Main frame margin csökkentés */
+  .main-frame {
+    margin-top: clamp(5px, 1.5vw, 15px) !important;
+  }
   
-  /* Divider line extra kis méret */
+  /* Projects section hézag csökkentés */
+  .projects-section {
+    gap: clamp(15px, 3vw, 30px) !important;
+    margin: clamp(15px, 4vw, 30px) 0 clamp(25px, 6vw, 30px) 0 !important;
+  }
+  
+  /* Projects cards közötti tér csökkentése */
+  .projects-cards-container {
+    gap: 20px !important;
+  }
+  
+  .project-item {
+    gap: 10px !important;
+  }
+  
+  /* Card magic konténer margin */
+  .card-magic-container {
+    margin: 0 5px !important;
+  }
+  
+  .magic-container {
+    margin-bottom: -20px !important;
+  }
+  
+  /* About section hézag csökkentés */
+  .about-section {
+    gap: 15px !important;
+    margin: clamp(15px, 4vw, 25px) 0 !important;
+  }
+  
+  /* About text marginok csökkentése */
+  .about-text h1 {
+    margin-bottom: 18px !important;
+  }
+  
+  .about-text p {
+    margin-bottom: 10px !important;
+    line-height: 1.3 !important;
+  }
+  
+  /* Contact section hézag csökkentés */
+  .contact-section {
+    gap: 20px !important;
+    margin: clamp(20px, 5vw, 30px) 0 !important;
+  }
+  
+  /* Contact form elemek közötti tér */
+  .contact-form {
+    gap: 12px !important;
+  }
+  
+  .contact-form h1 {
+    margin-bottom: 10px !important;
+  }
+  
+  /* Button konténerek margin csökkentés */
+  .aboutme-button-wrap {
+    margin-top: clamp(10px, 2vw, 15px) !important;
+  }
+  
+  .send-button-container {
+    margin-top: 10px !important;
+  }
+  
+  /* Social row margin csökkentés */
+  .social-row {
+    margin-top: 15px !important;
+    gap: 12px !important;
+  }
+  
+  /* Footer animation container hézag csökkentés */
+  .footer-animation-container {
+    margin-top: clamp(15px, 3vw, 25px) !important;
+    gap: clamp(10px, 2vw, 20px) !important;
+    min-height: 450px !important;
+  }
+  
+  /* Divider line kisebb */
   .divider-line-container {
-    min-height: 60px;
+    min-height: 120px !important;
+    margin: 10px auto !important;
   }
   
   .line-svg {
-    height: 50px;
+    height: 100px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-section {
+    gap: 12px !important;
+    margin: 12px 0 20px 0 !important;
+  }
+  
+  .about-section {
+    gap: 12px !important;
+    margin: 12px 0 !important;
+  }
+  
+  .contact-section {
+    gap: 16px !important;
+    margin: 16px 0 !important;
+  }
+  
+  .about-text h1 {
+    margin-bottom: 15px !important;
+  }
+  
+  .about-text p {
+    margin-bottom: 8px !important;
+  }
+  
+  .footer-animation-container {
+    min-height: 400px !important;
+  }
+  
+  .divider-line-container {
+    min-height: 100px !important;
+  }
+  
+  .line-svg {
+    height: 85px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .projects-section {
+    gap: 10px !important;
+    margin: 10px 0 15px 0 !important;
+  }
+  
+  .projects-cards-container {
+    gap: 15px !important;
+  }
+  
+  .about-section {
+    gap: 10px !important;
+    margin: 10px 0 !important;
+  }
+  
+  .contact-section {
+    gap: 14px !important;
+    margin: 14px 0 !important;
+  }
+  
+  .contact-form {
+    gap: 10px !important;
+  }
+  
+  .about-text h1 {
+    margin-bottom: 12px !important;
+  }
+  
+  .about-text p {
+    margin-bottom: 6px !important;
+  }
+  
+  .social-row {
+    margin-top: 12px !important;
+    gap: 10px !important;
+  }
+  
+  .footer-animation-container {
+    min-height: 350px !important;
+    gap: 8px !important;
+  }
+  
+  .divider-line-container {
+    min-height: 80px !important;
+    margin: 8px auto !important;
+  }
+  
+  .line-svg {
+    height: 70px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra kis képernyőkre még kisebb hézagok */
+  .projects-section {
+    gap: 8px !important;
+    margin: 8px 0 12px 0 !important;
+    padding: 0 5px !important;
+  }
+  
+  .about-section {
+    gap: 8px !important;
+    margin: 8px 0 !important;
+    padding: 0 5px !important;
+  }
+  
+  .contact-section {
+    gap: 12px !important;
+    margin: 12px 0 !important;
+    padding: 0 5px !important;
+  }
+  
+  .about-text h1 {
+    margin-bottom: 10px !important;
+  }
+  
+  .about-text p {
+    margin-bottom: 5px !important;
+    font-size: clamp(14px, 2.5vw, 18px) !important;
+  }
+  
+  .contact-form h1 {
+    margin-bottom: 8px !important;
+  }
+  
+  .aboutme-button-wrap {
+    margin-top: 8px !important;
+  }
+  
+  .send-button-container {
+    margin-top: 8px !important;
+  }
+  
+  .social-row {
+    margin-top: 10px !important;
+    gap: 8px !important;
+  }
+  
+  .social-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  
+  .footer-animation-container {
+    min-height: 300px !important;
+    gap: 5px !important;
+  }
+  
+  .divider-line-container {
+    min-height: 60px !important;
+    margin: 5px auto !important;
+    padding: 0 5px !important;
+  }
+  
+  .line-svg {
+    height: 55px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  /* Extra extra kis képernyők */
+  .projects-section {
+    gap: 6px !important;
+    margin: 6px 0 10px 0 !important;
+  }
+  
+  .about-section {
+    gap: 6px !important;
+    margin: 6px 0 !important;
+  }
+  
+  .contact-section {
+    gap: 10px !important;
+    margin: 10px 0 !important;
+  }
+  
+  .about-text h1 {
+    margin-bottom: 8px !important;
+    font-size: clamp(16px, 3.5vw, 18px) !important;
+  }
+  
+  .contact-form h1 {
+    margin-bottom: 6px !important;
+  }
+  
+  .footer-animation-container {
+    min-height: 250px !important;
+  }
+  
+  .divider-line-container {
+    min-height: 50px !important;
+  }
+  
+  .line-svg {
+    height: 45px !important;
   }
 }

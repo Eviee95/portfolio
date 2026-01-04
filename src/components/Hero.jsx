@@ -23,6 +23,10 @@ const Hero = () => {
 
   const [currentThanksFrame, setCurrentThanksFrame] = useState(1);
 
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState('');
+
   // Divider line animációk
   const [firstLineSvgIndex, setFirstLineSvgIndex] = useState(1);
   const [firstAnimationStarted, setFirstAnimationStarted] = useState(false);
@@ -75,7 +79,33 @@ const Hero = () => {
   const totalThanksFrames = 5;
   const thanksFps = 3;
 
-  // Divider observers (unchanged)
+  // Handle arrow click to show modal
+  const handleArrowClick = () => {
+    setModalContent("I'm cool and all...but not that cool 😎");
+    setShowModal(true);
+  };
+
+  // Handle modal close
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setModalContent('');
+  };
+
+  // Close modal when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showModal && event.target.classList.contains('modal-overlay')) {
+        handleCloseModal();
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showModal]);
+
+  // Divider observers
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -370,19 +400,37 @@ const Hero = () => {
       await addDoc(collection(db, 'contacts'), {
         name, email, message, timestamp: serverTimestamp(), read: false
       });
-      alert('Köszönjük az üzeneted! Hamarosan válaszolunk.');
+      // Show success modal instead of alert
+      setModalContent('Thank you for your message! I will reply soon. 😊');
+      setShowModal(true);
       form.reset();
     } catch (error) {
-      console.error('Hiba az üzenet küldésekor:', error);
-      alert('Hiba történt az üzenet küldése során. Kérlek próbáld újra később.');
+      console.error('Something went wrong:', error);
+      alert('An error occurred while sending the message. Please try again later.');
     } finally {
       setIsSending(false);
     }
   };
 
-  // Important: use Link for cards so Router behavior matches Header links
   return (
     <div id="home" className="page-container hero-root">
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-text">
+              {modalContent}
+            </div>
+            <button 
+              className="modal-close-btn"
+              onClick={handleCloseModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="page-content">
         <div className="main-container">
           <div className="main-frame">
@@ -412,8 +460,10 @@ const Hero = () => {
             <div className="about-text">
               <h1>About Me</h1>
               <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Hello, I'm Eva Kapusi, a beginner (a very beginner!) UI/UX designer. I'm not professional yet, but I truly enjoy bringing my ideas to life. I don't work with the most high-end tools (I'm always trying to keep things budget-friendly :) ), but nothing feels impossible as long as I have my iPad with me. A few years ago, I already knew that finance and accounting weren't my world but now I finally feel ready to make the switch. Through my portfolio and resume (downloadable below), I'd like to show a little piece of who I am.
               </p>
+              <p>xoxo, Evie</p>
+              
               <div className="aboutme-button-wrap">
                 <img
                   src="/images/aboutmebutton.svg"
@@ -449,7 +499,13 @@ const Hero = () => {
             
             <div className="projects-cards-container">
               <div className="project-item first-card">
-                <img src="/images/arrow-right.svg" alt="Left" style={{ transform: "scaleX(-1)" }} className="arrow-img left-arrow" />
+                <img 
+                  src="/images/arrow-right.svg" 
+                  alt="Left" 
+                  className="arrow-img left-arrow" 
+                  onClick={handleArrowClick}
+                  style={{ cursor: 'pointer', transform: "scaleX(-1)" }}
+                />
 
                 <Link to="/nagyi-peksege" className="card-magic-container" onMouseEnter={() => handleMagicHover(0)} onMouseLeave={() => handleMagicLeave(0)} aria-label="Nagyi Peksege project">
                   <div className="magic-container">
@@ -486,7 +542,13 @@ const Hero = () => {
                   </div>
                 </Link>
 
-                <img src="/images/arrow-right.svg" alt="Right" className="arrow-img right-arrow" />
+                <img 
+                  src="/images/arrow-right.svg" 
+                  alt="Right" 
+                  className="arrow-img right-arrow" 
+                  onClick={handleArrowClick}
+                  style={{ cursor: 'pointer' }}
+                />
               </div>
             </div>
           </div>
@@ -528,9 +590,9 @@ const Hero = () => {
               </div>
               
               <div className="social-row">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><img src="/images/facebook.svg" alt="Facebook" className="social-icon" /></a>
-                <a href="https://discord.com" target="_blank" rel="noopener noreferrer"><img src="/images/discord.svg" alt="Discord" className="social-icon" /></a>
-                <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer"><img src="/images/dribbble.svg" alt="Dribbble" className="social-icon" /></a>
+                <a href="https://www.facebook.com/eva.kapusi/" target="_blank" rel="noopener noreferrer"><img src="/images/facebook.svg" alt="Facebook" className="social-icon" /></a>
+                <a href="https://discord.gg/evie95" target="_blank" rel="noopener noreferrer"><img src="/images/discord.svg" alt="Discord" className="social-icon" /></a>
+                <a href="https://dribbble.com/Evie19950128" target="_blank" rel="noopener noreferrer"><img src="/images/dribbble.svg" alt="Dribbble" className="social-icon" /></a>
               </div>
             </form>
             <div className="contact-img-col">
@@ -553,7 +615,11 @@ const Hero = () => {
               </div>
             </div>
           </div>
-
+          <img 
+            src="/images/theend.svg" 
+            alt="theend" 
+            className="theend" 
+          />
         </div>
       </div>
     </div>

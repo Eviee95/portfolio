@@ -1,3 +1,47 @@
+/* Mr. Bean overlay styles for PetNanny */
+.mrbean-overlay {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 10000;
+  animation: slideInOutRight 3s ease-in-out forwards;
+}
+
+.mrbean-image {
+  width: 220px;
+  height: auto;
+}
+
+.mrbean-fallback {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 2px solid #1B95AA;
+  font-size: 16px;
+}
+
+@keyframes slideInOutRight {
+  0% {
+    opacity: 1;
+    transform: translateX(100px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(100px);
+  }
+}
+
 .petnanny-page {
     min-height: 100vh;
     width: 100%;
@@ -94,7 +138,7 @@
 .petnanny-page .text-content h2 {
     font-size: clamp(24px, 3vw, 36px);
     margin-top: 0;
-    color: #1976d2;
+    color: #1B95AA;
     margin-bottom: 20px;
 }
 
@@ -235,7 +279,7 @@
 .petnanny-page .comparison-text h2 {
     font-size: clamp(24px, 3vw, 36px);
     margin-top: 0;
-    color: #1976d2;
+    color: #1B95AA;
     margin-bottom: 20px;
 }
 
@@ -318,7 +362,7 @@
 .petnanny-page .text-column h2 {
     font-size: clamp(26px, 3.2vw, 38px);
     margin-top: 0;
-    color: #1976d2;
+    color: #1B95AA;
     margin-bottom: 25px;
 }
 
@@ -1038,6 +1082,26 @@
         height: 40px;
         font-size: 24px;
     }
+
+    /* Responsive Mr. Bean for PetNanny */
+    .mrbean-overlay {
+        top: 30px;
+        right: 10px;
+    }
+    
+    .mrbean-image {
+        width: 150px;
+    }
+    
+    .mrbean-fallback {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    /* BACK BUTTON KICSIYÍTÉS */
+    .petnanny-page .back-button-img {
+        width: 180px; /* Új sor hozzáadva */
+    }
 }
 
 @media (max-width: 600px) {
@@ -1098,6 +1162,26 @@
     .petnanny-page .thumbnail-container {
         width: 60px;
         height: 60px;
+    }
+
+    /* Responsive Mr. Bean for PetNanny */
+    .mrbean-overlay {
+        top: 25px;
+        right: 5px;
+    }
+    
+    .mrbean-image {
+        width: 120px;
+    }
+    
+    .mrbean-fallback {
+        padding: 8px;
+        font-size: 12px;
+    }
+    
+    /* BACK BUTTON TOVÁBBI KICSIYÍTÉS */
+    .petnanny-page .back-button-img {
+        width: 150px; /* Új sor hozzáadva */
     }
 }
 
@@ -1205,6 +1289,26 @@
     .petnanny-page .modal-next-btn {
         right: 10px;
     }
+
+    /* Responsive Mr. Bean for PetNanny */
+    .mrbean-overlay {
+        top: 20px;
+        right: 3px;
+    }
+    
+    .mrbean-image {
+        width: 100px;
+    }
+    
+    .mrbean-fallback {
+        padding: 6px;
+        font-size: 11px;
+    }
+    
+    /* BACK BUTTON MÉG KISEBB */
+    .petnanny-page .back-button-img {
+        width: 130px; /* Új sor hozzáadva */
+    }
 }
 
 @media (max-width: 360px) {
@@ -1263,5 +1367,25 @@
     .petnanny-page .thumbnail-container {
         width: 50px;
         height: 50px;
+    }
+
+    /* Responsive Mr. Bean for PetNanny */
+    .mrbean-overlay {
+        top: 15px;
+        right: 2px;
+    }
+    
+    .mrbean-image {
+        width: 80px;
+    }
+    
+    .mrbean-fallback {
+        padding: 5px;
+        font-size: 10px;
+    }
+    
+    /* BACK BUTTON LEGKISEBB MÉRET */
+    .petnanny-page .back-button-img {
+        width: 110px; /* Új sor hozzáadva */
     }
 }

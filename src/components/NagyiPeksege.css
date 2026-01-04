@@ -156,7 +156,7 @@
 .nagyi-page .text-content h2 {
     font-size: clamp(24px, 3vw, 36px);
     margin-top: 0;
-    color: #2e7d32;
+    color: #27140F;
     margin-bottom: 20px;
 }
 
@@ -297,7 +297,7 @@
 .nagyi-page .second-section h2 {
     font-size: clamp(24px, 3vw, 36px);
     margin-top: 0;
-    color: #2e7d32;
+    color: #27140F;
     width: 100%;
 }
 
@@ -422,7 +422,7 @@
 .nagyi-page .text-column h2 {
     font-size: clamp(26px, 3.2vw, 38px);
     margin-top: 0;
-    color: #2e7d32;
+    color: #27140F;
     margin-bottom: 25px;
 }
 
@@ -565,8 +565,7 @@
   aspect-ratio: 4/3;
   overflow: hidden;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
   background-color: transparent;
   cursor: pointer;
 }
@@ -1112,6 +1111,11 @@
         padding: 10px;
         font-size: 14px;
     }
+    
+    /* BACK BUTTON KICSIYÍTÉS */
+    .nagyi-page .back-button-img {
+        width: 180px; /* Új sor hozzáadva */
+    }
 }
 
 @media (max-width: 600px) {
@@ -1168,6 +1172,11 @@
     .mrbean-fallback {
         padding: 8px;
         font-size: 12px;
+    }
+    
+    /* BACK BUTTON TOVÁBBI KICSIYÍTÉS */
+    .nagyi-page .back-button-img {
+        width: 150px; /* Új sor hozzáadva */
     }
 }
 
@@ -1245,17 +1254,6 @@
         font-size: 14px;
     }
 
-    .greenpulse-page .third-section .divider-line-container {
-        max-width: 480px;
-        padding: 0 8px;
-        min-height: 120px;
-        margin: 20px auto 10px auto;
-    }
-    
-    .greenpulse-page .third-section .line-svg {
-        height: 110px;
-    }
-
     /* Mr. Bean responsive - Frissítve */
     .mrbean-overlay {
         top: 20px; /* 3px-ről 20px-re változott */
@@ -1269,6 +1267,11 @@
     .mrbean-fallback {
         padding: 6px;
         font-size: 11px;
+    }
+    
+    /* BACK BUTTON MÉG KISEBB */
+    .nagyi-page .back-button-img {
+        width: 130px; /* Új sor hozzáadva */
     }
 }
 
@@ -1340,5 +1343,10 @@
     .mrbean-fallback {
         padding: 5px;
         font-size: 10px;
+    }
+    
+    /* BACK BUTTON LEGKISEBB MÉRET */
+    .nagyi-page .back-button-img {
+        width: 110px; /* Új sor hozzáadva */
     }
 }
